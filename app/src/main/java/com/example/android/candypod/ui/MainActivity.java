@@ -3,14 +3,12 @@ package com.example.android.candypod.ui;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.ActivityMainBinding;
@@ -18,6 +16,8 @@ import com.example.android.candypod.ui.downloads.DownloadsFragment;
 import com.example.android.candypod.ui.favorites.FavoritesFragment;
 import com.example.android.candypod.ui.playlists.PlaylistsFragment;
 import com.example.android.candypod.ui.podcasts.PodcastsFragment;
+
+import static com.example.android.candypod.utilities.Constants.INDEX_ZERO;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 
         // Set PodcastsFragment as a default fragment when starting the app
         if (savedInstanceState == null) {
-            onNavigationItemSelected(mMainBinding.navView.getMenu().getItem(0).setChecked(true));
+            onNavigationItemSelected(mMainBinding.navView.getMenu().getItem(INDEX_ZERO).setChecked(true));
         }
     }
 
