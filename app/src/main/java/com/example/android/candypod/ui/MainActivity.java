@@ -1,20 +1,19 @@
 package com.example.android.candypod.ui;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.candypod.R;
+import com.example.android.candypod.databinding.ActivityMainBinding;
 import com.example.android.candypod.ui.downloads.DownloadsFragment;
 import com.example.android.candypod.ui.favorites.FavoritesFragment;
 import com.example.android.candypod.ui.playlists.PlaylistsFragment;
@@ -23,15 +22,16 @@ import com.example.android.candypod.ui.podcasts.PodcastsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    /** This field is used for data binding **/
+    private ActivityMainBinding mMainBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setSupportActionBar(mMainBinding.appBarMain.toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mMainBinding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -39,26 +39,24 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+                this, mMainBinding.drawerLayout, mMainBinding.appBarMain.toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mMainBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mMainBinding.navView.setNavigationItemSelectedListener(this);
 
         // Set PodcastsFragment as a default fragment when starting the app
         if (savedInstanceState == null) {
-            onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
+            onNavigationItemSelected(mMainBinding.navView.getMenu().getItem(0).setChecked(true));
         }
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mMainBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -113,8 +111,7 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
