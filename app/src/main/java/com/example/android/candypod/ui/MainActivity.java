@@ -1,10 +1,10 @@
-package com.example.android.candypod;
+package com.example.android.candypod.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.example.android.candypod.R;
+import com.example.android.candypod.ui.downloads.DownloadsFragment;
+import com.example.android.candypod.ui.favorites.FavoritesFragment;
+import com.example.android.candypod.ui.playlists.PlaylistsFragment;
+import com.example.android.candypod.ui.podcasts.PodcastsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,6 +47,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set PodcastsFragment as a default fragment when starting the app
+        if (savedInstanceState == null) {
+            onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
+        }
     }
 
     @Override
@@ -80,18 +92,25 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        // Replace the fragment using a FragmentManager and Transaction
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_podcasts) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, new PodcastsFragment())
+                    .commit();
+        } else if (id == R.id.nav_playlists) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, new PlaylistsFragment())
+                    .commit();
+        } else if (id == R.id.nav_favorites) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, new FavoritesFragment())
+                    .commit();
+        } else if (id == R.id.nav_downloads) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, new DownloadsFragment())
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
