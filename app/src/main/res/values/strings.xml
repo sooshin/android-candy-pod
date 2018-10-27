@@ -13,4 +13,7 @@
     <string name="favorites">Favorites</string>
     <string name="downloads">Downloads</string>
 
+    <!-- Content Description for a FAB and label for AddPodcastActivity -->
+    <string name="add_podcast">Add Podcast</string>
+
 </resources>

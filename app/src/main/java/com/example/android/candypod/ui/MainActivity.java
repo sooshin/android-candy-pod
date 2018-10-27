@@ -31,14 +31,6 @@ public class MainActivity extends AppCompatActivity
         mMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mMainBinding.appBarMain.toolbar);
 
-        mMainBinding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mMainBinding.drawerLayout, mMainBinding.appBarMain.toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
