@@ -17,6 +17,8 @@ import com.example.android.candypod.ui.favorites.FavoritesFragment;
 import com.example.android.candypod.ui.playlists.PlaylistsFragment;
 import com.example.android.candypod.ui.podcasts.PodcastsFragment;
 
+import timber.log.Timber;
+
 import static com.example.android.candypod.utilities.Constants.INDEX_ZERO;
 
 public class MainActivity extends AppCompatActivity
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         mMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mMainBinding.appBarMain.toolbar);
+
+        // Setup Timber
+        Timber.plant(new Timber.DebugTree());
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mMainBinding.drawerLayout, mMainBinding.appBarMain.toolbar,
