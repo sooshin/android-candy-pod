@@ -15,5 +15,7 @@
 
     <!-- Content Description for a FAB and label for AddPodcastActivity -->
     <string name="add_podcast">Add Podcast</string>
+    <!-- Content Description -->
+    <string name="artwork_content_description">Artwork</string>
 
 </resources>
