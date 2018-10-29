@@ -23,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+
 public class AddPodcastActivity extends AppCompatActivity
         implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler {
 
@@ -66,8 +68,7 @@ public class AddPodcastActivity extends AppCompatActivity
     }
 
     private void call() {
-        RetrofitClient retrofitClient = new RetrofitClient();
-        Retrofit retrofit = retrofitClient.getClient();
+        Retrofit retrofit = RetrofitClient.getClient();
         ITunesSearchApi iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
 
         Call<ITunesResponse> call = iTunesSearchApi.getTopPodcasts("us");
@@ -99,8 +100,10 @@ public class AddPodcastActivity extends AppCompatActivity
     public void onItemClick(Result result) {
         // Create the Intent that will start the SubscribeActivity
         Intent intent = new Intent(this, SubscribeActivity.class);
+        // Pass the podcast ID
+        intent.putExtra(EXTRA_RESULT_ID, result.getId());
         // Once the Intent has been created, start the SubscribeActivity
         startActivity(intent);
-        Toast.makeText(this, result.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, result.getId(), Toast.LENGTH_SHORT).show();
     }
 }
