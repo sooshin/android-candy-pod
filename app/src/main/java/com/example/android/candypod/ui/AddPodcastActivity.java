@@ -1,9 +1,11 @@
 package com.example.android.candypod.ui;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.widget.Toast;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
@@ -21,7 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class AddPodcastActivity extends AppCompatActivity {
+public class AddPodcastActivity extends AppCompatActivity
+        implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler {
 
     /** This field is used for data binding **/
     private ActivityAddPodcastBinding mAddPodBinding;
@@ -57,7 +60,7 @@ public class AddPodcastActivity extends AppCompatActivity {
         // Create an empty ArrayList
         mResults = new ArrayList<>();
         // AddPodcastAdapter is responsible for displaying each result in the list.
-        mAddPodAdapter = new AddPodcastAdapter(mResults);
+        mAddPodAdapter = new AddPodcastAdapter(mResults, this);
         // Set adapter to the RecyclerView
         mAddPodBinding.rvAddPod.setAdapter(mAddPodAdapter);
     }
@@ -82,5 +85,22 @@ public class AddPodcastActivity extends AppCompatActivity {
                 t.printStackTrace();
             }
         });
+    }
+
+    /**
+     * This is where we receive our callback from
+     * {@link AddPodcastAdapter.AddPodcastAdapterOnClickHandler}
+     *
+     * This callback is invoked when you click on an item in the list.
+     *
+     * @param result Result object
+     */
+    @Override
+    public void onItemClick(Result result) {
+        // Create the Intent that will start the SubscribeActivity
+        Intent intent = new Intent(this, SubscribeActivity.class);
+        // Once the Intent has been created, start the SubscribeActivity
+        startActivity(intent);
+        Toast.makeText(this, result.getName(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -24,8 +24,8 @@
         </activity>
         <activity
             android:name=".ui.AddPodcastActivity"
-            android:label="@string/add_podcast">
-        </activity>
+            android:label="@string/add_podcast"></activity>
+        <activity android:name=".ui.SubscribeActivity"></activity>
     </application>
 
 </manifest>

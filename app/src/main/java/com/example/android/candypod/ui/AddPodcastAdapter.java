@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
@@ -18,13 +19,27 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
     /** Member variable for the list of {@link Result}s */
     private List<Result> mResults;
 
+    /** An on-click handler that we've defined to make it easy for an Activity to interface with
+     * our RecyclerView
+     */
+    private final AddPodcastAdapterOnClickHandler mOnClickHandler;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface AddPodcastAdapterOnClickHandler {
+        void onItemClick(Result result);
+    }
+
     /**
      * Constructor for the AddPodcastAdapter that accepts a list of results to display
      *
      * @param results The list of {@link Result}s
+     * @param onClickHandler The on-click handler for list item clicks
      */
-    public AddPodcastAdapter(List<Result> results) {
+    public AddPodcastAdapter(List<Result> results, AddPodcastAdapterOnClickHandler onClickHandler) {
         mResults = results;
+        mOnClickHandler = onClickHandler;
     }
 
     /**
@@ -84,7 +99,7 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
     /**
      * Caches of the children views for a result list item.
      */
-    public class AddPodcastViewHolder extends RecyclerView.ViewHolder {
+    public class AddPodcastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         /** This field is used for data binding */
         private AddPodListItemBinding mAddPodListItemBinding;
@@ -97,6 +112,9 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
         public AddPodcastViewHolder(AddPodListItemBinding addPodListItemBinding) {
             super(addPodListItemBinding.getRoot());
             mAddPodListItemBinding = addPodListItemBinding;
+
+            // Set an onClickListener on the itemView to listen for clicks
+            itemView.setOnClickListener(this);
         }
 
         /**
@@ -115,6 +133,17 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
 
             // Set the name
             mAddPodListItemBinding.tvName.setText(result.getName());
+        }
+
+        /**
+         * Called whenever a user clicks on a item in the list.
+         * @param v The View that was clicked
+         */
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Result result = mResults.get(adapterPosition);
+            mOnClickHandler.onItemClick(result);
         }
     }
 }
