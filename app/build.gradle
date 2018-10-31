@@ -37,6 +37,12 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    // Room
+    implementation "android.arch.persistence.room:runtime:$arch_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:$arch_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
