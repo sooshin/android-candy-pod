@@ -1,22 +1,22 @@
 package com.example.android.candypod.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.LookupResult;
-import com.example.android.candypod.utilities.ITunesSearchApi;
-import com.example.android.candypod.utilities.RetrofitClient;
+import com.example.android.candypod.ui.subscribe.SubscribeViewModel;
+import com.example.android.candypod.ui.subscribe.SubscribeViewModelFactory;
+import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
@@ -26,6 +26,9 @@ public class SubscribeActivity extends AppCompatActivity {
     /** The podcast ID */
     private String mResultId;
 
+    /** ViewModel for SubscribeActivity */
+    private SubscribeViewModel mSubscribeViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,10 @@ public class SubscribeActivity extends AppCompatActivity {
         // Get the podcast ID
         mResultId = getResultId();
 
-        call();
+       // Get the ViewModel from the factory
+        setupViewModel();
+        // Observe changes in the LookupResponse
+        observeLookupResponse();
     }
 
     /**
@@ -48,25 +54,28 @@ public class SubscribeActivity extends AppCompatActivity {
         return mResultId;
     }
 
-    private void call() {
-        Retrofit retrofit = RetrofitClient.getClient();
-        ITunesSearchApi iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
+    /**
+     * Get the ViewModel from the factory.
+     */
+    private void setupViewModel() {
+        SubscribeViewModelFactory factory = InjectorUtils.provideSubscribeViewModelFactory(
+                SubscribeActivity.this, I_TUNES_LOOKUP, mResultId);
+        mSubscribeViewModel = ViewModelProviders.of(this, factory).get(SubscribeViewModel.class);
+    }
 
-        Call<LookupResponse> call = iTunesSearchApi
-                .getLookupResponse(I_TUNES_LOOKUP, mResultId);
-        call.enqueue(new Callback<LookupResponse>() {
+    /**
+     * Every time the LookupResponse data is updated, the onChanged callback will be invoked and
+     * update the UI.
+     */
+    private void observeLookupResponse() {
+        mSubscribeViewModel.getLookupResponse().observe(this, new Observer<LookupResponse>() {
             @Override
-            public void onResponse(Call<LookupResponse> call, Response<LookupResponse> response) {
-                LookupResponse lookupResponse = response.body();
-                List<LookupResult> lookupResults = lookupResponse.getLookupResults();
-                LookupResult lookupResult = lookupResults.get(0);
-                String feeUrl = lookupResult.getFeedUrl();
-                Toast.makeText(SubscribeActivity.this, feeUrl, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(Call<LookupResponse> call, Throwable t) {
-                t.printStackTrace();
+            public void onChanged(@Nullable LookupResponse lookupResponse) {
+                if (lookupResponse != null) {
+                    List<LookupResult> lookupResults = lookupResponse.getLookupResults();
+                    String feedUrl = lookupResults.get(0).getFeedUrl();
+                    Timber.e("feedUrl: " + feedUrl);
+                }
             }
         });
     }

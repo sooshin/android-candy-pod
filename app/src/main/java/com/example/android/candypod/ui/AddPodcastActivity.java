@@ -1,8 +1,11 @@
 package com.example.android.candypod.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.widget.Toast;
@@ -12,16 +15,12 @@ import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
 import com.example.android.candypod.model.Feed;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.Result;
-import com.example.android.candypod.utilities.ITunesSearchApi;
-import com.example.android.candypod.utilities.RetrofitClient;
+import com.example.android.candypod.ui.add.AddPodViewModel;
+import com.example.android.candypod.ui.add.AddPodViewModelFactory;
+import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 
@@ -37,6 +36,9 @@ public class AddPodcastActivity extends AppCompatActivity
     /** Member variable for AddPodcastAdapter */
     private AddPodcastAdapter mAddPodAdapter;
 
+    /** ViewModel for AddPodcastActivity */
+    private AddPodViewModel mAddPodViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +47,11 @@ public class AddPodcastActivity extends AppCompatActivity
         // Create a GridLayoutManager and AddPodcastAdapter, and set them to the RecyclerView
         initAdapter();
 
-        call();
+        String country = "us";
+        // Get the ViewModel from the factory
+        setupViewModel(country);
+        // Observe changes in the ITunesResponse
+        observeITunesResponse();
     }
 
     /**
@@ -67,23 +73,28 @@ public class AddPodcastActivity extends AppCompatActivity
         mAddPodBinding.rvAddPod.setAdapter(mAddPodAdapter);
     }
 
-    private void call() {
-        Retrofit retrofit = RetrofitClient.getClient();
-        ITunesSearchApi iTunesSearchApi = retrofit.create(ITunesSearchApi.class);
+    /**
+     * Get the ViewModel from the factory.
+     */
+    private void setupViewModel(String country) {
+        AddPodViewModelFactory factory = InjectorUtils.provideAddPodViewModelFactory(
+                AddPodcastActivity.this, country);
+        mAddPodViewModel = ViewModelProviders.of(this, factory).get(AddPodViewModel.class);
+    }
 
-        Call<ITunesResponse> call = iTunesSearchApi.getTopPodcasts("us");
-        call.enqueue(new Callback<ITunesResponse>() {
+    /**
+     * Every time the ITunesResponse data is updated, the onChanged callback will be invoked and
+     * update the UI.
+     */
+    private void observeITunesResponse() {
+        mAddPodViewModel.getITunesResponse().observe(this, new Observer<ITunesResponse>() {
             @Override
-            public void onResponse(Call<ITunesResponse> call, Response<ITunesResponse> response) {
-                ITunesResponse iTunesResponse = response.body();
-                Feed feed = iTunesResponse.getFeed();
-                List<Result> results = feed.getResults();
-                mAddPodAdapter.addAll(results);
-            }
-
-            @Override
-            public void onFailure(Call<ITunesResponse> call, Throwable t) {
-                t.printStackTrace();
+            public void onChanged(@Nullable ITunesResponse iTunesResponse) {
+                if (iTunesResponse != null) {
+                    Feed feed = iTunesResponse.getFeed();
+                    List<Result> results = feed.getResults();
+                    mAddPodAdapter.addAll(results);
+                }
             }
         });
     }
