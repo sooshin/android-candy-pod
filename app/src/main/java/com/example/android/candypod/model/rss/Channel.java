@@ -21,8 +21,8 @@ public class Channel {
     @Element(name = "language", required = false)
     private String mLanguage;
 
-    @Element(name = "category", required = false)
-    private Category mCategory;
+    @ElementList(inline = true, name = "category", required = false)
+    private List<Category> mCategories;
 
     @ElementList(inline = true, name = "item", required = false)
     private List<Item> mItemList;
@@ -62,12 +62,12 @@ public class Channel {
         mLanguage = language;
     }
 
-    public Category getCategory() {
-        return mCategory;
+    public List<Category> getCategories() {
+        return mCategories;
     }
 
-    public void setCategory(Category category) {
-        mCategory = category;
+    public void setCategory(List<Category> categories) {
+        mCategories = categories;
     }
 
     public List<Item> getItemList() {

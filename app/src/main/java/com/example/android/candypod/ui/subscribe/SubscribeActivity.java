@@ -118,8 +118,8 @@ public class SubscribeActivity extends AppCompatActivity {
                     Timber.e("author: " + author);
                     String language = channel.getLanguage();
                     Timber.e("language: " + language);
-                    Category category = channel.getCategory();
-                    String categoryText = category.getText();
+                    List<Category> categories = channel.getCategories();
+                    String categoryText = categories.get(0).getText();
                     Timber.e("categoryText: " + categoryText);
                     List<Item> itemList = channel.getItemList();
                     Enclosure enclosure = itemList.get(0).getEnclosure();
