@@ -2,7 +2,9 @@ package com.example.android.candypod.model.rss;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Text;
 
 import java.util.List;
 
@@ -12,7 +14,8 @@ public class Channel {
     @Element(name = "title", required = false)
     private String mTitle;
 
-    @Element(name = "description", required = false)
+    @Path("description")
+    @Text(required = false)
     private String mDescription;
 
     @Element(name = "author", required = false)
