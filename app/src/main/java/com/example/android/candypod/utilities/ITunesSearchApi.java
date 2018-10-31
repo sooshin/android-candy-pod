@@ -2,6 +2,7 @@ package com.example.android.candypod.utilities;
 
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.LookupResponse;
+import com.example.android.candypod.model.rss.RssFeed;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -28,5 +29,10 @@ public interface ITunesSearchApi {
     Call<LookupResponse> getLookupResponse(
             @Url String url,
             @Query("id") String id
+    );
+
+    @GET
+    Call<RssFeed> getRssFeed(
+            @Url String url
     );
 }

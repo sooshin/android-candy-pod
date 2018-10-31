@@ -10,13 +10,28 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.LookupResult;
+import com.example.android.candypod.model.rss.Category;
+import com.example.android.candypod.model.rss.Channel;
+import com.example.android.candypod.model.rss.Enclosure;
+import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.model.rss.RssFeed;
+import com.example.android.candypod.utilities.ITunesSearchApi;
 import com.example.android.candypod.utilities.InjectorUtils;
+
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.I_TUNES_BASE_URL;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
 
 public class SubscribeActivity extends AppCompatActivity {
@@ -73,7 +88,51 @@ public class SubscribeActivity extends AppCompatActivity {
                     List<LookupResult> lookupResults = lookupResponse.getLookupResults();
                     String feedUrl = lookupResults.get(0).getFeedUrl();
                     Timber.e("feedUrl: " + feedUrl);
+
+                    parseXml(feedUrl);
                 }
+            }
+        });
+    }
+
+    private void parseXml(String feedUrl) {
+        Retrofit sRetrofit = new Retrofit.Builder()
+                // Set the API base URL
+                .baseUrl(I_TUNES_BASE_URL)
+                .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
+                .build();
+
+        ITunesSearchApi iTunesSearchApi = sRetrofit.create(ITunesSearchApi.class);
+        Call<RssFeed> call = iTunesSearchApi.getRssFeed(feedUrl);
+        call.enqueue(new Callback<RssFeed>() {
+            @Override
+            public void onResponse(Call<RssFeed> call, Response<RssFeed> response) {
+                RssFeed rssFeed = response.body();
+                if (rssFeed != null) {
+                    Channel channel = rssFeed.getChannel();
+                    String title = channel.getTitle();
+                    Timber.e("title: " + title);
+                    String description = channel.getDescription();
+                    Timber.e("description: " + description);
+                    String author = channel.getITunesAuthor();
+                    Timber.e("author: " + author);
+                    String language = channel.getLanguage();
+                    Timber.e("language: " + language);
+                    Category category = channel.getCategory();
+                    String categoryText = category.getText();
+                    Timber.e("categoryText: " + categoryText);
+                    List<Item> itemList = channel.getItemList();
+                    Enclosure enclosure = itemList.get(0).getEnclosure();
+                    String type = enclosure.getType();
+                    Timber.e("type: " + type);
+                    String enclosureUrl = enclosure.getUrl();
+                    Timber.e("enclosure: " + enclosureUrl);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RssFeed> call, Throwable t) {
+                Timber.e("Failed:" + t.getMessage());
             }
         });
     }
