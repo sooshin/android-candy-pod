@@ -1,4 +1,4 @@
-package com.example.android.candypod.ui;
+package com.example.android.candypod.ui.subscribe;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -10,8 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.LookupResult;
-import com.example.android.candypod.ui.subscribe.SubscribeViewModel;
-import com.example.android.candypod.ui.subscribe.SubscribeViewModelFactory;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;

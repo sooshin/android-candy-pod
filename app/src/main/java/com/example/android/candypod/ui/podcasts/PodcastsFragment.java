@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.FragmentPodcastsBinding;
-import com.example.android.candypod.ui.AddPodcastActivity;
+import com.example.android.candypod.ui.add.AddPodcastActivity;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -23,9 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.AddPodcastActivity"
+            android:name=".ui.add.AddPodcastActivity"
             android:label="@string/add_podcast"></activity>
-        <activity android:name=".ui.SubscribeActivity"></activity>
+        <activity android:name=".ui.subscribe.SubscribeActivity"></activity>
     </application>
 
 </manifest>

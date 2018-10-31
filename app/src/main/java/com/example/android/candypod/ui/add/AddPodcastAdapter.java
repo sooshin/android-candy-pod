@@ -1,4 +1,4 @@
-package com.example.android.candypod.ui;
+package com.example.android.candypod.ui.add;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;

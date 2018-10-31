@@ -1,4 +1,4 @@
-package com.example.android.candypod.ui;
+package com.example.android.candypod.ui.add;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -15,8 +15,7 @@ import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
 import com.example.android.candypod.model.Feed;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.Result;
-import com.example.android.candypod.ui.add.AddPodViewModel;
-import com.example.android.candypod.ui.add.AddPodViewModelFactory;
+import com.example.android.candypod.ui.subscribe.SubscribeActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
