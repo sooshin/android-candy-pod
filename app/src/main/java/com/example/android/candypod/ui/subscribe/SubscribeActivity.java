@@ -123,6 +123,8 @@ public class SubscribeActivity extends AppCompatActivity {
                     Timber.e("categoryText: " + categoryText);
                     List<Item> itemList = channel.getItemList();
                     Enclosure enclosure = itemList.get(0).getEnclosure();
+                    String itemTitle = itemList.get(0).getTitle();
+                    Timber.e("itemTitle: " + itemTitle);
                     String type = enclosure.getType();
                     Timber.e("type: " + type);
                     String enclosureUrl = enclosure.getUrl();
