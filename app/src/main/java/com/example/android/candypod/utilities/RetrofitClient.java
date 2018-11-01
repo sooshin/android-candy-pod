@@ -3,7 +3,6 @@ package com.example.android.candypod.utilities;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.android.candypod.utilities.Constants.I_TUNES_BASE_URL;
 
@@ -28,9 +27,11 @@ public class RetrofitClient {
                     // Set the API base URL
                     .baseUrl(I_TUNES_BASE_URL)
                     .client(client)
-                    // Use the GsonConverterFactory class to generate an implementation of the
-                    // ITunesSearchApi interface which uses Gson for its deserialization
-                    .addConverterFactory(GsonConverterFactory.create())
+                    // Use custom ConverterFactory where you delegate to either GsonConverterFactory
+                    // or SimpleXmlConverterFactory
+                    // Reference: @see "https://stackoverflow.com/questions/40824122/android-retrofit-2-multiple-converters-gson-simplexml-error"
+                    // @see "https://speakerdeck.com/jakewharton/making-retrofit-work-for-you-ohio-devfest-2016?slide=86"
+                    .addConverterFactory(new XmlOrJsonConverterFactory())
                     .build();
         }
         return sRetrofit;
