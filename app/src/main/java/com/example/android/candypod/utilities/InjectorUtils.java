@@ -6,6 +6,7 @@ import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.data.CandyPodDatabase;
 import com.example.android.candypod.data.CandyPodRepository;
 import com.example.android.candypod.ui.add.AddPodViewModelFactory;
+import com.example.android.candypod.ui.subscribe.RssFeedViewModelFactory;
 import com.example.android.candypod.ui.subscribe.SubscribeViewModelFactory;
 
 /**
@@ -29,5 +30,10 @@ public class InjectorUtils {
             Context context, String lookupUrl, String id) {
         CandyPodRepository repository = provideRepository(context.getApplicationContext());
         return new SubscribeViewModelFactory(repository, lookupUrl, id);
+    }
+
+    public static RssFeedViewModelFactory provideRssViewModelFactory(Context context, String feedUrl) {
+        CandyPodRepository repository = provideRepository(context.getApplicationContext());
+        return new RssFeedViewModelFactory(repository, feedUrl);
     }
 }

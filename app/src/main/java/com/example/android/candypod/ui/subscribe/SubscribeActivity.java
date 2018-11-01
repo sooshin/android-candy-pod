@@ -15,23 +15,13 @@ import com.example.android.candypod.model.rss.Channel;
 import com.example.android.candypod.model.rss.Enclosure;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.RssFeed;
-import com.example.android.candypod.utilities.ITunesSearchApi;
 import com.example.android.candypod.utilities.InjectorUtils;
-
-import org.simpleframework.xml.convert.AnnotationStrategy;
-import org.simpleframework.xml.core.Persister;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
-import static com.example.android.candypod.utilities.Constants.I_TUNES_BASE_URL;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
 
 public class SubscribeActivity extends AppCompatActivity {
@@ -41,6 +31,8 @@ public class SubscribeActivity extends AppCompatActivity {
 
     /** ViewModel for SubscribeActivity */
     private SubscribeViewModel mSubscribeViewModel;
+    /** ViewModel which stores and manages LiveData RssFeed */
+    private RssFeedViewModel mRssFeedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,25 +81,33 @@ public class SubscribeActivity extends AppCompatActivity {
                     String feedUrl = lookupResults.get(0).getFeedUrl();
                     Timber.e("feedUrl: " + feedUrl);
 
-                    parseXml(feedUrl);
+                    // Get the RssFeedViewModel from the factory
+                    setupRssFeedViewModel(feedUrl);
+                    // Observe changes in the RssFeed
+                    observeRssFeed();
                 }
             }
         });
     }
 
-    private void parseXml(String feedUrl) {
-        Retrofit sRetrofit = new Retrofit.Builder()
-                // Set the API base URL
-                .baseUrl(I_TUNES_BASE_URL)
-                .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(new Persister(new AnnotationStrategy())))
-                .build();
+    /**
+     * Get the RssFeedViewModel from the factory.
+     * @param feedUrl The feed URL extracted from the list of LookupResults has the episode
+     *                  metadata and stream URLs for the audio file.
+     */
+    private void setupRssFeedViewModel(String feedUrl) {
+        RssFeedViewModelFactory rssFactory = InjectorUtils.provideRssViewModelFactory(
+                SubscribeActivity.this, feedUrl);
+        mRssFeedViewModel = ViewModelProviders.of(this, rssFactory).get(RssFeedViewModel.class);
+    }
 
-        ITunesSearchApi iTunesSearchApi = sRetrofit.create(ITunesSearchApi.class);
-        Call<RssFeed> call = iTunesSearchApi.getRssFeed(feedUrl);
-        call.enqueue(new Callback<RssFeed>() {
+    /**
+     * Observe changes in the RssFeed
+     */
+    private void observeRssFeed() {
+        mRssFeedViewModel.getRssFeed().observe(this, new Observer<RssFeed>() {
             @Override
-            public void onResponse(Call<RssFeed> call, Response<RssFeed> response) {
-                RssFeed rssFeed = response.body();
+            public void onChanged(@Nullable RssFeed rssFeed) {
                 if (rssFeed != null) {
                     Channel channel = rssFeed.getChannel();
                     String title = channel.getTitle();
@@ -130,11 +130,6 @@ public class SubscribeActivity extends AppCompatActivity {
                     String enclosureUrl = enclosure.getUrl();
                     Timber.e("enclosure: " + enclosureUrl);
                 }
-            }
-
-            @Override
-            public void onFailure(Call<RssFeed> call, Throwable t) {
-                Timber.e("Failed:" + t.getMessage());
             }
         });
     }

@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData;
 import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.LookupResponse;
+import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.utilities.ITunesSearchApi;
 
 import retrofit2.Call;
@@ -99,5 +100,31 @@ public class CandyPodRepository {
                     }
                 });
         return lookupResponseData;
+    }
+
+    /**
+     * Returns {@link LiveData} RssFeed
+     * @param feedUrl The feed URL which has the episode metadata and stream URLs for the audio file
+     */
+    public LiveData<RssFeed> getRssFeed(String feedUrl) {
+        final MutableLiveData<RssFeed> rssFeedData = new MutableLiveData<>();
+
+        mITunesSearchApi.getRssFeed(feedUrl)
+                .enqueue(new Callback<RssFeed>() {
+                    @Override
+                    public void onResponse(Call<RssFeed> call, Response<RssFeed> response) {
+                        if (response.isSuccessful()) {
+                            RssFeed rssFeed = response.body();
+                            rssFeedData.setValue(rssFeed);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<RssFeed> call, Throwable t) {
+                        rssFeedData.setValue(null);
+                        Timber.e("Failed getting RssFeed data. " + t.getMessage());
+                    }
+                });
+        return rssFeedData;
     }
 }
