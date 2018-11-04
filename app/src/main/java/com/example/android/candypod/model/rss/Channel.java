@@ -18,7 +18,8 @@ public class Channel {
     @Text(required = false)
     private String mDescription;
 
-    @Element(name = "author", required = false)
+    @Path("author")
+    @Text(required = false)
     private String mITunesAuthor;
 
     @Element(name = "language", required = false)

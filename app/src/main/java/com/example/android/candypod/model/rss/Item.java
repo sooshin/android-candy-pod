@@ -12,7 +12,8 @@ public class Item {
     @Text(required = false)
     private String mTitle;
 
-    @Element(name = "description", required = false)
+    @Path("description")
+    @Text(required = false)
     private String mDescription;
 
     @Element(name = "summary", required = false)
