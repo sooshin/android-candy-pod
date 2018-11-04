@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.widget.Toast;
 
 import com.example.android.candypod.R;
@@ -15,6 +14,7 @@ import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
 import com.example.android.candypod.model.Feed;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.Result;
+import com.example.android.candypod.ui.GridAutofitLayoutManager;
 import com.example.android.candypod.ui.subscribe.SubscribeActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
 public class AddPodcastActivity extends AppCompatActivity
         implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler {
@@ -54,10 +55,14 @@ public class AddPodcastActivity extends AppCompatActivity
     }
 
     /**
-     * Create a GridLayoutManager and AddPodcastAdapter, and set them to the RecyclerView.
+     * Create a GridAutofitLayoutManager and AddPodcastAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        // A GridAutofitLayoutManager is responsible for calculating the amount of GridView columns
+        // based on screen size and positioning item views within a RecyclerView into a grid layout.
+        // Reference: @see "https://codentrick.com/part-4-android-recyclerview-grid/"
+        GridAutofitLayoutManager layoutManager = new GridAutofitLayoutManager(
+                this, GRID_AUTO_FIT_COLUMN_WIDTH);
         // Set the layout manager to the RecyclerView
         mAddPodBinding.rvAddPod.setLayoutManager(layoutManager);
         // Use this setting to improve performance if you know that changes in content do not

@@ -27,4 +27,11 @@ public class Constants {
     /** Used to replace the HTML img tag with empty string */
     public static final String IMG_HTML_TAG = "<img.+?>";
     public static final String REPLACEMENT_EMPTY = "";
+
+    /** The value of column width in the GridAutofitLayoutManager */
+    public static final int GRID_AUTO_FIT_COLUMN_WIDTH = 380;
+    /** Default value for column width in the GridAutofitLayoutManager */
+    public static final int GRID_COLUMN_WIDTH_DEFAULT = 48;
+    /** Initial span count for the GridAutofitLayoutManager */
+    public static final int GRID_SPAN_COUNT = 1;
 }
