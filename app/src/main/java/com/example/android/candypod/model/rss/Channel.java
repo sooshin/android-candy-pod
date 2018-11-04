@@ -27,6 +27,9 @@ public class Channel {
     @ElementList(inline = true, name = "category", required = false)
     private List<Category> mCategories;
 
+    @ElementList(inline = true, name = "image", required = false)
+    private List<ArtworkImage> mArtworkImages;
+
     @ElementList(inline = true, name = "item", required = false)
     private List<Item> mItemList;
 
@@ -71,6 +74,14 @@ public class Channel {
 
     public void setCategory(List<Category> categories) {
         mCategories = categories;
+    }
+
+    public List<ArtworkImage> getImages() {
+        return mArtworkImages;
+    }
+
+    public void setImages(List<ArtworkImage> artworkImages) {
+        mArtworkImages = artworkImages;
     }
 
     public List<Item> getItemList() {
