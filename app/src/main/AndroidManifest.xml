@@ -25,7 +25,11 @@
         <activity
             android:name=".ui.add.AddPodcastActivity"
             android:label="@string/add_podcast"></activity>
-        <activity android:name=".ui.subscribe.SubscribeActivity"></activity>
+        <activity
+            android:name=".ui.subscribe.SubscribeActivity"
+            android:label="@string/subscribe"
+            android:theme="@style/Theme.Subscribe">
+        </activity>
     </application>
 
 </manifest>

@@ -23,4 +23,8 @@ public class Constants {
 
     /** Database name */
     public static final String DATABASE_NAME = "podcast";
+
+    /** Used to replace the HTML img tag with empty string */
+    public static final String IMG_HTML_TAG = "<img.+?>";
+    public static final String REPLACEMENT_EMPTY = "";
 }

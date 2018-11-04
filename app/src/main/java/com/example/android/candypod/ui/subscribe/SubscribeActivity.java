@@ -3,20 +3,26 @@ package com.example.android.candypod.ui.subscribe;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 
+import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
+import com.example.android.candypod.databinding.ActivitySubscribeBinding;
 import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.LookupResult;
+import com.example.android.candypod.model.rss.ArtworkImage;
 import com.example.android.candypod.model.rss.Category;
 import com.example.android.candypod.model.rss.Channel;
-import com.example.android.candypod.model.rss.Enclosure;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.utilities.InjectorUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -34,10 +40,19 @@ public class SubscribeActivity extends AppCompatActivity {
     /** ViewModel which stores and manages LiveData RssFeed */
     private RssFeedViewModel mRssFeedViewModel;
 
+    /** This field is used for data binding **/
+    private ActivitySubscribeBinding mSubscribeBinding;
+
+    /** Member variable for SubscribeAdapter */
+    private SubscribeAdapter mSubscribeAdapter;
+
+    /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
+    private List<Item> mItemList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subscribe);
+        mSubscribeBinding = DataBindingUtil.setContentView(this, R.layout.activity_subscribe);
 
         // Get the podcast ID
         mResultId = getResultId();
@@ -46,6 +61,28 @@ public class SubscribeActivity extends AppCompatActivity {
         setupViewModel();
         // Observe changes in the LookupResponse
         observeLookupResponse();
+
+        // Create a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView
+        initAdapter();
+    }
+
+    /**
+     * Create a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView.
+     */
+    private void initAdapter() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        // Set the layout manager to the RecyclerView
+        mSubscribeBinding.rvItem.setLayoutManager(layoutManager);
+        // Use this setting to improve performance if you know that changes in content do not
+        // change the child layout size in the RecyclerView
+        mSubscribeBinding.rvItem.setHasFixedSize(true);
+
+        // Create an empty ArrayList
+        mItemList = new ArrayList<>();
+        // SubscribeAdapter is responsible for displaying each item in the list.
+        mSubscribeAdapter = new SubscribeAdapter(mItemList);
+        // Set adapter to the RecyclerView
+        mSubscribeBinding.rvItem.setAdapter(mSubscribeAdapter);
     }
 
     /**
@@ -110,27 +147,71 @@ public class SubscribeActivity extends AppCompatActivity {
             public void onChanged(@Nullable RssFeed rssFeed) {
                 if (rssFeed != null) {
                     Channel channel = rssFeed.getChannel();
-                    String title = channel.getTitle();
-                    Timber.e("title: " + title);
-                    String description = channel.getDescription();
-                    Timber.e("description: " + description);
-                    String author = channel.getITunesAuthor();
-                    Timber.e("author: " + author);
-                    String language = channel.getLanguage();
-                    Timber.e("language: " + language);
-                    List<Category> categories = channel.getCategories();
-                    String categoryText = categories.get(0).getText();
-                    Timber.e("categoryText: " + categoryText);
-                    List<Item> itemList = channel.getItemList();
-                    Enclosure enclosure = itemList.get(0).getEnclosure();
-                    String itemTitle = itemList.get(0).getTitle();
-                    Timber.e("itemTitle: " + itemTitle);
-                    String type = enclosure.getType();
-                    Timber.e("type: " + type);
-                    String enclosureUrl = enclosure.getUrl();
-                    Timber.e("enclosure: " + enclosureUrl);
+
+                    // Show the details of the podcast
+                    showDetails(channel);
+                    // Show the episodes of the podcast
+                    showItems(channel);
                 }
             }
         });
+    }
+
+    /**
+     * Show the details of the podcast.
+     * @param channel Channel object that contains data, such as title, description, author,
+     *                language, categories, image, items.
+     */
+    private void showDetails(Channel channel) {
+        // Get the image URL which consists of two types. One has a href attribute, the other has
+        // an url element. If the url element is null, use the href attribute.
+        List<ArtworkImage> artworkImage = channel.getImages();
+        ArtworkImage image = artworkImage.get(0);
+        String artworkImageUrl = image.getImageUrl();
+        if (artworkImageUrl == null) {
+            artworkImageUrl = image.getImageHref();
+        }
+        // Use Glide library to upload the artwork
+        Glide.with(this)
+                .load(artworkImageUrl)
+                .into(mSubscribeBinding.ivArtwork);
+
+        // Get the title and set the text
+        String title = channel.getTitle();
+        mSubscribeBinding.tvTitle.setText(title);
+
+        // Get the author and set the text
+        String author = channel.getITunesAuthor();
+        mSubscribeBinding.tvAuthor.setText(author);
+
+        // Get the categories and set the categories
+        List<Category> categories = channel.getCategories();
+        for (Category category:categories) {
+            String categoryText = category.getText();
+            if (categoryText != null) {
+                mSubscribeBinding.tvCategory.append(categoryText + "  ");
+            }
+        }
+
+        // Get the language and set the text
+        String language = channel.getLanguage();
+        mSubscribeBinding.tvLanguage.setText(language);
+
+        // Get the description
+        String description = channel.getDescription();
+        // Convert HTML to plain text and set the text
+        // Reference: @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
+        mSubscribeBinding.tvDescription.setText(Html.fromHtml(Html.fromHtml(description).toString()));
+    }
+
+    /**
+     * Show the episodes of the podcast.
+     * @param channel Channel object that includes the items data which is the podcast episodes.
+     */
+    private void showItems(Channel channel) {
+        // Get the list of items
+        mItemList = channel.getItemList();
+        // Update the data source and notify the adapter of any changes.
+        mSubscribeAdapter.addAll(mItemList);
     }
 }
