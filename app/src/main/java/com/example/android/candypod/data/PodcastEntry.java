@@ -20,6 +20,12 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+
+import com.example.android.candypod.model.rss.Item;
+
+import java.util.Date;
+import java.util.List;
 
 @Entity(tableName = "podcast")
 public class PodcastEntry {
@@ -39,6 +45,11 @@ public class PodcastEntry {
     @ColumnInfo(name = "artwork_image_url")
     private String artworkImageUrl;
 
+    @TypeConverters(ItemsConverter.class)
+    private List<Item> items;
+
+    private Date date;
+
     /**
      * Constructor
      *
@@ -47,23 +58,31 @@ public class PodcastEntry {
      * @param description
      * @param author
      * @param artworkImageUrl
+     * @param items
+     * @param date
      */
     @Ignore
-    public PodcastEntry(String podcastId, String title, String description, String author, String artworkImageUrl) {
+    public PodcastEntry(String podcastId, String title, String description, String author,
+                        String artworkImageUrl, List<Item> items, Date date) {
         this.podcastId = podcastId;
         this.title = title;
         this.description = description;
         this.author = author;
         this.artworkImageUrl = artworkImageUrl;
+        this.items = items;
+        this.date = date;
     }
 
-    public PodcastEntry(int id, String podcastId, String title, String description, String author, String artworkImageUrl) {
+    public PodcastEntry(int id, String podcastId, String title, String description, String author,
+                        String artworkImageUrl, List<Item> items, Date date) {
         this.id = id;
         this.podcastId = podcastId;
         this.title = title;
         this.description = description;
         this.author = author;
         this.artworkImageUrl = artworkImageUrl;
+        this.items = items;
+        this.date = date;
     }
 
     public int getId() {
@@ -88,5 +107,14 @@ public class PodcastEntry {
 
     public String getArtworkImageUrl() {
         return artworkImageUrl;
+    }
+
+    @TypeConverters(ItemsConverter.class)
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

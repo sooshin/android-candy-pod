@@ -44,6 +44,7 @@ import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
@@ -241,8 +242,11 @@ public class SubscribeActivity extends AppCompatActivity {
         // Reference: @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
         mSubscribeBinding.tvDescription.setText(Html.fromHtml(Html.fromHtml(description).toString()));
 
+        // Get the list of items
+        mItemList = channel.getItemList();
         // Create the PodcastEntry based on the data
-        mPodcastEntry = new PodcastEntry(mResultId, title, description, author, artworkImageUrl);
+        mPodcastEntry = new PodcastEntry(mResultId, title, description, author,
+                artworkImageUrl, mItemList, new Date());
     }
 
     /**

@@ -19,6 +19,7 @@ package com.example.android.candypod.data;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import timber.log.Timber;
@@ -26,6 +27,7 @@ import timber.log.Timber;
 import static com.example.android.candypod.utilities.Constants.DATABASE_NAME;
 
 @Database(entities = {PodcastEntry.class}, version = 1, exportSchema = false)
+@TypeConverters({ItemsConverter.class, DateConverter.class})
 public abstract class CandyPodDatabase extends RoomDatabase {
 
     // For Singleton instantiation
