@@ -9,6 +9,8 @@ import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.utilities.ITunesSearchApi;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -126,5 +128,22 @@ public class CandyPodRepository {
                     }
                 });
         return rssFeedData;
+    }
+
+    /**
+     * Get the podcast by podcast ID from the podcast table.
+     * @param podcastId The podcast ID
+     * @return {@link LiveData} PodcastEntry from the database.
+     */
+    public LiveData<PodcastEntry> getPodcastByPodcastId(String podcastId) {
+        return mPodcastDao.loadPodcastByPodcastId(podcastId);
+    }
+
+    /**
+     * Get the list of the podcasts from the podcast table.
+     * @return {@link LiveData} list of all {@link PodcastEntry} objects from the database.
+     */
+    public LiveData<List<PodcastEntry>> getPodcasts() {
+        return mPodcastDao.loadPodcasts();
     }
 }

@@ -9,9 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
+import com.example.android.candypod.data.CandyPodDatabase;
+import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivitySubscribeBinding;
 import com.example.android.candypod.model.LookupResponse;
 import com.example.android.candypod.model.LookupResult;
@@ -39,6 +44,8 @@ public class SubscribeActivity extends AppCompatActivity {
     private SubscribeViewModel mSubscribeViewModel;
     /** ViewModel which stores and manages LiveData RssFeed */
     private RssFeedViewModel mRssFeedViewModel;
+    /** Member variable for the PodcastEntryViewModel to store and manage LiveData PodcastEntry */
+    private PodcastEntryViewModel mPodcastEntryViewModel;
 
     /** This field is used for data binding **/
     private ActivitySubscribeBinding mSubscribeBinding;
@@ -48,6 +55,13 @@ public class SubscribeActivity extends AppCompatActivity {
 
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
     private List<Item> mItemList;
+
+    /** Member variable for the Database */
+    private CandyPodDatabase mDb;
+    /** Member variable for the PodcastEntry */
+    private PodcastEntry mPodcastEntry;
+    /** True when the user subscribed the podcast, otherwise false */
+    private boolean mIsSubscribed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +78,11 @@ public class SubscribeActivity extends AppCompatActivity {
 
         // Create a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView
         initAdapter();
+
+        // Get the Database instance
+        mDb = CandyPodDatabase.getInstance(getApplicationContext());
+        // Check if the podcast is subscribed or not
+        mIsSubscribed = isSubscribed();
     }
 
     /**
@@ -158,7 +177,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Show the details of the podcast.
+     * Show the details of the podcast and create the PodcastEntry based on the data.
      * @param channel Channel object that contains data, such as title, description, author,
      *                language, categories, image, items.
      */
@@ -202,6 +221,9 @@ public class SubscribeActivity extends AppCompatActivity {
         // Convert HTML to plain text and set the text
         // Reference: @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
         mSubscribeBinding.tvDescription.setText(Html.fromHtml(Html.fromHtml(description).toString()));
+
+        // Create the PodcastEntry based on the data
+        mPodcastEntry = new PodcastEntry(mResultId, title, description, author, artworkImageUrl);
     }
 
     /**
@@ -214,4 +236,63 @@ public class SubscribeActivity extends AppCompatActivity {
         // Update the data source and notify the adapter of any changes.
         mSubscribeAdapter.addAll(mItemList);
     }
+
+    /**
+     * Return true when the user subscribed the podcast otherwise, return false.
+     */
+    private boolean isSubscribed() {
+        // Get the PodcastEntryViewModel from the factory
+        PodcastEntryViewModelFactory podcastEntryFactory = InjectorUtils.providePodcastEntryViewModelFactory(
+                this, mResultId);
+        mPodcastEntryViewModel = ViewModelProviders.of(this, podcastEntryFactory)
+                .get(PodcastEntryViewModel.class);
+
+        // Observe the PodcastEntry and changes the button text based on whether or not the podcast
+        // exists
+        mPodcastEntryViewModel.getPodcastEntry().observe(this, new Observer<PodcastEntry>() {
+            @Override
+            public void onChanged(@Nullable PodcastEntry podcastEntry) {
+                if (mPodcastEntryViewModel.getPodcastEntry().getValue() == null) {
+                    mSubscribeBinding.btSubscribe.setText("subscribe");
+                    mIsSubscribed = false;
+                } else {
+                    mSubscribeBinding.btSubscribe.setText("unsubscribe");
+                    mIsSubscribed = true;
+                }
+            }
+        });
+        return mIsSubscribed;
+    }
+
+    /**
+     * Called when the subscribe button is clicked. If the podcast is not in the podcast table,
+     * insert the data into the underlying database. Otherwise, delete the podcast data from the
+     * database.
+     */
+    public void onSubscribeClick(View view) {
+        // Check if the PodcastEntry is not null
+        if (mPodcastEntry != null) {
+            if (!mIsSubscribed) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Insert the podcast data into the database by using the podcastDao
+                        mDb.podcastDao().insertPodcast(mPodcastEntry);
+                    }
+                });
+                Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+            } else {
+                mPodcastEntry = mPodcastEntryViewModel.getPodcastEntry().getValue();
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Delete the podcast from the database by using the podcastDao
+                        mDb.podcastDao().deletePodcast(mPodcastEntry);
+                    }
+                });
+                Toast.makeText(this, "Removed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

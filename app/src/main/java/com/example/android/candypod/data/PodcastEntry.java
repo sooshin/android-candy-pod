@@ -12,13 +12,16 @@ public class PodcastEntry {
     private int id;
 
     @ColumnInfo(name = "podcast_id")
-    private int podcastId;
+    private String podcastId;
 
     private String title;
 
     private String description;
 
     private String author;
+
+    @ColumnInfo(name = "artwork_image_url")
+    private String artworkImageUrl;
 
     /**
      * Constructor
@@ -27,28 +30,31 @@ public class PodcastEntry {
      * @param title
      * @param description
      * @param author
+     * @param artworkImageUrl
      */
     @Ignore
-    public PodcastEntry(int podcastId, String title, String description, String author) {
+    public PodcastEntry(String podcastId, String title, String description, String author, String artworkImageUrl) {
         this.podcastId = podcastId;
         this.title = title;
         this.description = description;
         this.author = author;
+        this.artworkImageUrl = artworkImageUrl;
     }
 
-    public PodcastEntry(int id, int podcastId, String title, String description, String author) {
+    public PodcastEntry(int id, String podcastId, String title, String description, String author, String artworkImageUrl) {
         this.id = id;
         this.podcastId = podcastId;
         this.title = title;
         this.description = description;
         this.author = author;
+        this.artworkImageUrl = artworkImageUrl;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getPodcastId() {
+    public String getPodcastId() {
         return podcastId;
     }
 
@@ -62,5 +68,9 @@ public class PodcastEntry {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getArtworkImageUrl() {
+        return artworkImageUrl;
     }
 }
