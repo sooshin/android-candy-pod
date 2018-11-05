@@ -198,13 +198,16 @@ public class SubscribeActivity extends AppCompatActivity {
      *                language, categories, image, items.
      */
     private void showDetails(Channel channel) {
-        // Get the image URL which consists of two types. One has a href attribute, the other has
-        // an url element. If the url element is null, use the href attribute.
+        // Get the two types of image URL. One has a href attribute, the other has an url element.
+        // First, use the href attribute. If the href attribute is null, use the url element.
         List<ArtworkImage> artworkImage = channel.getImages();
         ArtworkImage image = artworkImage.get(0);
-        String artworkImageUrl = image.getImageUrl();
+        String artworkImageUrl = image.getImageHref();
         if (artworkImageUrl == null) {
-            artworkImageUrl = image.getImageHref();
+            artworkImageUrl = artworkImage.get(1).getImageHref();
+            if (artworkImageUrl == null) {
+                artworkImageUrl = image.getImageUrl();
+            }
         }
         // Use Glide library to upload the artwork
         Glide.with(this)
