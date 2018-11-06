@@ -25,7 +25,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
@@ -40,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
 public class AddPodcastActivity extends AppCompatActivity
@@ -163,8 +163,9 @@ public class AddPodcastActivity extends AppCompatActivity
         Intent intent = new Intent(this, SubscribeActivity.class);
         // Pass the podcast ID
         intent.putExtra(EXTRA_RESULT_ID, result.getId());
+        // Pass the podcast title
+        intent.putExtra(EXTRA_RESULT_NAME, result.getName());
         // Once the Intent has been created, start the SubscribeActivity
         startActivity(intent);
-        Toast.makeText(this, result.getId(), Toast.LENGTH_SHORT).show();
     }
 }

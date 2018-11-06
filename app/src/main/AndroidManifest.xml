@@ -33,7 +33,11 @@
         <activity
             android:name=".ui.subscribe.SubscribeActivity"
             android:label="@string/subscribe"
+            android:parentActivityName=".ui.add.AddPodcastActivity"
             android:theme="@style/Theme.Subscribe">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.add.AddPodcastActivity" />
         </activity>
     </application>
 

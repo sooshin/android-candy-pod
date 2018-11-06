@@ -22,6 +22,8 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
@@ -50,12 +52,15 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
 
 public class SubscribeActivity extends AppCompatActivity {
 
     /** The podcast ID */
     private String mResultId;
+    /** The podcast title */
+    private String mResultName;
 
     /** ViewModel for SubscribeActivity */
     private SubscribeViewModel mSubscribeViewModel;
@@ -85,8 +90,8 @@ public class SubscribeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mSubscribeBinding = DataBindingUtil.setContentView(this, R.layout.activity_subscribe);
 
-        // Get the podcast ID
-        mResultId = getResultId();
+        // Get the podcast ID and title
+        getResultData();
 
        // Get the ViewModel from the factory
         setupViewModel();
@@ -95,6 +100,11 @@ public class SubscribeActivity extends AppCompatActivity {
 
         // Create a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView
         initAdapter();
+
+        // Show the up button on Collapsing Toolbar
+        showUpButton();
+        // Show the title in the app bar when a CollapsingToolbarLayout is fully collapsed
+        setCollapsingToolbarTitle();
 
         // Get the Database instance
         mDb = CandyPodDatabase.getInstance(getApplicationContext());
@@ -122,14 +132,17 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Returns the podcast ID which is used to create a lookup request to search for content.
+     * Get the podcast ID which is used to create a lookup request to search for content.
+     * Get the podcast title used to set the title in the app bar.
      */
-    private String getResultId() {
+    private void getResultData() {
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_RESULT_ID)) {
             mResultId = intent.getStringExtra(EXTRA_RESULT_ID);
         }
-        return mResultId;
+        if(intent.hasExtra(EXTRA_RESULT_NAME)) {
+            mResultName = intent.getStringExtra(EXTRA_RESULT_NAME);
+        }
     }
 
     /**
@@ -318,4 +331,57 @@ public class SubscribeActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show the up button on the Collapsing Toolbar.
+     */
+    private void showUpButton() {
+        // Set the toolbar as the app bar
+        setSupportActionBar(mSubscribeBinding.toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        // Set the action bar back button to look like an up button
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    /**
+     * When the user press the up button in the app bar, finishes this SubscribeActivity.
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /**
+     * Show the title in the app bar when a CollapsingToolbarLayout is fully collapsed, otherwise
+     * hide the title.
+     *
+     * References: @see "https://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed"
+     * @see "https://stackoverflow.com/questions/31872653/how-can-i-determine-that-collapsingtoolbar-is-collapsed"
+     */
+    private void setCollapsingToolbarTitle() {
+        // Set onOffsetChangedListener to determine when the CollapsingToolbar is collapsed
+        mSubscribeBinding.appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                int scrollRange = appBarLayout.getTotalScrollRange();
+                if (verticalOffset == 0) {
+                    // When a CollapsingToolbarLayout is expanded, hide the title
+                    mSubscribeBinding.collapsingToolbar.setTitle(" ");
+                } else if (Math.abs(verticalOffset) >= scrollRange) {
+                    // When a CollapsingToolbarLayout is fully collapsed, show the title
+                    if (mResultName != null) {
+                        mSubscribeBinding.collapsingToolbar.setTitle(mResultName);
+                    }
+                } else {
+                    // Otherwise, hide the title
+                    mSubscribeBinding.collapsingToolbar.setTitle(" ");
+                }
+            }
+        });
+    }
 }

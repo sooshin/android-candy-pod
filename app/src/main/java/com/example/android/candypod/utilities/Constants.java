@@ -36,6 +36,7 @@ public class Constants {
 
     /** A key for the Extra to pass data via Intent */
     public static final String EXTRA_RESULT_ID = "extra_result_id";
+    public static final String EXTRA_RESULT_NAME = "extra_result_name";
 
     /** Database name */
     public static final String DATABASE_NAME = "podcast";
