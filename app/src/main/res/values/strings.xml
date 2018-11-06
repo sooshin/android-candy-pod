@@ -34,5 +34,10 @@
     <!-- Content Description -->
     <string name="artwork_content_description">Artwork</string>
 
+    <!-- Text for the subscribe button and label for the SubscribeActivity -->
     <string name="subscribe">Subscribe</string>
+    <!-- Text for the unsubscribe button -->
+    <string name="unsubscribe">Unsubscribe</string>
+    <!-- Space used to set the title in the expanded collapsing toolbar -->
+    <string name="space">\u0020</string>
 </resources>

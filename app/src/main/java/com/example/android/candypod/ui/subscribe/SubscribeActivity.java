@@ -241,7 +241,7 @@ public class SubscribeActivity extends AppCompatActivity {
         for (Category category:categories) {
             String categoryText = category.getText();
             if (categoryText != null) {
-                mSubscribeBinding.tvCategory.append(categoryText + "  ");
+                mSubscribeBinding.tvCategory.append(categoryText + getString(R.string.space));
             }
         }
 
@@ -289,10 +289,10 @@ public class SubscribeActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable PodcastEntry podcastEntry) {
                 if (mPodcastEntryViewModel.getPodcastEntry().getValue() == null) {
-                    mSubscribeBinding.btSubscribe.setText("subscribe");
+                    mSubscribeBinding.btSubscribe.setText(getString(R.string.subscribe));
                     mIsSubscribed = false;
                 } else {
-                    mSubscribeBinding.btSubscribe.setText("unsubscribe");
+                    mSubscribeBinding.btSubscribe.setText(getString(R.string.unsubscribe));
                     mIsSubscribed = true;
                 }
             }
@@ -371,7 +371,7 @@ public class SubscribeActivity extends AppCompatActivity {
                 int scrollRange = appBarLayout.getTotalScrollRange();
                 if (verticalOffset == 0) {
                     // When a CollapsingToolbarLayout is expanded, hide the title
-                    mSubscribeBinding.collapsingToolbar.setTitle(" ");
+                    mSubscribeBinding.collapsingToolbar.setTitle(getString(R.string.space));
                 } else if (Math.abs(verticalOffset) >= scrollRange) {
                     // When a CollapsingToolbarLayout is fully collapsed, show the title
                     if (mResultName != null) {
@@ -379,7 +379,7 @@ public class SubscribeActivity extends AppCompatActivity {
                     }
                 } else {
                     // Otherwise, hide the title
-                    mSubscribeBinding.collapsingToolbar.setTitle(" ");
+                    mSubscribeBinding.collapsingToolbar.setTitle(getString(R.string.space));
                 }
             }
         });
