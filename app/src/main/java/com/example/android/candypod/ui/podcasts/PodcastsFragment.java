@@ -34,10 +34,12 @@ import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.FragmentPodcastsBinding;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
 import com.example.android.candypod.ui.add.AddPodcastActivity;
+import com.example.android.candypod.ui.detail.DetailActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
 /**
@@ -140,8 +142,26 @@ public class PodcastsFragment extends Fragment
         });
     }
 
+    /**
+     * This is where we receive our callback from
+     * {@link PodcastsAdapter.PodcastsAdapterOnClickHandler}.
+     *
+     * This callback is invoked when the user clicks on a podcast in the list. When the user clicks
+     * the podcast, start the DetailActivity.
+     *
+     * @param podcastEntry A single row from podcast table that has the data of the podcast.
+     *             When the user subscribes to the podcast, the podcast data is added to the database.
+     */
     @Override
     public void onPodcastClick(PodcastEntry podcastEntry) {
+        // Create the Intent that will start the DetailActivity
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
 
+        // Get the podcast ID from the podcastEntry and pass the podcast ID
+        String podcastId = podcastEntry.getPodcastId();
+        intent.putExtra(EXTRA_RESULT_ID, podcastId);
+
+        // Once the Intent has been created, start the DetailActivity
+        startActivity(intent);
     }
 }

@@ -40,4 +40,7 @@
     <string name="unsubscribe">Unsubscribe</string>
     <!-- Space used to set the title in the expanded collapsing toolbar -->
     <string name="space">\u0020</string>
+
+    <!-- Label for the DetailActivity -->
+    <string name="detail">Detail</string>
 </resources>

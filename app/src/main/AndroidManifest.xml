@@ -39,6 +39,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.add.AddPodcastActivity" />
         </activity>
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:label="@string/detail">
+        </activity>
     </application>
 
 </manifest>
