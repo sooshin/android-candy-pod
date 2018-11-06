@@ -24,7 +24,12 @@
         </activity>
         <activity
             android:name=".ui.add.AddPodcastActivity"
-            android:label="@string/add_podcast"></activity>
+            android:label="@string/add_podcast"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
         <activity
             android:name=".ui.subscribe.SubscribeActivity"
             android:label="@string/subscribe"
