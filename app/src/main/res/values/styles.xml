@@ -45,4 +45,9 @@
 
     </style>
 
+    <!-- Theme applied to the NowPlayingActivity -->
+    <style name="Theme.Subscribe.NowPlaying" >
+
+    </style>
+
 </resources>

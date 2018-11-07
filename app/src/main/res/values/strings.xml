@@ -41,8 +41,9 @@
     <!-- Space used to set the title in the expanded collapsing toolbar -->
     <string name="space">\u0020</string>
 
-    <!-- Label for the DetailActivity -->
+    <!-- Label for the DetailActivity and NowPlayingActivity -->
     <string name="detail">Detail</string>
+    <string name="now_playing">Now Playing</string>
 
     <!-- Context menu item -->
     <string name="action_delete">Delete</string>

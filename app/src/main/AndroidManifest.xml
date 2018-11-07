@@ -42,7 +42,11 @@
         <activity
             android:name=".ui.detail.DetailActivity"
             android:label="@string/detail"
-            android:theme="@style/Theme.Subscribe.Detail">
+            android:theme="@style/Theme.Subscribe.Detail"></activity>
+        <activity
+            android:name=".ui.nowplaying.NowPlayingActivity"
+            android:label="@string/now_playing"
+            android:theme="@style/Theme.Subscribe.NowPlaying">
         </activity>
     </application>
 

@@ -20,6 +20,7 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
@@ -35,13 +36,29 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
     private List<Item> mItems;
 
+    /*
+     * An on-click handler that we've defined to make it easy for an Activity to interface with
+     * our RecyclerView
+     */
+    private final DetailAdapterOnClickHandler mOnClickHandler;
+
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface DetailAdapterOnClickHandler {
+        void onItemClick(Item item);
+    }
+
     /**
      * Creates a DetailAdapter.
      *
      * @param items The list of items to display
+     * @param onClickHandler The on-click handler for this adapter. This single handler is called
+     *                      when an item is clicked.
      */
-    public DetailAdapter(List<Item> items) {
+    public DetailAdapter(List<Item> items, DetailAdapterOnClickHandler onClickHandler) {
         mItems = items;
+        mOnClickHandler = onClickHandler;
     }
 
     /**
@@ -92,7 +109,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     /**
      * Cache of the children vies for a list item.
      */
-    public class DetailViewHolder extends RecyclerView.ViewHolder {
+    public class DetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         /** This field is used for data binding */
         private DetailListItemBinding mDetailListItemBinding;
@@ -105,6 +122,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             super(detailListItemBinding.getRoot());
             mDetailListItemBinding = detailListItemBinding;
 
+            // Set an onClickListener on the itemView to listen for clicks
+            itemView.setOnClickListener(this);
         }
 
         /**
@@ -135,6 +154,17 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             // Get the duration of an episode and set text
             String duration = item.getITunesDuration();
             mDetailListItemBinding.tvDetailDuration.setText(duration);
+        }
+
+        /**
+         * Called by th child views during a click.
+         * @param v The View that was clicked
+         */
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            Item item = mItems.get(adapterPosition);
+            mOnClickHandler.onItemClick(item);
         }
     }
 }

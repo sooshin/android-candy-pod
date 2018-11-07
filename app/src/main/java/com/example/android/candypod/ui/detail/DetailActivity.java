@@ -32,6 +32,7 @@ import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
 import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.ui.subscribe.PodcastEntryViewModel;
 import com.example.android.candypod.ui.subscribe.PodcastEntryViewModelFactory;
 import com.example.android.candypod.utilities.InjectorUtils;
@@ -42,7 +43,8 @@ import java.util.List;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity
+        implements DetailAdapter.DetailAdapterOnClickHandler {
 
     /** This field is used for data binding */
     private ActivityDetailBinding mDetailBinding;
@@ -130,7 +132,7 @@ public class DetailActivity extends AppCompatActivity {
         mItemList = new ArrayList<>();
         // The DetailAdapter is responsible for linking our item data with the Views that will
         // end up displaying our episode data.
-        mDetailAdapter = new DetailAdapter(mItemList);
+        mDetailAdapter = new DetailAdapter(mItemList, this);
         // Setting the adapter attaches it to the RecyclerView in our layout
         mDetailBinding.rvDetail.setAdapter(mDetailAdapter);
     }
@@ -212,5 +214,15 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * When an episode is selected, start the NowPlayingActivity.
+     * @param item The podcast episode
+     */
+    @Override
+    public void onItemClick(Item item) {
+        Intent intent = new Intent(this, NowPlayingActivity.class);
+        startActivity(intent);
     }
 }
