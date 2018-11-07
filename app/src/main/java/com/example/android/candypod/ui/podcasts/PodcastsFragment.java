@@ -40,6 +40,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.List;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
 /**
@@ -157,9 +158,11 @@ public class PodcastsFragment extends Fragment
         // Create the Intent that will start the DetailActivity
         Intent intent = new Intent(getActivity(), DetailActivity.class);
 
-        // Get the podcast ID from the podcastEntry and pass the podcast ID
+        // Get the podcast ID and title from the podcastEntry and pass them
         String podcastId = podcastEntry.getPodcastId();
+        String podcastName = podcastEntry.getTitle();
         intent.putExtra(EXTRA_RESULT_ID, podcastId);
+        intent.putExtra(EXTRA_RESULT_NAME, podcastName);
 
         // Once the Intent has been created, start the DetailActivity
         startActivity(intent);
