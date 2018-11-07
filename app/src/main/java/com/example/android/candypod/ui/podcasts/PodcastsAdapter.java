@@ -20,16 +20,24 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
+import com.example.android.candypod.data.CandyPodDatabase;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.PodcastsListItemBinding;
 
 import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.DELETE;
+import static com.example.android.candypod.utilities.Constants.GROUP_ID_DELETE;
+import static com.example.android.candypod.utilities.Constants.ORDER_DELETE;
 
 public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.PodcastsViewHolder> {
 
@@ -74,7 +82,8 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
         notifyDataSetChanged();
     }
 
-    public class PodcastsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PodcastsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
         private PodcastsListItemBinding mPodcastsListItemBinding;
 
@@ -83,6 +92,8 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
             mPodcastsListItemBinding = podcastsListItemBinding;
 
             itemView.setOnClickListener(this);
+            // Set OnCreateContextMenuListener on the view
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         void bind(PodcastEntry podcastEntry) {
@@ -97,6 +108,55 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
             int adapterPosition = getAdapterPosition();
             PodcastEntry podcastEntry = mPodcastEntries.get(adapterPosition);
             mOnClickHandler.onPodcastClick(podcastEntry);
+        }
+
+        /**
+         * When the user performs a long-click on a podcast, a floating menu appears.
+         *
+         *  Reference @see "https://stackoverflow.com/questions/36958800/recyclerview-getmenuinfo-always-null"
+         *  "https://stackoverflow.com/questions/37601346/create-options-menu-for-recyclerview-item"
+         */
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            int adapterPosition = getAdapterPosition();
+            // Set the itemId to adapterPosition to retrieve podcastEntry later
+            MenuItem item = menu.add(GROUP_ID_DELETE, adapterPosition, ORDER_DELETE,
+                    v.getContext().getString(R.string.action_delete));
+            // Set OnMenuItemClickListener on the menu item
+            item.setOnMenuItemClickListener(this);
+        }
+
+        /**
+         * This gets called when a menu item is clicked.
+         */
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getTitle().toString()) {
+                case DELETE:
+                    int adapterPosition = item.getItemId();
+                    PodcastEntry podcastEntry = mPodcastEntries.get(adapterPosition);
+                    // Delete the podcast from the database
+                    delete(podcastEntry);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /**
+         * Delete the podcast when the user clicks "Delete" menu option.
+         * @param podcastEntry The PodcastEntry the user want to delete
+         */
+        private void delete(final PodcastEntry podcastEntry) {
+            // Get the database instance
+            final CandyPodDatabase db = CandyPodDatabase.getInstance(mContext);
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Delete the podcast from the database by using the podcastDao
+                    db.podcastDao().deletePodcast(podcastEntry);
+                }
+            });
         }
     }
 }

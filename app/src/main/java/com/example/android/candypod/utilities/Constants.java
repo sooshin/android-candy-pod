@@ -51,4 +51,10 @@ public class Constants {
     public static final int GRID_COLUMN_WIDTH_DEFAULT = 48;
     /** Initial span count for the GridAutofitLayoutManager */
     public static final int GRID_SPAN_COUNT = 1;
+
+    /** Context menu option in the PodcastsAdapter */
+    public static final String DELETE = "Delete";
+    public static final int GROUP_ID_DELETE = 0;
+    public static final int ORDER_DELETE = 0;
+
 }

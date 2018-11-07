@@ -43,4 +43,7 @@
 
     <!-- Label for the DetailActivity -->
     <string name="detail">Detail</string>
+
+    <!-- Context menu item -->
+    <string name="action_delete">Delete</string>
 </resources>
