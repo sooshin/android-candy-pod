@@ -40,4 +40,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Theme applied to the DetailActivity -->
+    <style name="Theme.Subscribe.Detail" >
+
+    </style>
+
 </resources>

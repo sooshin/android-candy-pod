@@ -41,7 +41,8 @@
         </activity>
         <activity
             android:name=".ui.detail.DetailActivity"
-            android:label="@string/detail">
+            android:label="@string/detail"
+            android:theme="@style/Theme.Subscribe.Detail">
         </activity>
     </application>
 

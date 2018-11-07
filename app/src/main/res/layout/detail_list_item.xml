@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,25 +14,45 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_detail_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_detail_pub_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/iv_detail_artwork"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:contentDescription="@string/artwork_content_description"
+            android:padding="8dp"
+            android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/tv_detail_duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/tv_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_detail_pub_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"
+            tools:text="pub date" />
+
+        <TextView
+            android:id="@+id/tv_detail_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_pub_date"
+            tools:text="duration" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

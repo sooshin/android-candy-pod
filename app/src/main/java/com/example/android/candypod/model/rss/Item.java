@@ -44,6 +44,9 @@ public class Item {
     @Element(name = "enclosure", required = false)
     private Enclosure mEnclosure;
 
+    @Element(name = "image", required = false)
+    private ItemImage mItemImage;
+
     public Item() {
     }
 
@@ -93,5 +96,12 @@ public class Item {
 
     public void setEnclosure(Enclosure enclosure) {
         mEnclosure = enclosure;
+    }
+
+    public ItemImage getItemImage() {
+        return mItemImage;
+    }
+    public void setItemImage(ItemImage itemImage) {
+        mItemImage = itemImage;
     }
 }
