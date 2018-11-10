@@ -16,11 +16,14 @@
 
 package com.example.android.candypod.model.rss;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 @Root(name = "enclosure", strict = false)
-public class Enclosure {
+public class Enclosure implements Parcelable {
 
     @Attribute(name = "url", required = false)
     private String mUrl;
@@ -33,6 +36,24 @@ public class Enclosure {
 
     public Enclosure() {
     }
+
+    protected Enclosure(Parcel in) {
+        mUrl = in.readString();
+        mType = in.readString();
+        mLength = in.readString();
+    }
+
+    public static final Creator<Enclosure> CREATOR = new Creator<Enclosure>() {
+        @Override
+        public Enclosure createFromParcel(Parcel in) {
+            return new Enclosure(in);
+        }
+
+        @Override
+        public Enclosure[] newArray(int size) {
+            return new Enclosure[size];
+        }
+    };
 
     public String getUrl() {
         return mUrl;
@@ -56,5 +77,17 @@ public class Enclosure {
 
     public void setLength(String length) {
         mLength = length;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mUrl);
+        dest.writeString(mType);
+        dest.writeString(mLength);
     }
 }
