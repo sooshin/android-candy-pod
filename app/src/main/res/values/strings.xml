@@ -47,4 +47,10 @@
 
     <!-- Context menu item -->
     <string name="action_delete">Delete</string>
+
+    <!-- String for the empty view -->
+    <string name="empty_podcasts">You do not have any subscriptions.\nYou can click
+        the + button in the bottom right corner to add new podcasts.</string>
+
+
 </resources>

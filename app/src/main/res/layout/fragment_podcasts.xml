@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +23,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!-- Display the subscribed podcast list -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_podcasts"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <!-- Empty view -->
+        <TextView
+            android:id="@+id/tv_empty_podcasts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="@dimen/padding_empty_podcasts"
+            android:paddingEnd="@dimen/padding_empty_podcasts"
+            android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
+            android:text="@string/empty_podcasts"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

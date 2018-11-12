@@ -136,9 +136,13 @@ public class PodcastsFragment extends Fragment
         mPodcastsViewModel.getPodcasts().observe(this, new Observer<List<PodcastEntry>>() {
             @Override
             public void onChanged(@Nullable List<PodcastEntry> podcastEntries) {
-                if (podcastEntries != null) {
+                // When the podcasts list is empty, show an empty view, otherwise, show podcasts.
+                if (podcastEntries != null && podcastEntries.size() != 0) {
+                    showPodcastsView();
                     // Update the list of PodcastEntries and notify the adapter of any changes
                     mPodcastsAdapter.setPodcastEntries(podcastEntries);
+                } else {
+                    showEmptyView();
                 }
             }
         });
@@ -169,5 +173,25 @@ public class PodcastsFragment extends Fragment
 
         // Once the Intent has been created, start the DetailActivity
         startActivity(intent);
+    }
+
+    /**
+     * This method will make the view for podcasts visible.
+     */
+    private void showPodcastsView() {
+        // First, hide an empty view
+        mPodcastsBinding.tvEmptyPodcasts.setVisibility(View.GONE);
+        // Then, make sure the podcasts list data is visible
+        mPodcastsBinding.rvPodcasts.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * When the podcasts list is empty, show an empty view.
+     */
+    private void showEmptyView() {
+        // First, hide the view for the podcasts
+        mPodcastsBinding.rvPodcasts.setVisibility(View.GONE);
+        // Then, show an empty view
+        mPodcastsBinding.tvEmptyPodcasts.setVisibility(View.VISIBLE);
     }
 }
