@@ -40,6 +40,8 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
+import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
@@ -62,6 +64,10 @@ public class DetailActivity extends AppCompatActivity
 
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
     private List<Item> mItemList;
+
+    /** The Podcast image URL received from the PodcastsFragment will be passed to the
+     * NowPlayingActivity via Intent */
+    private String mPodcastImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,7 @@ public class DetailActivity extends AppCompatActivity
     /**
      * Get the podcast ID which is used to retrieve the PodcastEntry from the podcast table.
      * Get the podcast title used to set the title in the app bar.
+     * Get the podcast image URL from the PodcastFragment, which is used when there is no episode image.
      */
     private void getResultData() {
         Intent intent = getIntent();
@@ -94,6 +101,9 @@ public class DetailActivity extends AppCompatActivity
         }
         if(intent.hasExtra(EXTRA_RESULT_NAME)) {
             mResultName = intent.getStringExtra(EXTRA_RESULT_NAME);
+        }
+        if (intent.hasExtra(EXTRA_PODCAST_IMAGE)) {
+            mPodcastImage = intent.getStringExtra(EXTRA_PODCAST_IMAGE);
         }
     }
 
@@ -132,7 +142,7 @@ public class DetailActivity extends AppCompatActivity
         mItemList = new ArrayList<>();
         // The DetailAdapter is responsible for linking our item data with the Views that will
         // end up displaying our episode data.
-        mDetailAdapter = new DetailAdapter(mItemList, this);
+        mDetailAdapter = new DetailAdapter(mItemList, this, mPodcastImage);
         // Setting the adapter attaches it to the RecyclerView in our layout
         mDetailBinding.rvDetail.setAdapter(mDetailAdapter);
     }
@@ -223,6 +233,15 @@ public class DetailActivity extends AppCompatActivity
     @Override
     public void onItemClick(Item item) {
         Intent intent = new Intent(this, NowPlayingActivity.class);
+
+        // Wrap the parcelable into a bundle
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_ITEM, item);
+        // Pass the bundle through intent
+        intent.putExtra(EXTRA_ITEM, b);
+        // Pass the podcast image URL. If there is no item image, use this podcast image.
+        intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
+
         startActivity(intent);
     }
 }

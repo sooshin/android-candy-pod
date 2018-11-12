@@ -36,6 +36,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
     private List<Item> mItems;
 
+    /** The podcast image URL used when there is no episode image */
+    private String mPodcastImage;
+
     /*
      * An on-click handler that we've defined to make it easy for an Activity to interface with
      * our RecyclerView
@@ -55,10 +58,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
      * @param items The list of items to display
      * @param onClickHandler The on-click handler for this adapter. This single handler is called
      *                      when an item is clicked.
+     * @param podcastImage The podcast image URL used when there is no episode image.
      */
-    public DetailAdapter(List<Item> items, DetailAdapterOnClickHandler onClickHandler) {
+    public DetailAdapter(List<Item> items, DetailAdapterOnClickHandler onClickHandler, String podcastImage) {
         mItems = items;
         mOnClickHandler = onClickHandler;
+        mPodcastImage = podcastImage;
     }
 
     /**
@@ -134,14 +139,16 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
          */
         void bind(Item item) {
             ItemImage itemImage = item.getItemImage();
-            // Not all episode have the image URL, so we should check if it is null
+            // Not all episode have the image URL, so we should check if it is null.
+            // If the episode image does not exist, use the podcast image instead.
+            String itemImageUrl = mPodcastImage;
             if (itemImage != null) {
-                String itemImageUrl = itemImage.getItemImageHref();
-                // Use Glide library to upload the artwork
-                Glide.with(itemView.getContext())
-                        .load(itemImageUrl)
-                        .into(mDetailListItemBinding.ivDetailArtwork);
+                itemImageUrl = itemImage.getItemImageHref();
             }
+            // Use Glide library to upload the episode image
+            Glide.with(itemView.getContext())
+                    .load(itemImageUrl)
+                    .into(mDetailListItemBinding.ivDetailArtwork);
 
             // Get the title of an episode and set text
             String title = item.getTitle();

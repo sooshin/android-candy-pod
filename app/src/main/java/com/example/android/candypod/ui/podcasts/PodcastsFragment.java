@@ -39,6 +39,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
@@ -158,11 +159,13 @@ public class PodcastsFragment extends Fragment
         // Create the Intent that will start the DetailActivity
         Intent intent = new Intent(getActivity(), DetailActivity.class);
 
-        // Get the podcast ID and title from the podcastEntry and pass them
+        // Get the podcast ID, title, and the image from the podcastEntry and pass them via Intent
         String podcastId = podcastEntry.getPodcastId();
         String podcastName = podcastEntry.getTitle();
+        String podcastImage = podcastEntry.getArtworkImageUrl();
         intent.putExtra(EXTRA_RESULT_ID, podcastId);
         intent.putExtra(EXTRA_RESULT_NAME, podcastName);
+        intent.putExtra(EXTRA_PODCAST_IMAGE, podcastImage);
 
         // Once the Intent has been created, start the DetailActivity
         startActivity(intent);
