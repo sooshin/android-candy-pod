@@ -1,0 +1,25 @@
+<!--
+  ~ Copyright 2018 Soojeong Shin
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="950"
+    android:viewportHeight="950">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M475.154,950c27.33,0 49.518,-22.122 49.518,-49.453V689.181c167,-23.95 296.661,-168.225 296.661,-342.811C821.333,154.977 666.282,0 474.892,0C283.503,0 128.667,154.977 128.667,346.37c0,174.586 129.005,318.861 297.005,342.811v211.366C425.672,927.877 447.859,950 475.154,950zM331.903,395.854c0,-74.22 50.688,-148.441 143.488,-148.441c73.628,0 108.244,68.677 108.244,101.344c0,13.872 -2.752,48.667 -23.532,66.881c-24.157,20.987 -69.861,-3.174 -55.604,-31.447c18.581,-31.111 1.988,-63.115 -35.245,-63.115c-38.383,0 -56.196,34.006 -56.196,79.729c0,44.552 40.333,97.444 91.441,101.646c94.573,7.774 148.409,-68.215 148.409,-146.147c0,-107.669 -86.458,-187.434 -187.978,-187.434c-119.958,0 -195.137,93.376 -195.137,207.2c0,26.514 2.527,55.397 10.059,93.795c5.751,28.708 -24.928,31.481 -32.667,12.483c-13.63,-33.26 -28.48,-86.493 -28.48,-126.044c0,-154.613 103.885,-257.331 246.226,-257.331c136.136,0 257.281,112.621 257.281,257.331c0,93.987 -69.305,217.71 -206.625,217.71C408.109,574.014 331.903,504.691 331.903,395.854z" />
+</vector>

@@ -52,5 +52,10 @@
     <string name="empty_podcasts">You do not have any subscriptions.\nYou can click
         the + button in the bottom right corner to add new podcasts.</string>
 
+    <!-- Notification actions -->
+    <string name="notification_play">Play</string>
+    <string name="notification_pause">Pause</string>
 
+    <string name="channel_name">Now Playing</string>
+    <string name="channel_description">Shows what podcast is currently playing</string>
 </resources>
