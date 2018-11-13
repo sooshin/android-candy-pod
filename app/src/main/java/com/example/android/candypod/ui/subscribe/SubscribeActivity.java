@@ -43,6 +43,8 @@ import com.example.android.candypod.model.rss.Category;
 import com.example.android.candypod.model.rss.Channel;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.RssFeed;
+import com.example.android.candypod.ui.detail.PodcastEntryViewModel;
+import com.example.android.candypod.ui.detail.PodcastEntryViewModelFactory;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;

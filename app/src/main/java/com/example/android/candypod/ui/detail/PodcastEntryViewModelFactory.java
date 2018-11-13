@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.example.android.candypod.ui.subscribe;
+package com.example.android.candypod.ui.detail;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.example.android.candypod.data.CandyPodRepository;
+import com.example.android.candypod.ui.detail.PodcastEntryViewModel;
 
 /**
  * Factory method that allows us to create a ViewModel with a constructor that takes a

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.candypod.ui.subscribe;
+package com.example.android.candypod.ui.detail;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
