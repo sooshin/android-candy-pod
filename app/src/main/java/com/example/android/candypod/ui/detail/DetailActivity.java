@@ -248,10 +248,5 @@ public class DetailActivity extends AppCompatActivity
         serviceIntent.putExtra(EXTRA_ITEM, b);
         startService(serviceIntent);
 
-
-//        Timber.d("Broadcasting message");
-//        Intent serviceIntent = new Intent("android.media.browse.MediaBrowserService");
-//        serviceIntent.putExtra("extra_url", url);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(serviceIntent);
     }
 }

@@ -70,13 +70,6 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     /** Tag for a MediaSessionCompat */
     private static final String TAG = PodcastService.class.getSimpleName();
 
-//    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            mUrl = intent.getStringExtra("extra_url");
-//            Timber.d("Got message: " + mUrl);
-//        }
-//    };
     /** The enclosure URL for the episode's audio file */
     private String mUrl;
 
@@ -86,12 +79,6 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
         // Initialize the media session
         initializeMediaSession();
-
-        // Initialize ExoPlayer
-//        initializePlayer();
-
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-//                new IntentFilter("android.media.browse.MediaBrowserService"));
     }
 
     /**
@@ -187,7 +174,6 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mMediaSession.release();
         releasePlayer();
 
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
 
