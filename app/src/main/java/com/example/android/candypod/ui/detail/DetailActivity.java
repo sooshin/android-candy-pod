@@ -39,6 +39,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
@@ -245,6 +246,8 @@ public class DetailActivity extends AppCompatActivity
 
 
         Intent serviceIntent = new Intent(this, PodcastService.class);
+        // Set the action to check if the old player should be released in PodcastService
+        serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
         serviceIntent.putExtra(EXTRA_ITEM, b);
         startService(serviceIntent);
 

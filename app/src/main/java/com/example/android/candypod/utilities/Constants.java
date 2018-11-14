@@ -40,6 +40,8 @@ public class Constants {
     public static final String EXTRA_ITEM = "extra_item";
     public static final String EXTRA_PODCAST_IMAGE = "extra_podcast_image";
 
+    public static final String ACTION_RELEASE_OLD_PLAYER = "action_release_old_player";
+
     /** Database name */
     public static final String DATABASE_NAME = "podcast";
 

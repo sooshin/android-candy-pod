@@ -50,6 +50,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 
 /**
@@ -141,10 +142,12 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Timber.d("onStartCommand is called");
-        if (mExoPlayer != null) {
-            mExoPlayer.stop();
-            releasePlayer();
+        // Check if the old player should be released
+        if (intent.getAction() != null && intent.getAction().equals(ACTION_RELEASE_OLD_PLAYER)) {
+            if (mExoPlayer != null) {
+                mExoPlayer.stop();
+                releasePlayer();
+            }
         }
         Bundle b = intent.getBundleExtra(EXTRA_ITEM);
         if (b != null) {
