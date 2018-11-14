@@ -28,6 +28,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 
+import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -48,6 +49,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 
 /**
  * Reference: @see "https://developer.android.com/guide/topics/media-apps/audio-app/building-a-mediabrowserservice"
@@ -74,6 +77,7 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 //            Timber.d("Got message: " + mUrl);
 //        }
 //    };
+    /** The enclosure URL for the episode's audio file */
     private String mUrl;
 
     @Override
@@ -140,8 +144,6 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             mExoPlayer.addListener(this);
 
             // Prepare the MediaSource
-            String testUrl = "http://feeds.soundcloud.com/stream/525464154-risepodcast-181105-rachel-hollis-rise-podcast-edmylett.m4a";
-//          Uri mediaUri = Uri.parse(mItem.getEnclosure().getUrl());
             Uri mediaUri = Uri.parse(mUrl);
             MediaSource mediaSource = buildMediaSource(mediaUri);
             mExoPlayer.prepare(mediaSource);
@@ -152,8 +154,13 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mUrl = intent.getStringExtra("extra_url");
-        Timber.d("onStartCommand: " + mUrl);
+        Bundle b = intent.getBundleExtra(EXTRA_ITEM);
+        if (b != null) {
+            Item item = b.getParcelable(EXTRA_ITEM);
+            String itemTitle = item.getTitle();
+            mUrl = item.getEnclosure().getUrl();
+            Timber.d("onStartCommand: " + itemTitle + " Url: " + mUrl);
+        }
         // Initialize ExoPlayer
         initializePlayer();
         return super.onStartCommand(intent, flags, startId);

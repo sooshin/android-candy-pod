@@ -245,8 +245,7 @@ public class DetailActivity extends AppCompatActivity
 
 
         Intent serviceIntent = new Intent(this, PodcastService.class);
-        String url = item.getEnclosure().getUrl();
-        serviceIntent.putExtra("extra_url", url);
+        serviceIntent.putExtra(EXTRA_ITEM, b);
         startService(serviceIntent);
 
 
