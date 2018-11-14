@@ -141,6 +141,11 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Timber.d("onStartCommand is called");
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            releasePlayer();
+        }
         Bundle b = intent.getBundleExtra(EXTRA_ITEM);
         if (b != null) {
             Item item = b.getParcelable(EXTRA_ITEM);
