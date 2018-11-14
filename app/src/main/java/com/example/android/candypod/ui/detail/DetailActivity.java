@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.example.android.candypod.PodcastService;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
@@ -241,5 +242,17 @@ public class DetailActivity extends AppCompatActivity
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
 
         startActivity(intent);
+
+
+        Intent serviceIntent = new Intent(this, PodcastService.class);
+        String url = item.getEnclosure().getUrl();
+        serviceIntent.putExtra("extra_url", url);
+        startService(serviceIntent);
+
+
+//        Timber.d("Broadcasting message");
+//        Intent serviceIntent = new Intent("android.media.browse.MediaBrowserService");
+//        serviceIntent.putExtra("extra_url", url);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(serviceIntent);
     }
 }

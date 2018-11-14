@@ -67,6 +67,15 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     /** Tag for a MediaSessionCompat */
     private static final String TAG = PodcastService.class.getSimpleName();
 
+//    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            mUrl = intent.getStringExtra("extra_url");
+//            Timber.d("Got message: " + mUrl);
+//        }
+//    };
+    private String mUrl;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,7 +84,10 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         initializeMediaSession();
 
         // Initialize ExoPlayer
-        initializePlayer();
+//        initializePlayer();
+
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+//                new IntentFilter("android.media.browse.MediaBrowserService"));
     }
 
     /**
@@ -130,12 +142,21 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             // Prepare the MediaSource
             String testUrl = "http://feeds.soundcloud.com/stream/525464154-risepodcast-181105-rachel-hollis-rise-podcast-edmylett.m4a";
 //          Uri mediaUri = Uri.parse(mItem.getEnclosure().getUrl());
-            Uri mediaUri = Uri.parse(testUrl);
+            Uri mediaUri = Uri.parse(mUrl);
             MediaSource mediaSource = buildMediaSource(mediaUri);
             mExoPlayer.prepare(mediaSource);
 
             mExoPlayer.setPlayWhenReady(true);
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mUrl = intent.getStringExtra("extra_url");
+        Timber.d("onStartCommand: " + mUrl);
+        // Initialize ExoPlayer
+        initializePlayer();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -159,6 +180,7 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mMediaSession.release();
         releasePlayer();
 
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         super.onDestroy();
     }
 
