@@ -84,7 +84,7 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         String title = mItem.getTitle();
         if (title != null) {
-            mNowPlayingBinding.tvNowTitle.setText(title);
+            mNowPlayingBinding.playingInfo.tvNowTitle.setText(title);
         }
 
         // Not all episode has its image. If it exists, use the episode image. Otherwise,
@@ -192,7 +192,7 @@ public class NowPlayingActivity extends AppCompatActivity {
 
     void buildTransportControls() {
         // Attach a listener to the play/pause button
-        mNowPlayingBinding.ibPlayPause.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pbState = MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -211,7 +211,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         });
 
         // Attach a listener to the fast forward button
-        mNowPlayingBinding.ibFastforward.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibFastforward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -220,7 +220,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         });
 
         // Attach a listener to the rewind button
-        mNowPlayingBinding.ibRewind.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibRewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -228,7 +228,7 @@ public class NowPlayingActivity extends AppCompatActivity {
             }
         });
 
-        mNowPlayingBinding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -252,9 +252,9 @@ public class NowPlayingActivity extends AppCompatActivity {
         PlaybackStateCompat pbState = mediaController.getPlaybackState();
 
         if (pbState.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
         } else {
-            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
         }
 
         // Register a Callback to stay in sync
@@ -274,9 +274,9 @@ public class NowPlayingActivity extends AppCompatActivity {
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
             if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
             } else {
-                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
             }
         }
     };
