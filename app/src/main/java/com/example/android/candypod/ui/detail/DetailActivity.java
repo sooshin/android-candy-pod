@@ -249,6 +249,9 @@ public class DetailActivity extends AppCompatActivity
         // Set the action to check if the old player should be released in PodcastService
         serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
         serviceIntent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast title and podcast image
+        serviceIntent.putExtra(EXTRA_RESULT_NAME, mResultName);
+        serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
         startService(serviceIntent);
 
     }

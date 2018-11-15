@@ -56,6 +56,6 @@
     <string name="notification_play">Play</string>
     <string name="notification_pause">Pause</string>
 
-    <string name="channel_name">Now Playing</string>
-    <string name="channel_description">Shows what podcast is currently playing</string>
+    <!-- Notification channel name -->
+    <string name="playback_channel_name">Playback</string>
 </resources>

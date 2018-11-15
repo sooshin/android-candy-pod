@@ -61,4 +61,11 @@ public class Constants {
     public static final int GROUP_ID_DELETE = 0;
     public static final int ORDER_DELETE = 0;
 
+    /** Notification channel */
+    public static final String PLAYBACK_CHANNEL_ID = "candy_pod_playback_channel";
+    public static final int PLAYBACK_NOTIFICATION_ID = 1;
+
+    /** The fast forward increment and rewind increment (milliseconds) */
+    public static final int FAST_FORWARD_INCREMENT = 30000; // 30 sec
+    public static final int REWIND_INCREMENT = 10000; // 10 sec
 }
