@@ -27,9 +27,13 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.PodcastService;
@@ -76,6 +80,11 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         // Create MediaBrowserCompat
         createMediaBrowserCompat();
+
+        // Hide title on the Toolbar
+        setTitle(getString(R.string.space));
+        // Show the up button on the Toolbar
+        showUpButton();
     }
 
     /**
@@ -292,4 +301,46 @@ public class NowPlayingActivity extends AppCompatActivity {
             }
         }
     };
+
+    /**
+     * Show the up button on the tool bar.
+     */
+    private void showUpButton() {
+        // Set the toolbar as the app bar
+        setSupportActionBar(mNowPlayingBinding.toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        // Set the action bar back button to look like an up button
+        if (actionBar != null) {
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.now_playing, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                // When the user press the up button, finishes this NowPlayingActivity
+                onBackPressed();
+                return true;
+            case R.id.action_favorite:
+                //
+                Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_share:
+                //
+                Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
