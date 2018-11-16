@@ -42,6 +42,7 @@ import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
 /**
  * Reference: @see "https://developer.android.com/guide/topics/media-apps/audio-app/building-a-mediabrowser-client"
@@ -60,6 +61,8 @@ public class NowPlayingActivity extends AppCompatActivity {
 
     /** This field is used for data binding */
     private ActivityNowPlayingBinding mNowPlayingBinding;
+    /** The podcast title */
+    private String mPodcastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +82,16 @@ public class NowPlayingActivity extends AppCompatActivity {
      * Setup UI
      */
     private void setupUI() {
-        // Get the podcast episode and the podcast image URL
-        getItemAndImage();
+        // Get the podcast episode, title and the podcast image URL
+        getData();
 
         String title = mItem.getTitle();
         if (title != null) {
             mNowPlayingBinding.playingInfo.tvNowTitle.setText(title);
+        }
+        // Set podcast title
+        if (mPodcastName != null) {
+            mNowPlayingBinding.playingInfo.tvPodcastTitle.setText(mPodcastName);
         }
 
         // Not all episode has its image. If it exists, use the episode image. Otherwise,
@@ -137,14 +144,18 @@ public class NowPlayingActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the podcast episode and the podcast image URL from the DetailActivity via Intent.
+     * Get the podcast episode, title and the podcast image URL from the DetailActivity via Intent.
      */
-    private void getItemAndImage() {
+    private void getData() {
         Intent intent = getIntent();
         if (intent != null) {
             if (intent.hasExtra(EXTRA_ITEM)) {
                 Bundle b = intent.getBundleExtra(EXTRA_ITEM);
                 mItem = b.getParcelable(EXTRA_ITEM);
+            }
+            // Get podcast title
+            if (intent.hasExtra(EXTRA_RESULT_NAME)) {
+                mPodcastName = intent.getStringExtra(EXTRA_RESULT_NAME);
             }
             if (intent.hasExtra(EXTRA_PODCAST_IMAGE)) {
                 mPodcastImage = intent.getStringExtra(EXTRA_PODCAST_IMAGE);

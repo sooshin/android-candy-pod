@@ -239,9 +239,10 @@ public class DetailActivity extends AppCompatActivity
         b.putParcelable(EXTRA_ITEM, item);
         // Pass the bundle through intent
         intent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast title
+        intent.putExtra(EXTRA_RESULT_NAME, mResultName);
         // Pass the podcast image URL. If there is no item image, use this podcast image.
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
-
         startActivity(intent);
 
 
