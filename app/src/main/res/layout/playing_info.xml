@@ -13,6 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -22,7 +23,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_now_title"
+            android:id="@+id/tv_episode_title"
             style="@style/Base.TextAppearance.AppCompat.Subhead"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_now_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_episode_title"
             tools:text="podcast title" />
 
         <SeekBar

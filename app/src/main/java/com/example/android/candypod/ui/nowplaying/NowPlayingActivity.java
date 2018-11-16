@@ -85,9 +85,10 @@ public class NowPlayingActivity extends AppCompatActivity {
         // Get the podcast episode, title and the podcast image URL
         getData();
 
-        String title = mItem.getTitle();
-        if (title != null) {
-            mNowPlayingBinding.playingInfo.tvNowTitle.setText(title);
+        // Set episode title
+        String episodeTitle = mItem.getTitle();
+        if (episodeTitle != null) {
+            mNowPlayingBinding.playingInfo.tvEpisodeTitle.setText(episodeTitle);
         }
         // Set podcast title
         if (mPodcastName != null) {
