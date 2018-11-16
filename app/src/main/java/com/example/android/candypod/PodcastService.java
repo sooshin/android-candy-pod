@@ -62,6 +62,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.FAST_FORWARD_INCREMENT;
+import static com.example.android.candypod.utilities.Constants.NOTIFICATION_PENDING_INTENT_ID;
 import static com.example.android.candypod.utilities.Constants.PLAYBACK_CHANNEL_ID;
 import static com.example.android.candypod.utilities.Constants.PLAYBACK_NOTIFICATION_ID;
 import static com.example.android.candypod.utilities.Constants.REWIND_INCREMENT;
@@ -229,7 +230,8 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
                     @Nullable
                     @Override
                     public PendingIntent createCurrentContentIntent(Player player) {
-                        return null;
+                        // Create a pending intent that relaunches the NowPlayingActivity
+                        return createContentPendingIntent(item);
                     }
 
                     @Nullable
@@ -277,6 +279,22 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mPlayerNotificationManager.setRewindIncrementMs(REWIND_INCREMENT);
         // Omit the stop action
         mPlayerNotificationManager.setStopAction(null);
+    }
+
+    /**
+     * Create a content pending intent that relaunches the NowPlayingActivity.
+     */
+    private PendingIntent createContentPendingIntent(Item item) {
+        Intent intent = new Intent(PodcastService.this, NowPlayingActivity.class);
+        // Pass data via intent
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_ITEM, item); // Podcast episode
+        intent.putExtra(EXTRA_ITEM, b);
+        intent.putExtra(EXTRA_RESULT_NAME, mPodcastName); // Podcast title
+        intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage); // Podcast Image
+        return PendingIntent.getActivity(
+                PodcastService.this, NOTIFICATION_PENDING_INTENT_ID,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     /**

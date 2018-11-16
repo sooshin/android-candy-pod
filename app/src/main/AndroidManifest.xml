@@ -45,6 +45,7 @@
             android:theme="@style/Theme.Subscribe.Detail"></activity>
         <activity
             android:name=".ui.nowplaying.NowPlayingActivity"
+            android:launchMode="singleTop"
             android:label="@string/now_playing"
             android:theme="@style/Theme.Subscribe.NowPlaying">
         </activity>
