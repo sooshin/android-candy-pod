@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.DATABASE_NAME;
 
-@Database(entities = {PodcastEntry.class}, version = 1, exportSchema = false)
+@Database(entities = {PodcastEntry.class, FavoriteEntry.class}, version = 1, exportSchema = false)
 @TypeConverters({ItemsConverter.class, DateConverter.class})
 public abstract class CandyPodDatabase extends RoomDatabase {
 

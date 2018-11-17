@@ -16,12 +16,15 @@
 
 package com.example.android.candypod.ui.nowplaying;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.Nullable;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -36,16 +39,21 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.PodcastService;
 import com.example.android.candypod.R;
+import com.example.android.candypod.data.CandyPodDatabase;
+import com.example.android.candypod.data.FavoriteEntry;
 import com.example.android.candypod.databinding.ActivityNowPlayingBinding;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.ItemImage;
+import com.example.android.candypod.utilities.InjectorUtils;
 
 import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
 /**
@@ -68,6 +76,21 @@ public class NowPlayingActivity extends AppCompatActivity {
     /** The podcast title */
     private String mPodcastName;
 
+    /** The podcast id */
+    private String mPodcastId;
+
+    /** Member variable for FavoriteEntry which represents a single favorite episode */
+    private FavoriteEntry mFavoriteEntry;
+
+    /** Member variable for the CandyPodDatabase */
+    private CandyPodDatabase mDb;
+
+    /** True when the current episode is in the favorites, otherwise false */
+    private boolean mIsFavorite;
+
+    /** Member variable for the FavoriteEntryViewModel to store and manage LiveData FavoriteEntry */
+    private FavoriteEntryViewModel mFavoriteEntryViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +98,12 @@ public class NowPlayingActivity extends AppCompatActivity {
                 this, R.layout.activity_now_playing);
 
         setupUI();
+
+        // Get the database instance
+        mDb = CandyPodDatabase.getInstance(getApplicationContext());
+
+        // Check if the episode is in the favorites or not
+        mIsFavorite = isFavorite();
 
         Timber.d("enclosure url: " + mItem.getEnclosure().getUrl());
 
@@ -162,6 +191,10 @@ public class NowPlayingActivity extends AppCompatActivity {
             if (intent.hasExtra(EXTRA_ITEM)) {
                 Bundle b = intent.getBundleExtra(EXTRA_ITEM);
                 mItem = b.getParcelable(EXTRA_ITEM);
+            }
+            // Get podcast id
+            if (intent.hasExtra(EXTRA_RESULT_ID)) {
+                mPodcastId = intent.getStringExtra(EXTRA_RESULT_ID);
             }
             // Get podcast title
             if (intent.hasExtra(EXTRA_RESULT_NAME)) {
@@ -333,7 +366,7 @@ public class NowPlayingActivity extends AppCompatActivity {
                 return true;
             case R.id.action_favorite:
                 //
-                Toast.makeText(this, "fav", Toast.LENGTH_SHORT).show();
+                addOrRemoveFavorite();
                 return true;
             case R.id.action_share:
                 //
@@ -341,6 +374,62 @@ public class NowPlayingActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private boolean isFavorite() {
+        // Get the FavoriteEntryViewModel from the factory
+        FavoriteEntryViewModelFactory favEntryFactory =
+                InjectorUtils.provideFavoriteEntryViewModelFactory(this, mItem.getTitle());
+        mFavoriteEntryViewModel = ViewModelProviders.of(this, favEntryFactory)
+                .get(FavoriteEntryViewModel.class);
+
+        // Observe the FavoriteEntry data
+        mFavoriteEntryViewModel.getFavoriteEntry().observe(this, new Observer<FavoriteEntry>() {
+            @Override
+            public void onChanged(@Nullable FavoriteEntry favoriteEntry) {
+                mIsFavorite = mFavoriteEntryViewModel.getFavoriteEntry().getValue() != null;
+            }
+        });
+        return mIsFavorite;
+    }
+
+    private void changeFavIcon(boolean isFavorite, MenuItem menuItem) {
+        if (isFavorite) {
+
+        } else {
+
+        }
+    }
+
+    /**
+     *
+     */
+    private void addOrRemoveFavorite() {
+        // Create a FavoriteEntry
+        mFavoriteEntry = new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
+                mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
+                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
+                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
+                mItem.getItemImage().getItemImageHref());
+
+        if (!mIsFavorite) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mDb.podcastDao().insertFavoriteEpisode(mFavoriteEntry);
+                }
+            });
+            Toast.makeText(this, "inserted", Toast.LENGTH_SHORT).show();
+        } else {
+            mFavoriteEntry = mFavoriteEntryViewModel.getFavoriteEntry().getValue();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mDb.podcastDao().deleteFavoriteEpisode(mFavoriteEntry);
+                }
+            });
+            Toast.makeText(this, "deleted", Toast.LENGTH_SHORT).show();
         }
     }
 }

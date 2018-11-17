@@ -58,6 +58,7 @@
     <!-- String for the empty view -->
     <string name="empty_podcasts">You do not have any subscriptions.\nYou can click
         the + button in the bottom right corner to add new podcasts.</string>
+    <string name="empty_favorites">Start adding your favorite episodes by tapping a heart button!</string>
 
     <!-- Notification actions -->
     <string name="notification_play">Play</string>

@@ -42,4 +42,34 @@ public interface PodcastDao {
     @Delete
     void deletePodcast(PodcastEntry podcastEntry);
 
+
+    // FavoriteEntry
+
+    /**
+     * Selects all favorite episodes.
+     */
+    @Query("SELECT * FROM favorite_episodes")
+    LiveData<List<FavoriteEntry>> loadFavorites();
+
+    /**
+     * Selects episode where the value in column item_title is the given item title.
+     * @param itemTitle The podcast episode name
+     */
+    @Query("SELECT * FROM favorite_episodes WHERE item_title = :itemTitle")
+    LiveData<FavoriteEntry> loadFavoriteEpisodeByItemTitle(String itemTitle);
+
+    /**
+     * Inserts a {@link FavoriteEntry} into the favorite_episodes table.
+     * @param favoriteEntry The podcast episode the user wants to add into the favorites.
+     */
+    @Insert
+    void insertFavoriteEpisode(FavoriteEntry favoriteEntry);
+
+    /**
+     * Deletes a {@link FavoriteEntry} from the favorite_episodes table.
+     * @param favoriteEntry The podcast episode the user wants to delete from the favorites
+     */
+    @Delete
+    void deleteFavoriteEpisode(FavoriteEntry favoriteEntry);
+
 }

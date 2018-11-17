@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +14,34 @@
   ~ limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.favorites.FavoritesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/favorites" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <!-- Display the list of favorite episodes -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_favorites"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Empty View -->
+        <TextView
+            android:id="@+id/tv_empty_favorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="@dimen/padding_empty_podcasts"
+            android:paddingEnd="@dimen/padding_empty_podcasts"
+            android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
+            android:text="@string/empty_favorites"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</layout>

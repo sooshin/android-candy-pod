@@ -162,4 +162,22 @@ public class CandyPodRepository {
     public LiveData<List<PodcastEntry>> getPodcasts() {
         return mPodcastDao.loadPodcasts();
     }
+
+    /**
+     * Get the favorite episode by item title from the favorite_episode table.
+     * @param itemTitle The podcast episode title
+     * @return {@link LiveData} {@link FavoriteEntry} from the database.
+     */
+    public LiveData<FavoriteEntry> getFavoriteEpisodeByItemTitle(String itemTitle) {
+        return mPodcastDao.loadFavoriteEpisodeByItemTitle(itemTitle);
+    }
+
+    /**
+     * Get the list of the favorite episodes from the favorite_episodes table.
+     * @return {@link LiveData} list of {@link FavoriteEntry} objects from the database.
+     */
+    public LiveData<List<FavoriteEntry>> getFavorites() {
+        return mPodcastDao.loadFavorites();
+    }
+
 }
