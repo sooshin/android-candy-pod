@@ -32,23 +32,43 @@ import com.example.android.candypod.databinding.FavoritesListItemBinding;
 
 import java.util.List;
 
+/**
+ * Exposes a list of favorite episodes from a list of {@link FavoriteEntry} to a {@link RecyclerView}
+ */
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder> {
 
+    /** Member variable for the list of FavoriteEntries that holds favorite episode data */
     private List<FavoriteEntry> mFavoriteEntries;
 
+    /** Context we use to utility methods, app resources and layout inflaters */
     private Context mContext;
 
+    /**
+     * An on-click handler that we've defined to make it easy for a Fragment to interface with
+     * our RecyclerView
+     */
     private final FavoritesAdapterOnClickHandler mOnClickHandler;
 
+    /**
+     * The interface that receives onClick messages.
+     */
     public interface FavoritesAdapterOnClickHandler {
         void onFavoriteClick(FavoriteEntry favoriteEntry);
     }
 
+    /**
+     * Creates a FavoritesAdapter.
+     */
     public FavoritesAdapter(Context context, FavoritesAdapterOnClickHandler onClickHandler) {
         mContext = context;
         mOnClickHandler = onClickHandler;
     }
 
+    /**
+     * Called when ViewHolders are created to fill a RecyclerView.
+     *
+     * @return A new FavoritesViewHolder that holds the FavoritesListItemBinding
+     */
     @NonNull
     @Override
     public FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -58,12 +78,21 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         return new FavoritesViewHolder(favoritesListItemBinding);
     }
 
+    /**
+     * Called by the RecyclerView to display the data at the specified position.
+     */
     @Override
     public void onBindViewHolder(@NonNull FavoritesViewHolder holder, int position) {
         FavoriteEntry favoriteEntry = mFavoriteEntries.get(position);
         holder.bind(favoriteEntry);
     }
 
+    /**
+     * This method simply return the number of items to display. It is used behind the scenes
+     * to help layout our Views and for animations.
+     *
+     * @return The number of items available in the favorites
+     */
     @Override
     public int getItemCount() {
         if (mFavoriteEntries == null) return 0;
@@ -79,10 +108,19 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         notifyDataSetChanged();
     }
 
+    /**
+     * Cache of the children views for a list item.
+     */
     public class FavoritesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        /** This field is used for data binding */
         private FavoritesListItemBinding mFavListItemBinding;
 
+        /**
+         * Constructor for FavoritesViewHolder.
+         *
+         * @param favoritesListItemBinding Used to access the layout's variables and views
+         */
         public FavoritesViewHolder(@NonNull FavoritesListItemBinding favoritesListItemBinding) {
             super(favoritesListItemBinding.getRoot());
             mFavListItemBinding = favoritesListItemBinding;
@@ -91,6 +129,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
             itemView.setOnClickListener(this);
         }
 
+        /**
+         * This method will take a FavoriteEntry object as input and use it to display
+         * the appropriate text within a list item.
+         */
         void bind(FavoriteEntry favoriteEntry) {
 
             String podcastTitle = favoriteEntry.getTitle();
@@ -110,6 +152,10 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
             mFavListItemBinding.tvPodcastTitle.setText(podcastTitle);
         }
 
+        /**
+         * Called whenever a user clicks on an episode in the list
+         * @param v The View that was clicked
+         */
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();

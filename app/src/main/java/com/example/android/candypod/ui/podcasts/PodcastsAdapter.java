@@ -39,23 +39,43 @@ import static com.example.android.candypod.utilities.Constants.DELETE;
 import static com.example.android.candypod.utilities.Constants.GROUP_ID_DELETE;
 import static com.example.android.candypod.utilities.Constants.ORDER_DELETE;
 
+/**
+ * Exposes a list of subscribed podcasts from a list of {@link PodcastEntry} to a {@link RecyclerView}.
+ */
 public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.PodcastsViewHolder> {
 
+    /** Member variable for the list of PodcastEntries that holds subscribed podcast data */
     private List<PodcastEntry> mPodcastEntries;
 
+    /** Context we use to utility methods, app resources and layout inflaters */
     private Context mContext;
 
+    /**
+     * An on-click handler that we've defined to make it easy for a Fragment to interface with
+     * our RecyclerView
+     */
     private final PodcastsAdapterOnClickHandler mOnClickHandler;
 
+    /**
+     * The interface that receives onClick messages.
+     */
     public interface PodcastsAdapterOnClickHandler {
         void onPodcastClick(PodcastEntry podcastEntry);
     }
 
+    /**
+     * Creates a PodcastsAdapter.
+     */
     public PodcastsAdapter(Context context, PodcastsAdapterOnClickHandler onClickHandler) {
         mContext = context;
         mOnClickHandler = onClickHandler;
     }
 
+    /**
+     * Called when ViewHolders are created to fill a RecyclerView.
+     *
+     * @return A new PodcastsViewHolder that holds the PodcastsListItemBinding
+     */
     @NonNull
     @Override
     public PodcastsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -65,37 +85,61 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
         return new PodcastsViewHolder(podcastsListItemBinding);
     }
 
+    /**
+     * Called by the RecyclerView to display the data at the specified position.
+     */
     @Override
     public void onBindViewHolder(@NonNull PodcastsViewHolder podcastsViewHolder, int position) {
         PodcastEntry podcastEntry = mPodcastEntries.get(position);
         podcastsViewHolder.bind(podcastEntry);
     }
 
+    /**
+     * Returns the number of items available in the podcasts.
+     */
     @Override
     public int getItemCount() {
         if (null == mPodcastEntries) return 0;
         return mPodcastEntries.size();
     }
 
+    /**
+     * When data changes, updates the list of podcastEntries and notifies the adapter to use
+     * the new values on it.
+     */
     public void setPodcastEntries(List<PodcastEntry> podcastEntries) {
         mPodcastEntries = podcastEntries;
         notifyDataSetChanged();
     }
 
+    /**
+     * Cache of the children views for the podcast list item.
+     */
     public class PodcastsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
+        /** This field is used for data binding */
         private PodcastsListItemBinding mPodcastsListItemBinding;
 
+        /**
+         * Constructor for the PodcastsViewHolder.
+         *
+         * @param podcastsListItemBinding Used to access the layout's variables and views
+         */
         public PodcastsViewHolder(PodcastsListItemBinding podcastsListItemBinding) {
             super(podcastsListItemBinding.getRoot());
             mPodcastsListItemBinding = podcastsListItemBinding;
 
+            // Set OnClickListener on the view
             itemView.setOnClickListener(this);
             // Set OnCreateContextMenuListener on the view
             itemView.setOnCreateContextMenuListener(this);
         }
 
+        /**
+         * This method will take a PodcastEntry object as input and use it to display
+         * the appropriate image within a list item.
+         */
         void bind(PodcastEntry podcastEntry) {
             String artworkImageUrl = podcastEntry.getArtworkImageUrl();
             Glide.with(mContext)
@@ -103,6 +147,10 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
                     .into(mPodcastsListItemBinding.ivArtwork);
         }
 
+        /**
+         * Called whenever a user clicks on a podcast in the list.
+         * @param v The View that was clicked
+         */
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();

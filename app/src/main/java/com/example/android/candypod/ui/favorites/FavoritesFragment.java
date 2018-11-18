@@ -37,7 +37,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The FavoritesFragment displays a list of the favorite episodes.
  */
 public class FavoritesFragment extends Fragment implements FavoritesAdapter.FavoritesAdapterOnClickHandler {
 

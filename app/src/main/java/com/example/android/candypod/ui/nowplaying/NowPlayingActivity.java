@@ -426,7 +426,8 @@ public class NowPlayingActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Called when the favorite menuItem is clicked. If the current episode is not in the favorites,
+     * insert the episode data into the database. Otherwise, delete the episode data from the database.
      */
     private void addOrRemoveFavorite() {
         // Create a FavoriteEntry
@@ -440,6 +441,7 @@ public class NowPlayingActivity extends AppCompatActivity {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+                    // Insert a episode to the database by using the podcastDao
                     mDb.podcastDao().insertFavoriteEpisode(mFavoriteEntry);
                 }
             });
@@ -449,6 +451,7 @@ public class NowPlayingActivity extends AppCompatActivity {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+                    // Delete the episode from the database by using the podcastDao
                     mDb.podcastDao().deleteFavoriteEpisode(mFavoriteEntry);
                 }
             });

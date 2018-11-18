@@ -32,6 +32,9 @@ import java.util.List;
 import static com.example.android.candypod.utilities.Constants.IMG_HTML_TAG;
 import static com.example.android.candypod.utilities.Constants.REPLACEMENT_EMPTY;
 
+/**
+ * Exposes a list of episodes from a list of {@link Item} to a {@link RecyclerView}.
+ */
 public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.SubscribeViewHolder> {
 
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */

@@ -31,6 +31,9 @@ import com.example.android.candypod.model.rss.ItemImage;
 
 import java.util.List;
 
+/**
+ * Exposes a list of episodes from a list of {@link Item} to a {@link RecyclerView}.
+ */
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailViewHolder> {
 
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
@@ -112,7 +115,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     }
 
     /**
-     * Cache of the children vies for a list item.
+     * Cache of the children views for a list item.
      */
     public class DetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

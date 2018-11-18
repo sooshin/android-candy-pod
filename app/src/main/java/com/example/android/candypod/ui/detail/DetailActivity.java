@@ -45,6 +45,9 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMA
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
+/**
+ * The DetailActivity displays the detail of the podcast and the list of episodes.
+ */
 public class DetailActivity extends AppCompatActivity
         implements DetailAdapter.DetailAdapterOnClickHandler {
 

@@ -57,6 +57,11 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
 
+/**
+ * The SubscribeActivity displays the detailed information of the podcast such as the title, the image,
+ * subscribe button, descriptions, and the list of episodes. If the user clicks the subscribe button,
+ * the PodcastsFragment will show this podcast with a grid arrangement of the image.
+ */
 public class SubscribeActivity extends AppCompatActivity {
 
     /** The podcast ID */

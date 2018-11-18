@@ -45,7 +45,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The PodcastsFragment displays the list of podcasts that the user subscribed.
  */
 public class PodcastsFragment extends Fragment
         implements PodcastsAdapter.PodcastsAdapterOnClickHandler {

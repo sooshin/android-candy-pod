@@ -42,6 +42,10 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 
+/**
+ * The AddPodcastActivity displays the list of podcasts. When the user clicks one of the podcasts
+ * in this activity, it will navigate the user to the {@link SubscribeActivity}.
+ */
 public class AddPodcastActivity extends AppCompatActivity
         implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler {
 
