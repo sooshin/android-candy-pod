@@ -16,14 +16,19 @@
 
 package com.example.android.candypod.ui.add;
 
+import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.android.candypod.R;
@@ -32,6 +37,7 @@ import com.example.android.candypod.model.Feed;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.Result;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
+import com.example.android.candypod.ui.search.SearchResultsActivity;
 import com.example.android.candypod.ui.subscribe.SubscribeActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
@@ -138,6 +144,47 @@ public class AddPodcastActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater =  getMenuInflater();
+        inflater.inflate(R.menu.add_podcast, menu);
+
+        // Associate searchable configuration with the SearchView
+        // Reference: @see "https://developer.android.com/training/search/setup#create-sc"
+        // "https://www.youtube.com/watch?v=9OWmnYPX1uc"
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        // Display a hint text in the search text field.
+        // android:hint attribute in the searchable.xml is not working.
+        // Reference: @see "https://stackoverflow.com/questions/37919328/searchview-hint-not-showing"
+        searchView.setQueryHint(getString(R.string.search_hint));
+
+        // Set onQueryTextListener
+        // Reference: @see "https://www.youtube.com/watch?v=9OWmnYPX1uc"
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            // Called when the user submits the query
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                // Perform the final search
+                Intent intent = new Intent(AddPodcastActivity.this, SearchResultsActivity.class);
+                intent.setAction(Intent.ACTION_SEARCH);
+                intent.putExtra(SearchManager.QUERY, s);
+                startActivity(intent);
+                return true;
+            }
+
+            // Called when the query text is changed by the user
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // Text has changed, apply filtering?
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override

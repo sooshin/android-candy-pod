@@ -29,6 +29,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".ui.subscribe.SubscribeActivity"
@@ -48,6 +51,14 @@
             android:launchMode="singleTop"
             android:label="@string/now_playing"
             android:theme="@style/Theme.Subscribe.NowPlaying">
+        </activity>
+        <activity
+            android:name=".ui.search.SearchResultsActivity"
+            android:label="@string/action_search"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
         </activity>
         <service
             android:name=".PodcastService"
