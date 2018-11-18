@@ -350,6 +350,22 @@ public class NowPlayingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Modify the options menu based on events. If the current episode is not in the favorites,
+     * the heart button icon image will be border heart image, otherwise full heart image.
+     * When an event occurs and you want to perform a menu update, you must call
+     * invalidateOptionsMenu() to request that the system call onPrepareOptionsMenu().
+     *
+     * References: @see "https://stackoverflow.com/questions/11006749/change-icons-in-actionbar-dynamically?rq=1"
+     * "https://developer.android.com/guide/topics/ui/menus#ChangingTheMenu"
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Change the hear button icon based on whether or not the episode exists in the favorites
+        changeFavIcon(mIsFavorite, menu);
+        return true;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.now_playing, menu);
@@ -389,16 +405,23 @@ public class NowPlayingActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable FavoriteEntry favoriteEntry) {
                 mIsFavorite = mFavoriteEntryViewModel.getFavoriteEntry().getValue() != null;
+                // Update the menu
+                invalidateOptionsMenu();
             }
         });
         return mIsFavorite;
     }
 
-    private void changeFavIcon(boolean isFavorite, MenuItem menuItem) {
+    /**
+     * Change the hear button icon based on whether or not the episode exists in the favorites.
+     * @param isFavorite True when the current episode is in the favorites, otherwise false
+     * @param menu The menu object
+     */
+    private void changeFavIcon(boolean isFavorite, Menu menu) {
         if (isFavorite) {
-
+            menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_menu_favorite);
         } else {
-
+            menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_favorite_border);
         }
     }
 
