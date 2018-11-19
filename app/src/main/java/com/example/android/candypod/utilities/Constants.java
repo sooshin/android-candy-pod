@@ -67,9 +67,11 @@ public class Constants {
     public static final int GROUP_ID_DELETE = 0;
     public static final int ORDER_DELETE = 0;
 
-    /** Notification channel */
+    /** Notification channel id */
     public static final String PLAYBACK_CHANNEL_ID = "candy_pod_playback_channel";
     public static final int PLAYBACK_NOTIFICATION_ID = 1;
+    public static final String DOWNLOAD_CHANNEL_ID = "candy_pod_download_channel";
+    public static final int DOWNLOAD_NOTIFICATION_ID = 2;
 
     /** The pending intent id is used to uniquely reference the pending intent */
     public static final int NOTIFICATION_PENDING_INTENT_ID = 0;

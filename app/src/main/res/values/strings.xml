@@ -42,6 +42,7 @@
     <string name="rewind_content_description">Rewind</string>
     <string name="play_pause_content_description">Play or pause</string>
     <string name="fast_forward_content_description">Fast forward</string>
+    <string name="download_content_description">Download</string>
 
     <!-- Text for the subscribe button and label for the SubscribeActivity -->
     <string name="subscribe">Subscribe</string>
@@ -68,4 +69,5 @@
 
     <!-- Notification channel name -->
     <string name="playback_channel_name">Playback</string>
+    <string name="download_channel_name">Download</string>
 </resources>

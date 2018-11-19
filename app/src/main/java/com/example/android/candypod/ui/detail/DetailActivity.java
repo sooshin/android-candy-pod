@@ -20,6 +20,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -33,8 +34,10 @@ import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
 import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.service.PodcastDownloadService;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,6 +262,25 @@ public class DetailActivity extends AppCompatActivity
         serviceIntent.putExtra(EXTRA_RESULT_NAME, mResultName);
         serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
         startService(serviceIntent);
+
+    }
+
+    /**
+     * When the user clicks the download button, triggers the download to start from our activity.
+     * @param item The podcast episode
+     */
+    @Override
+    public void onDownloadClick(Item item) {
+        Uri uri = Uri.parse(item.getEnclosure().getUrl());
+        // Create a progressive stream download action
+        ProgressiveDownloadAction action = ProgressiveDownloadAction.createDownloadAction(
+                uri, null, null);
+        // Start the service with that action
+        PodcastDownloadService.startWithAction(
+                DetailActivity.this,
+                PodcastDownloadService.class,
+                action,
+                false);
 
     }
 }

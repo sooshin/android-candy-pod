@@ -32,6 +32,7 @@ import android.text.TextUtils;
 
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
+import com.example.android.candypod.utilities.DownloadUtil;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -50,6 +51,8 @@ import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.BitmapCallback;
 import com.google.android.exoplayer2.ui.PlayerNotificationManager.NotificationListener;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
@@ -349,7 +352,17 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         String userAgent = Util.getUserAgent(this, getString(R.string.app_name));
         DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(
                 this, userAgent);
-        return new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);
+
+        // Add support for caching to the player. The CacheDataSourceFactory sits between our
+        // DataSourceFactory for loading from the network and the MediaSource which extracts the media.
+        // Reference: @see "https://github.com/google/ExoPlayer/tree/io18"
+        // "https://www.youtube.com/watch?v=svdq1BWl4r8"
+        CacheDataSourceFactory cacheDataSourceFactory =
+                new CacheDataSourceFactory(
+                        DownloadUtil.getCache(this),
+                        dataSourceFactory, // The upstream DataSourceFactory for loading data from the network
+                        CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+        return new ExtractorMediaSource.Factory(cacheDataSourceFactory).createMediaSource(mediaUri);
     }
 
     /**
