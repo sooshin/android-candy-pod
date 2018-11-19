@@ -17,22 +17,48 @@
 package com.example.android.candypod.ui.search;
 
 import android.app.SearchManager;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.ActivitySearchResultsBinding;
+import com.example.android.candypod.model.SearchResponse;
+import com.example.android.candypod.model.SearchResult;
+import com.example.android.candypod.ui.GridAutofitLayoutManager;
+import com.example.android.candypod.utilities.InjectorUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
+import static com.example.android.candypod.utilities.Constants.I_TUNES_SEARCH;
+import static com.example.android.candypod.utilities.Constants.SEARCH_MEDIA_PODCAST;
 
 /**
  * Reference: @see "https://developer.android.com/training/search/setup#create-sa"
  */
-public class SearchResultsActivity extends AppCompatActivity {
+public class SearchResultsActivity extends AppCompatActivity implements SearchAdapter.SearchAdapterOnClickHandler {
 
     /** This field is used for data binding */
     private ActivitySearchResultsBinding mSearchBinding;
+
+    /** ViewModel for SearchResultsActivity */
+    private SearchViewModel mSearchViewModel;
+
+    /** Member variable for SearchAdapter */
+    private SearchAdapter mSearchAdapter;
+
+    /** Member variable for a list of {@link SearchResult}s which is the search results to display */
+    private List<SearchResult> mSearchResults;
+
+    /** The user's search query from the SearchView in the AddPodcastActivity */
+    private String mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +68,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                 this, R.layout.activity_search_results);
 
         handleIntent(getIntent());
+
+        // Initialize the adapter and attach it to the RecyclerView
+        initAdapter();
+
+        // Get the ViewModel from the factory
+        setupViewModel();
+
+        // Observe changes in the SearchResponse
+        observeSearchResponse();
     }
 
     /**
@@ -56,9 +91,60 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            mQuery = intent.getStringExtra(SearchManager.QUERY);
             //
-            Toast.makeText(this, "query: " + query, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "query: " + mQuery, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Create a LinearLayoutManager and SearchAdapter, and set them to the RecyclerView.
+     */
+    private void initAdapter() {
+        // A GridAutofitLayoutManager is responsible for calculating the amount of GridView columns
+        // based on screen size and positioning item views within a RecyclerView into a grid layout.
+        // Reference: @see "https://codentrick.com/part-4-android-recyclerview-grid/"
+        GridAutofitLayoutManager layoutManager = new GridAutofitLayoutManager(
+                this, GRID_AUTO_FIT_COLUMN_WIDTH);
+        mSearchBinding.rvSearchResults.setLayoutManager(layoutManager);
+        mSearchBinding.rvSearchResults.setHasFixedSize(true);
+
+        // Create an empty ArrayList
+        mSearchResults = new ArrayList<>();
+        // A SearchAdapter is responsible for displaying each item in the list.
+        mSearchAdapter = new SearchAdapter(mSearchResults, this);
+        // Set adapter to the RecyclerView
+        mSearchBinding.rvSearchResults.setAdapter(mSearchAdapter);
+    }
+
+    /**
+     * Get the ViewModel from the factory.
+     */
+    private void setupViewModel() {
+        if (mQuery != null) {
+            SearchViewModelFactory searchFactory = InjectorUtils.provideSearchViewModelFactory(
+                    this, I_TUNES_SEARCH, "us", SEARCH_MEDIA_PODCAST, mQuery);
+            mSearchViewModel = ViewModelProviders.of(this, searchFactory).get(SearchViewModel.class);
+        }
+    }
+
+    /**
+     * Observe changes in the SearchResponse.
+     */
+    private void observeSearchResponse() {
+        mSearchViewModel.getSearchResponse().observe(this, new Observer<SearchResponse>() {
+            @Override
+            public void onChanged(@Nullable SearchResponse searchResponse) {
+                if (searchResponse != null) {
+                    mSearchResults = searchResponse.getSearchResults();
+                    mSearchAdapter.addAll(mSearchResults);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(SearchResult searchResult) {
+
     }
 }

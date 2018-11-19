@@ -31,6 +31,12 @@ public class Constants {
     /** URL for a lookup request */
     public static final String I_TUNES_LOOKUP = "https://itunes.apple.com/lookup";
 
+    /** URL for search request */
+    public static final String I_TUNES_SEARCH = "https://itunes.apple.com/search";
+
+    /** The parameter value for a search field. The  "podcast" is the media type to search. */
+    public static final String SEARCH_MEDIA_PODCAST = "podcast";
+
     /** Index for representing a default fragment */
     public static final int INDEX_ZERO = 0;
 

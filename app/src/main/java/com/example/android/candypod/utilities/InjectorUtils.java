@@ -24,9 +24,9 @@ import com.example.android.candypod.data.CandyPodRepository;
 import com.example.android.candypod.ui.add.AddPodViewModelFactory;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModelFactory;
 import com.example.android.candypod.ui.favorites.FavViewModelFactory;
-import com.example.android.candypod.ui.nowplaying.FavoriteEntryViewModel;
 import com.example.android.candypod.ui.nowplaying.FavoriteEntryViewModelFactory;
 import com.example.android.candypod.ui.podcasts.PodcastsViewModelFactory;
+import com.example.android.candypod.ui.search.SearchViewModelFactory;
 import com.example.android.candypod.ui.subscribe.RssFeedViewModelFactory;
 import com.example.android.candypod.ui.subscribe.SubscribeViewModelFactory;
 
@@ -77,5 +77,11 @@ public class InjectorUtils {
     public static FavViewModelFactory provideFavViewModelFactory(Context context) {
         CandyPodRepository repository = provideRepository(context.getApplicationContext());
         return new FavViewModelFactory(repository);
+    }
+
+    public static SearchViewModelFactory provideSearchViewModelFactory(
+            Context context, String searchUrl, String country, String media, String term) {
+        CandyPodRepository repository = provideRepository(context.getApplicationContext());
+        return new SearchViewModelFactory(repository, searchUrl, country, media, term);
     }
 }

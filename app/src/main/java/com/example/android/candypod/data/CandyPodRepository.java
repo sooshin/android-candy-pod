@@ -22,6 +22,7 @@ import android.arch.lifecycle.MutableLiveData;
 import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.LookupResponse;
+import com.example.android.candypod.model.SearchResponse;
 import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.utilities.ITunesSearchApi;
 
@@ -118,6 +119,37 @@ public class CandyPodRepository {
                     }
                 });
         return lookupResponseData;
+    }
+
+    /**
+     * Get a search response data. When the user submits a search query, the SearchResultsActivity
+     * will display this data.
+     * @param searchUrl URL for a search request
+     * @param country The country
+     * @param media The media type to search
+     * @param term The user's query from the SearchView
+     */
+    public LiveData<SearchResponse> getSearchResponse(String searchUrl,
+                                                      String country, String media, String term) {
+        final MutableLiveData<SearchResponse> searchResponseData = new MutableLiveData<>();
+
+        mITunesSearchApi.getSearchResponse(searchUrl, country, media, term)
+                .enqueue(new Callback<SearchResponse>() {
+                    @Override
+                    public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                        if (response.isSuccessful()) {
+                            SearchResponse searchResponse = response.body();
+                            searchResponseData.setValue(searchResponse);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchResponse> call, Throwable t) {
+                        searchResponseData.setValue(null);
+                        Timber.e("Failed getting SearchResponse data. " + t.getMessage());
+                    }
+                });
+        return searchResponseData;
     }
 
     /**

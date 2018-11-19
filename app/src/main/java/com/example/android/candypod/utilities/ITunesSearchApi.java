@@ -18,6 +18,7 @@ package com.example.android.candypod.utilities;
 
 import com.example.android.candypod.model.ITunesResponse;
 import com.example.android.candypod.model.LookupResponse;
+import com.example.android.candypod.model.SearchResponse;
 import com.example.android.candypod.model.rss.RssFeed;
 
 import java.lang.annotation.Retention;
@@ -48,6 +49,14 @@ public interface ITunesSearchApi {
     Call<LookupResponse> getLookupResponse(
             @Url String url,
             @Query("id") String id
+    );
+
+    @GET @Json
+    Call<SearchResponse> getSearchResponse(
+            @Url String searchUrl,
+            @Query("country") String country,
+            @Query("media") String media,
+            @Query("term") String term
     );
 
     @GET @Xml
