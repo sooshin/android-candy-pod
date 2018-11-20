@@ -306,8 +306,7 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         intent.putExtra(EXTRA_ITEM, b);
         intent.putExtra(EXTRA_RESULT_NAME, mPodcastName); // Podcast title
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage); // Podcast Image
-//        // Set the action to check if the old player should be released in PodcastService
-//        serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
+
         return PendingIntent.getActivity(
                 PodcastService.this, NOTIFICATION_PENDING_INTENT_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
