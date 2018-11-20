@@ -26,6 +26,8 @@ import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
 import com.google.android.exoplayer2.offline.DownloadService;
 import com.google.android.exoplayer2.scheduler.Scheduler;
 import com.google.android.exoplayer2.ui.DownloadNotificationUtil;
+import com.google.android.exoplayer2.util.NotificationUtil;
+import com.google.android.exoplayer2.util.Util;
 
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_CHANNEL_ID;
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_NOTIFICATION_ID;
@@ -71,5 +73,39 @@ public class PodcastDownloadService extends DownloadService {
                 null,
                 null,
                 taskStates);
+    }
+
+    /**
+     * Called when the state of a task changes.
+     * Reference: @see "https://github.com/google/ExoPlayer/tree/release-v2/demos/main"
+     * @param taskState The state of the task
+     */
+    @Override
+    protected void onTaskStateChanged(TaskState taskState) {
+        if (taskState.action.isRemoveAction) {
+            return;
+        }
+        Notification notification = null;
+        if (taskState.state == TaskState.STATE_COMPLETED) {
+            // A notification for a completed download
+            notification =
+                    DownloadNotificationUtil.buildDownloadCompletedNotification(
+                            this,
+                            R.drawable.ic_candy,
+                            DOWNLOAD_CHANNEL_ID,
+                            null,
+                            Util.fromUtf8Bytes(taskState.action.data));
+        } else if (taskState.state == TaskState.STATE_FAILED) {
+            // A notification for a failed download
+            notification =
+                    DownloadNotificationUtil.buildDownloadFailedNotification(
+                            this,
+                            R.drawable.ic_candy,
+                            DOWNLOAD_CHANNEL_ID,
+                            null,
+                            Util.fromUtf8Bytes(taskState.action.data));
+        }
+        int notificationId = DOWNLOAD_NOTIFICATION_ID + 1 + taskState.taskId;
+        NotificationUtil.setNotification(this, notificationId, notification);
     }
 }
