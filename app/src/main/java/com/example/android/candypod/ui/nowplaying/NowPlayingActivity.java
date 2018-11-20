@@ -40,7 +40,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.AppExecutors;
-import com.example.android.candypod.PodcastService;
+import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.CandyPodDatabase;
 import com.example.android.candypod.data.FavoriteEntry;

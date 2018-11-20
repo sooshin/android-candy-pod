@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.candypod;
+package com.example.android.candypod.service;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -30,6 +30,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 
+import com.example.android.candypod.R;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.DownloadUtil;

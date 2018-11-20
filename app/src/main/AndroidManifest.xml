@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".PodcastService"
+            android:name=".service.PodcastService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
