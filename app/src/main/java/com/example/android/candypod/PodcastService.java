@@ -178,6 +178,14 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // If there are not any pending start commands to be delivered to the service, it will
+        // be called with a null intent object, so you must take care to check for this.
+        // Reference: @see "https://developer.android.com/reference/android/app/Service.html#START_STICKY"
+        // "https://stackoverflow.com/questions/8421430/reasons-that-the-passed-intent-would-be-null-in-onstartcommand"
+        if (intent == null || intent.getAction() == null) {
+            Timber.e("intent in onStartCommand is null");
+            return START_STICKY;
+        }
         // Check if the old player should be released
         if (intent.getAction() != null && intent.getAction().equals(ACTION_RELEASE_OLD_PLAYER)) {
             if (mExoPlayer != null) {
@@ -205,7 +213,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
         // Initialize PlayerNotificationManager
         initializeNotificationManager(mItem);
-        return super.onStartCommand(intent, flags, startId);
+        // The service is not immediately destroyed, and we can explicitly terminate our service
+        // when finished audio playback.
+        return START_STICKY;
     }
 
     /**
@@ -295,6 +305,8 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         intent.putExtra(EXTRA_ITEM, b);
         intent.putExtra(EXTRA_RESULT_NAME, mPodcastName); // Podcast title
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage); // Podcast Image
+//        // Set the action to check if the old player should be released in PodcastService
+//        serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
         return PendingIntent.getActivity(
                 PodcastService.this, NOTIFICATION_PENDING_INTENT_ID,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
