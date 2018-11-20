@@ -430,12 +430,22 @@ public class NowPlayingActivity extends AppCompatActivity {
      * insert the episode data into the database. Otherwise, delete the episode data from the database.
      */
     private void addOrRemoveFavorite() {
+        // Not all episode have the image URL, so we should check if it is null.
+        // If the episode image does not exist, use the podcast image instead.
+        String itemImageUrl;
+        ItemImage itemImage = mItem.getItemImage();
+        if (itemImage == null) {
+            itemImageUrl = mPodcastImage;
+        } else {
+            itemImageUrl = itemImage.getItemImageHref();
+        }
+
         // Create a FavoriteEntry
         mFavoriteEntry = new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
                 mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
                 mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
                 mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
-                mItem.getItemImage().getItemImageHref());
+                itemImageUrl);
 
         if (!mIsFavorite) {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
