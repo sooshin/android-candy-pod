@@ -22,7 +22,9 @@ import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.data.CandyPodDatabase;
 import com.example.android.candypod.data.CandyPodRepository;
 import com.example.android.candypod.ui.add.AddPodViewModelFactory;
+import com.example.android.candypod.ui.nowplaying.DownloadEntryViewModelFactory;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModelFactory;
+import com.example.android.candypod.ui.downloads.DownloadsViewModelFactory;
 import com.example.android.candypod.ui.favorites.FavViewModelFactory;
 import com.example.android.candypod.ui.nowplaying.FavoriteEntryViewModelFactory;
 import com.example.android.candypod.ui.podcasts.PodcastsViewModelFactory;
@@ -77,6 +79,17 @@ public class InjectorUtils {
     public static FavViewModelFactory provideFavViewModelFactory(Context context) {
         CandyPodRepository repository = provideRepository(context.getApplicationContext());
         return new FavViewModelFactory(repository);
+    }
+
+    public static DownloadsViewModelFactory provideDownloadsViewModelFactory(Context context) {
+        CandyPodRepository repository = provideRepository(context.getApplicationContext());
+        return new DownloadsViewModelFactory(repository);
+    }
+
+    public static DownloadEntryViewModelFactory provideDownloadEntryViewModelFactory(
+            Context context, String enclosureUrl) {
+        CandyPodRepository repository = provideRepository(context.getApplicationContext());
+        return new DownloadEntryViewModelFactory(repository, enclosureUrl);
     }
 
     public static SearchViewModelFactory provideSearchViewModelFactory(

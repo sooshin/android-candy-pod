@@ -17,30 +17,183 @@
 package com.example.android.candypod.ui.downloads;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.candypod.R;
+import com.example.android.candypod.data.DownloadEntry;
+import com.example.android.candypod.databinding.FragmentDownloadsBinding;
+import com.example.android.candypod.model.rss.Enclosure;
+import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.model.rss.ItemImage;
+import com.example.android.candypod.service.PodcastService;
+import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
+import com.example.android.candypod.utilities.InjectorUtils;
+
+import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
+import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
+import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DownloadsFragment extends Fragment {
+public class DownloadsFragment extends Fragment implements DownloadsAdapter.DownloadsAdapterOnClickHandler {
 
+    /** This field is used for data binding */
+    private FragmentDownloadsBinding mDownloadsBinding;
+
+    /** Member variable for DownloadsAdapter */
+    private DownloadsAdapter mDownloadsAdapter;
+
+    /** Member variable for DownloadsViewModel */
+    private DownloadsViewModel mDownloadsViewModel;
 
     public DownloadsFragment() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_downloads, container, false);
+        // Inflate the data binding layout for this fragment
+        mDownloadsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_downloads,
+                container, false);
+        View rootView = mDownloadsBinding.getRoot();
+
+        // Create and set the adapter to the RecyclerView
+        initAdapter();
+
+        return rootView;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Setup ViewModel
+        setupViewModel(this.getActivity());
+    }
+
+    /**
+     * Create a LinearLayoutManager and DownloadsAdapter, and set them to the RecyclerView.
+     */
+    private void initAdapter() {
+        // A LinearLayoutManager is responsible for measuring and positioning item views within a
+        // RecyclerView into a linear list.
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        // Set the layout for the RecyclerView to be a linear layout
+        mDownloadsBinding.rvDownloads.setLayoutManager(layoutManager);
+        // Use this setting to improve performance if you know that changes in content do not
+        // change the child layout size in the RecyclerView
+        mDownloadsBinding.rvDownloads.setHasFixedSize(true);
+
+        // Initialize the adapter and attach it to the RecyclerView
+        mDownloadsAdapter = new DownloadsAdapter(getContext(), this);
+        mDownloadsBinding.rvDownloads.setAdapter(mDownloadsAdapter);
+    }
+
+    /**
+     * Every time the downloaded episode data is updated, update the UI.
+     */
+    private void setupViewModel(Context context) {
+        // Get the ViewModel from the factory
+        DownloadsViewModelFactory downloadsFactory =
+                InjectorUtils.provideDownloadsViewModelFactory(context);
+        mDownloadsViewModel = ViewModelProviders.of(this, downloadsFactory)
+                .get(DownloadsViewModel.class);
+
+        // Observe changes in the list of DownloadEntries
+        mDownloadsViewModel.getDownloads().observe(this, new Observer<List<DownloadEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<DownloadEntry> downloadEntries) {
+                if (downloadEntries != null && downloadEntries.size() != 0) {
+                    showDownloadsView();
+                    mDownloadsAdapter.setDownloadEntries(downloadEntries);
+                } else {
+                    showEmptyView();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(DownloadEntry downloadEntry) {
+        String podcastId = downloadEntry.getPodcastId();
+        String podcastTitle = downloadEntry.getTitle();
+        String podcastImageUrl = downloadEntry.getArtworkImageUrl();
+
+        String itemTitle = downloadEntry.getItemTitle();
+        String itemDescription = downloadEntry.getItemDescription();
+        String iTunesSummary = downloadEntry.getItemDescription();
+        String pubDate = downloadEntry.getItemPubDate();
+        String duration = downloadEntry.getItemDuration();
+
+        String enclosureUrl = downloadEntry.getItemEnclosureUrl();
+        String enclosureType = downloadEntry.getItemEnclosureType();
+        String enclosureLength = downloadEntry.getItemEnclosureLength();
+        Enclosure enclosure = new Enclosure(enclosureUrl, enclosureType, enclosureLength);
+
+        String itemImageUrl = downloadEntry.getItemImageUrl();
+        ItemImage itemImage = new ItemImage(itemImageUrl);
+
+        Item item = new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImage);
+        Intent intent = new Intent(this.getActivity(), NowPlayingActivity.class);
+        // Wrap the parcelable into a bundle
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_ITEM, item);
+        // Pass the bundle through intent
+        intent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast id
+        intent.putExtra(EXTRA_RESULT_ID, podcastId);
+        // Pass podcast title
+        intent.putExtra(EXTRA_RESULT_NAME, podcastTitle);
+        // Pass the podcast image URL. If there is no item image, use this podcast image.
+        intent.putExtra(EXTRA_PODCAST_IMAGE, podcastImageUrl);
+        startActivity(intent);
+
+
+        Intent serviceIntent = new Intent(this.getActivity(), PodcastService.class);
+        // Set the action to check if the old player should be released in PodcastService
+        serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
+        serviceIntent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast title and podcast image
+        serviceIntent.putExtra(EXTRA_RESULT_NAME, podcastTitle);
+        serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, podcastImageUrl);
+        getActivity().startService(serviceIntent);
+    }
+
+    /**
+     * This method will make the view for downloads visible.
+     */
+    private void showDownloadsView() {
+        // First, hide an empty view
+        mDownloadsBinding.tvEmptyDownloads.setVisibility(View.GONE);
+        // Then, make sure the downloads list data is visible
+        mDownloadsBinding.rvDownloads.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * When the favorite list is empty, show an empty view.
+     */
+    private void showEmptyView() {
+        // First, hide the view for the downloads
+        mDownloadsBinding.rvDownloads.setVisibility(View.GONE);
+        // Then, show an empty view
+        mDownloadsBinding.tvEmptyDownloads.setVisibility(View.VISIBLE);
+    }
 }

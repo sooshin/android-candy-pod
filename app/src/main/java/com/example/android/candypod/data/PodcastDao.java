@@ -72,4 +72,34 @@ public interface PodcastDao {
     @Delete
     void deleteFavoriteEpisode(FavoriteEntry favoriteEntry);
 
+
+    // DownloadEntry
+
+    /**
+     * Selects all downloaded episodes.
+     */
+    @Query("SELECT * FROM downloaded_episodes")
+    LiveData<List<DownloadEntry>> loadDownloads();
+
+    /**
+     * Selects downloaded episode where the value in item_enclosure_url is the given enclosure URL.
+     * @param enclosureUrl The stream URL for the episode audio file
+     */
+    @Query("SELECT * FROM downloaded_episodes WHERE item_enclosure_url = :enclosureUrl")
+    LiveData<DownloadEntry> loadDownloadedEpisodeByEnclosureUrl(String enclosureUrl);
+
+    /**
+     * Inserts a {@link DownloadEntry} into the downloaded_episodes table.
+     * @param downloadEntry Podcast episode to download
+     */
+    @Insert
+    void insertDownloadedEpisode(DownloadEntry downloadEntry);
+
+    /**
+     * Deletes a {@link DownloadEntry} from the downloaded_episode table.
+     * @param downloadEntry Downloaded episode the user wants to delete
+     */
+    @Delete
+    void deleteDownloadedEpisode(DownloadEntry downloadEntry);
+
 }

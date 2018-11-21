@@ -212,4 +212,18 @@ public class CandyPodRepository {
         return mPodcastDao.loadFavorites();
     }
 
+    /**
+     * Returns the list of all downloads episodes from downloaded_episodes table.
+     */
+    public LiveData<List<DownloadEntry>> getDownloads() {
+        return mPodcastDao.loadDownloads();
+    }
+
+    /**
+     * Returns the downloaded episode by enclosure URL.
+     * @param enclosureUrl The stream URL for the episode audio file
+     */
+    public LiveData<DownloadEntry> getDownloadedEpisodeByEnclosureUrl(String enclosureUrl) {
+        return mPodcastDao.loadDownloadedEpisodeByEnclosureUrl(enclosureUrl);
+    }
 }

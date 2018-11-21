@@ -22,6 +22,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -40,14 +41,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.AppExecutors;
-import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.CandyPodDatabase;
+import com.example.android.candypod.data.DownloadEntry;
 import com.example.android.candypod.data.FavoriteEntry;
 import com.example.android.candypod.databinding.ActivityNowPlayingBinding;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.ItemImage;
+import com.example.android.candypod.service.PodcastDownloadService;
+import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import timber.log.Timber;
 
@@ -87,9 +91,13 @@ public class NowPlayingActivity extends AppCompatActivity {
 
     /** True when the current episode is in the favorites, otherwise false */
     private boolean mIsFavorite;
+    /** True when the user downloaded the current episode */
+    private boolean mIsDownloaded;
 
     /** Member variable for the FavoriteEntryViewModel to store and manage LiveData FavoriteEntry */
     private FavoriteEntryViewModel mFavoriteEntryViewModel;
+    /** Member variable for the DownloadEntryViewModel to store and manage LiveData DownloadEntry */
+    private DownloadEntryViewModel mDownloadEntryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +112,9 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         // Check if the episode is in the favorites or not
         mIsFavorite = isFavorite();
+
+        // Check if the episode is downloaded or not
+        mIsDownloaded = isDownloaded();
 
         Timber.d("enclosure url: " + mItem.getEnclosure().getUrl());
 
@@ -363,6 +374,8 @@ public class NowPlayingActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // Change the hear button icon based on whether or not the episode exists in the favorites
         changeFavIcon(mIsFavorite, menu);
+        // Change the download button icon based on whether or not the user downloaded the episode
+        changeDownloadIcon(mIsDownloaded, menu);
         return true;
     }
 
@@ -379,6 +392,10 @@ public class NowPlayingActivity extends AppCompatActivity {
             case android.R.id.home:
                 // When the user press the up button, finishes this NowPlayingActivity
                 onBackPressed();
+                return true;
+            case R.id.action_download:
+                // When the user clicks download button, download or remove episode
+                addOrRemoveDownloadedEpisode();
                 return true;
             case R.id.action_favorite:
                 //
@@ -413,6 +430,29 @@ public class NowPlayingActivity extends AppCompatActivity {
     }
 
     /**
+     * Returns true when the user downloaded the current episode.
+     */
+    private boolean isDownloaded() {
+        String enclosureUrl = mItem.getEnclosure().getUrl();
+        // Get the DownloadEntryViewModel from the factory
+        DownloadEntryViewModelFactory downloadEntryFactory =
+                InjectorUtils.provideDownloadEntryViewModelFactory(this, enclosureUrl);
+        mDownloadEntryViewModel = ViewModelProviders.of(this, downloadEntryFactory)
+                .get(DownloadEntryViewModel.class);
+
+        // Observe the DownloadEntry data
+        mDownloadEntryViewModel.getDownloadEntry().observe(this, new Observer<DownloadEntry>() {
+            @Override
+            public void onChanged(@Nullable DownloadEntry downloadEntry) {
+                mIsDownloaded = mDownloadEntryViewModel.getDownloadEntry().getValue() != null;
+                // Update the menu
+                invalidateOptionsMenu();
+            }
+        });
+        return mIsDownloaded;
+    }
+
+    /**
      * Change the hear button icon based on whether or not the episode exists in the favorites.
      * @param isFavorite True when the current episode is in the favorites, otherwise false
      * @param menu The menu object
@@ -422,6 +462,19 @@ public class NowPlayingActivity extends AppCompatActivity {
             menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_menu_favorite);
         } else {
             menu.findItem(R.id.action_favorite).setIcon(R.drawable.ic_favorite_border);
+        }
+    }
+
+    /**
+     * Changes the download button icon based on whether or not the user downloaded the episode.
+     * @param isDownloaded True when the user downloaded the current episode
+     * @param menu The menu object
+     */
+    private void changeDownloadIcon(boolean isDownloaded, Menu menu) {
+        if (isDownloaded) {
+            menu.findItem(R.id.action_download).setIcon(R.drawable.ic_menu_download);
+        } else {
+            menu.findItem(R.id.action_download).setIcon(R.drawable.ic_download_outline);
         }
     }
 
@@ -467,5 +520,90 @@ public class NowPlayingActivity extends AppCompatActivity {
             });
             Toast.makeText(this, "deleted", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /**
+     * Returns DownloadEntry which holds the current episode data.
+     */
+    private DownloadEntry getDownloadEntry() {
+        // Not all episode have the image URL, so we should check if it is null.
+        // If the episode image does not exist, use the podcast image instead.
+        String itemImageUrl;
+        ItemImage itemImage = mItem.getItemImage();
+        if (itemImage == null) {
+            itemImageUrl = mPodcastImage;
+        } else {
+            itemImageUrl = itemImage.getItemImageHref();
+        }
+
+        // Create a DownloadEntry
+        return new DownloadEntry(mPodcastId, mPodcastName, mPodcastImage,
+                mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
+                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
+                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
+                itemImageUrl);
+    }
+
+    /**
+     * Called when the download menu item clicked.
+     */
+    private void addOrRemoveDownloadedEpisode() {
+        if (!mIsDownloaded) {
+            // Trigger the download to start from our activity
+            startDownload();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Insert a downloaded episode to the database by using the podcastDao
+                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
+                }
+            });
+            Toast.makeText(this, "downloaded", Toast.LENGTH_SHORT).show();
+        } else {
+            // Remove the downloaded episode
+            RemoveDownload();
+            // Get downloaded episode by enclosure url
+            DownloadEntry downloadEntry = mDownloadEntryViewModel.getDownloadEntry().getValue();
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Delete the downloaded episode from the database by using the podcastDao
+                    mDb.podcastDao().deleteDownloadedEpisode(downloadEntry);
+                }
+            });
+            Toast.makeText(this, "Remove downloaded episode", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * When the user clicks the download button, triggers the download to start from our activity.
+     */
+    private void startDownload() {
+        Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
+        // Create a progressive stream download action
+        ProgressiveDownloadAction action = ProgressiveDownloadAction.createDownloadAction(
+                uri, null, null);
+        // Start the service with that action
+        PodcastDownloadService.startWithAction(
+                NowPlayingActivity.this,
+                PodcastDownloadService.class,
+                action,
+                false);
+    }
+
+    /**
+     * Removes downloaded episode.
+     */
+    private void RemoveDownload() {
+        Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
+        // Create a progressive stream remove action
+        ProgressiveDownloadAction deleteAction = ProgressiveDownloadAction.createRemoveAction(
+                uri, null, null);
+        // Start the service with that action
+        PodcastDownloadService.startWithAction(
+                NowPlayingActivity.this,
+                PodcastDownloadService.class,
+                deleteAction,
+                false);
     }
 }

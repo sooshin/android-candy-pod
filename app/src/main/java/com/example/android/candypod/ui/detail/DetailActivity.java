@@ -29,12 +29,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.service.PodcastDownloadService;
+import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
