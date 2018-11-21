@@ -53,6 +53,17 @@ public class Item implements Parcelable {
     public Item() {
     }
 
+    public Item(String title, String description, String iTunesSummary, String pubDate,
+                String duration, Enclosure enclosure, ItemImage itemImage) {
+        mTitle = title;
+        mDescription = description;
+        mITunesSummary = iTunesSummary;
+        mPubDate = pubDate;
+        mITunesDuration = duration;
+        mEnclosure = enclosure;
+        mItemImage = itemImage;
+    }
+
     protected Item(Parcel in) {
         mTitle = in.readString();
         mDescription = in.readString();

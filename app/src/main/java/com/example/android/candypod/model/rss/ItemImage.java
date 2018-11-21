@@ -31,6 +31,10 @@ public class ItemImage implements Parcelable {
     public ItemImage() {
     }
 
+    public ItemImage(String href) {
+        mHref = href;
+    }
+
     protected ItemImage(Parcel in) {
         mHref = in.readString();
     }
