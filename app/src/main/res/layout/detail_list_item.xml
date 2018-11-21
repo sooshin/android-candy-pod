@@ -34,7 +34,7 @@
             android:id="@+id/tv_detail_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/ib_detail_download"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="title" />
@@ -54,21 +54,6 @@
             app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
             app:layout_constraintTop_toBottomOf="@+id/tv_detail_pub_date"
             tools:text="duration" />
-
-        <!-- Download button.
-        Reference: @see "https://stackoverflow.com/questions/30959610/apply-material-design-touch-ripple-to-imagebutton" -->
-        <ImageButton
-            android:id="@+id/ib_detail_download"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/download_content_description"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu_download"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

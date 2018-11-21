@@ -53,7 +53,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
      */
     public interface DetailAdapterOnClickHandler {
         void onItemClick(Item item);
-        void onDownloadClick(Item item);
     }
 
     /**
@@ -131,9 +130,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             super(detailListItemBinding.getRoot());
             mDetailListItemBinding = detailListItemBinding;
 
-            // Set an onClickListener on the itemView and downloadButton to listen for clicks
+            // Set an onClickListener on the itemView to listen for clicks
             itemView.setOnClickListener(this);
-            mDetailListItemBinding.ibDetailDownload.setOnClickListener(this);
         }
 
         /**
@@ -176,14 +174,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Item item = mItems.get(adapterPosition);
-
-            if (v.getId() == R.id.ib_detail_download) {
-                // If the user clicks the download button, trigger the callback onDownloadClick.
-                mOnClickHandler.onDownloadClick(item);
-            } else {
-                // Else, trigger the callback onItemClick.
-                mOnClickHandler.onItemClick(item);
-            }
+            // Trigger the callback onItemClick
+            mOnClickHandler.onItemClick(item);
         }
     }
 }

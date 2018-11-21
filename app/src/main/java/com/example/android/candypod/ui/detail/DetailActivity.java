@@ -264,23 +264,4 @@ public class DetailActivity extends AppCompatActivity
         startService(serviceIntent);
 
     }
-
-    /**
-     * When the user clicks the download button, triggers the download to start from our activity.
-     * @param item The podcast episode
-     */
-    @Override
-    public void onDownloadClick(Item item) {
-        Uri uri = Uri.parse(item.getEnclosure().getUrl());
-        // Create a progressive stream download action
-        ProgressiveDownloadAction action = ProgressiveDownloadAction.createDownloadAction(
-                uri, null, null);
-        // Start the service with that action
-        PodcastDownloadService.startWithAction(
-                DetailActivity.this,
-                PodcastDownloadService.class,
-                action,
-                false);
-
-    }
 }
