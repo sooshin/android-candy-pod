@@ -51,6 +51,8 @@ import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.service.PodcastDownloadService;
 import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.android.exoplayer2.offline.DownloadManager;
+import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
 import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import timber.log.Timber;
@@ -63,7 +65,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME
 /**
  * Reference: @see "https://developer.android.com/guide/topics/media-apps/audio-app/building-a-mediabrowser-client"
  */
-public class NowPlayingActivity extends AppCompatActivity {
+public class NowPlayingActivity extends AppCompatActivity implements DownloadManager.Listener {
 
     /** The podcast episode */
     private Item mItem;
@@ -551,14 +553,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         if (!mIsDownloaded) {
             // Trigger the download to start from our activity
             startDownload();
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    // Insert a downloaded episode to the database by using the podcastDao
-                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
-                }
-            });
-            Toast.makeText(this, "downloaded", Toast.LENGTH_SHORT).show();
+
         } else {
             // Remove the downloaded episode
             RemoveDownload();
@@ -605,5 +600,35 @@ public class NowPlayingActivity extends AppCompatActivity {
                 PodcastDownloadService.class,
                 deleteAction,
                 false);
+    }
+
+    // DownloadManager.Listener
+
+    @Override
+    public void onInitialized(DownloadManager downloadManager) {
+
+    }
+
+    @Override
+    public void onTaskStateChanged(DownloadManager downloadManager, DownloadManager.TaskState taskState) {
+
+        if (taskState.state == TaskState.STATE_COMPLETED) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Insert a downloaded episode to the database by using the podcastDao
+                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
+                }
+            });
+            Toast.makeText(this, "downloaded", Toast.LENGTH_SHORT).show();
+            Timber.d("ontaskStateChanged: complete");
+        } else if (taskState.state == TaskState.STATE_FAILED) {
+
+        }
+    }
+
+    @Override
+    public void onIdle(DownloadManager downloadManager) {
+
     }
 }
