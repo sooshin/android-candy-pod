@@ -617,7 +617,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     @Override
     public void onTaskStateChanged(DownloadManager downloadManager, DownloadManager.TaskState taskState) {
 
-        if (taskState.state == TaskState.STATE_COMPLETED) {
+        if (taskState.state == TaskState.STATE_COMPLETED && !taskState.action.isRemoveAction) {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
