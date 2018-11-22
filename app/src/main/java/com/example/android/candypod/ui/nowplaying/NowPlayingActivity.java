@@ -50,6 +50,7 @@ import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.service.PodcastDownloadService;
 import com.example.android.candypod.service.PodcastService;
+import com.example.android.candypod.utilities.DownloadUtil;
 import com.example.android.candypod.utilities.InjectorUtils;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
@@ -174,6 +175,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         super.onStart();
         // Connect to the MediaBrowserService
         mMediaBrowser.connect();
+        // Add a DownloadManager.Listener. Please note that we must remove the listener in onStop()
+        DownloadUtil.getDownloadManager(this).addListener(this);
     }
 
     @Override
@@ -193,6 +196,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             MediaControllerCompat.getMediaController(this).unregisterCallback(controllerCallback);
         }
         mMediaBrowser.disconnect();
+        // Remove a DownloadManager.Listener
+        DownloadUtil.getDownloadManager(this).removeListener(this);
     }
 
     /**
