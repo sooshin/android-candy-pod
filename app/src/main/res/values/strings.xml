@@ -72,4 +72,10 @@
     <!-- Notification channel name -->
     <string name="playback_channel_name">Playback</string>
     <string name="download_channel_name">Download</string>
+
+    <!-- Toast -->
+    <string name="toast_start_downloading">Start downloading&#8230;</string>
+    <string name="toast_download_completed">Download completed</string>
+    <string name="toast_remove_downloaded_episode">Remove downloaded episode</string>
+    <string name="toast_download_failed">Download failed</string>
 </resources>

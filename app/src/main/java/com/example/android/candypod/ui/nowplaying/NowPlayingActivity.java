@@ -96,6 +96,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     private boolean mIsFavorite;
     /** True when the user downloaded the current episode */
     private boolean mIsDownloaded;
+    /** True when the download action is currently started */
+    private boolean mStateStarted;
 
     /** Member variable for the FavoriteEntryViewModel to store and manage LiveData FavoriteEntry */
     private FavoriteEntryViewModel mFavoriteEntryViewModel;
@@ -555,23 +557,18 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * Called when the download menu item clicked.
      */
     private void addOrRemoveDownloadedEpisode() {
-        if (!mIsDownloaded) {
+        // Check if is not downloaded episode and download action is currently started.
+        // mStateStarted is to avoid starting the download every time the button is pressed.
+        if (!mIsDownloaded && !mStateStarted) {
+            // Show a toast message that indicates start downloading
+            Toast.makeText(this, getString(R.string.toast_start_downloading),
+                    Toast.LENGTH_SHORT).show();
             // Trigger the download to start from our activity
             startDownload();
 
-        } else {
+        } else if (mIsDownloaded){
             // Remove the downloaded episode
             RemoveDownload();
-            // Get downloaded episode by enclosure url
-            DownloadEntry downloadEntry = mDownloadEntryViewModel.getDownloadEntry().getValue();
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    // Delete the downloaded episode from the database by using the podcastDao
-                    mDb.podcastDao().deleteDownloadedEpisode(downloadEntry);
-                }
-            });
-            Toast.makeText(this, "Remove downloaded episode", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -616,19 +613,44 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     @Override
     public void onTaskStateChanged(DownloadManager downloadManager, DownloadManager.TaskState taskState) {
-
+        // Check if the downloadAction completed
         if (taskState.state == TaskState.STATE_COMPLETED && !taskState.action.isRemoveAction) {
+            // Insert a downloaded episode only when this episode does not exist in the downloads database
+            if (!mIsDownloaded) {
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Insert a downloaded episode to the database by using the podcastDao
+                        mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
+                    }
+                });
+            }
+            // Show a toast message that indicates download completed
+            Toast.makeText(this, getString(R.string.toast_download_completed),
+                    Toast.LENGTH_SHORT).show();
+        } else if (taskState.state == TaskState.STATE_COMPLETED ) {
+            // When the removeAction is completed, delete episode from the database.
+            // Get downloaded episode by enclosure url
+            DownloadEntry downloadEntry = mDownloadEntryViewModel.getDownloadEntry().getValue();
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    // Insert a downloaded episode to the database by using the podcastDao
-                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
+                    // Delete the downloaded episode from the database by using the podcastDao
+                    mDb.podcastDao().deleteDownloadedEpisode(downloadEntry);
                 }
             });
-            Toast.makeText(this, "downloaded", Toast.LENGTH_SHORT).show();
-            Timber.d("ontaskStateChanged: complete");
+            mStateStarted = false;
+            // Show a toast message that indicates remove the downloaded episode
+            Toast.makeText(this, getString(R.string.toast_remove_downloaded_episode),
+                    Toast.LENGTH_SHORT).show();
         } else if (taskState.state == TaskState.STATE_FAILED) {
-
+            mStateStarted = false;
+            // Show a toast message that indicates download failed
+            Toast.makeText(this, getString(R.string.toast_download_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else if (taskState.state == TaskState.STATE_STARTED && !taskState.action.isRemoveAction) {
+            // Set mStateStarted to true
+            mStateStarted = true;
         }
     }
 
