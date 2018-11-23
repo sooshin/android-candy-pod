@@ -492,29 +492,12 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * insert the episode data into the database. Otherwise, delete the episode data from the database.
      */
     private void addOrRemoveFavorite() {
-        // Not all episode have the image URL, so we should check if it is null.
-        // If the episode image does not exist, use the podcast image instead.
-        String itemImageUrl;
-        ItemImage itemImage = mItem.getItemImage();
-        if (itemImage == null) {
-            itemImageUrl = mPodcastImage;
-        } else {
-            itemImageUrl = itemImage.getItemImageHref();
-        }
-
-        // Create a FavoriteEntry
-        mFavoriteEntry = new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
-                mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
-                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
-                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
-                itemImageUrl);
-
         if (!mIsFavorite) {
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
                     // Insert a episode to the database by using the podcastDao
-                    mDb.podcastDao().insertFavoriteEpisode(mFavoriteEntry);
+                    mDb.podcastDao().insertFavoriteEpisode(getFavoriteEntry());
                 }
             });
             Toast.makeText(this, "inserted", Toast.LENGTH_SHORT).show();
@@ -532,9 +515,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     }
 
     /**
-     * Returns DownloadEntry which holds the current episode data.
+     * Returns item image URL.
      */
-    private DownloadEntry getDownloadEntry() {
+    private String getItemImageUrl() {
         // Not all episode have the image URL, so we should check if it is null.
         // If the episode image does not exist, use the podcast image instead.
         String itemImageUrl;
@@ -544,6 +527,30 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         } else {
             itemImageUrl = itemImage.getItemImageHref();
         }
+        return itemImageUrl;
+    }
+
+    /**
+     * Returns FavoriteEntry which holds the current episode data.
+     */
+    private FavoriteEntry getFavoriteEntry() {
+        // Get item image URL
+        String itemImageUrl = getItemImageUrl();
+
+        // Create a FavoriteEntry
+        return new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
+                mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
+                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
+                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
+                itemImageUrl);
+    }
+
+    /**
+     * Returns DownloadEntry which holds the current episode data.
+     */
+    private DownloadEntry getDownloadEntry() {
+        // Get item image URL
+        String itemImageUrl = getItemImageUrl();
 
         // Create a DownloadEntry
         return new DownloadEntry(mPodcastId, mPodcastName, mPodcastImage,
@@ -564,43 +571,43 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             Toast.makeText(this, getString(R.string.toast_start_downloading),
                     Toast.LENGTH_SHORT).show();
             // Trigger the download to start from our activity
-            startDownload();
+            startServiceWithDownloadAction();
 
         } else if (mIsDownloaded){
             // Remove the downloaded episode
-            RemoveDownload();
+            startServiceWithRemoveAction();
         }
     }
 
     /**
      * When the user clicks the download button, triggers the download to start from our activity.
      */
-    private void startDownload() {
+    private void startServiceWithDownloadAction() {
         Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
         // Create a progressive stream download action
-        ProgressiveDownloadAction action = ProgressiveDownloadAction.createDownloadAction(
+        ProgressiveDownloadAction downloadAction = ProgressiveDownloadAction.createDownloadAction(
                 uri, null, null);
         // Start the service with that action
         PodcastDownloadService.startWithAction(
                 NowPlayingActivity.this,
                 PodcastDownloadService.class,
-                action,
+                downloadAction,
                 false);
     }
 
     /**
      * Removes downloaded episode.
      */
-    private void RemoveDownload() {
+    private void startServiceWithRemoveAction() {
         Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
         // Create a progressive stream remove action
-        ProgressiveDownloadAction deleteAction = ProgressiveDownloadAction.createRemoveAction(
+        ProgressiveDownloadAction removeAction = ProgressiveDownloadAction.createRemoveAction(
                 uri, null, null);
         // Start the service with that action
         PodcastDownloadService.startWithAction(
                 NowPlayingActivity.this,
                 PodcastDownloadService.class,
-                deleteAction,
+                removeAction,
                 false);
     }
 
@@ -616,33 +623,11 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Check if the downloadAction completed
         if (taskState.state == TaskState.STATE_COMPLETED && !taskState.action.isRemoveAction) {
             // Insert a downloaded episode only when this episode does not exist in the downloads database
-            if (!mIsDownloaded) {
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Insert a downloaded episode to the database by using the podcastDao
-                        mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
-                    }
-                });
-            }
-            // Show a toast message that indicates download completed
-            Toast.makeText(this, getString(R.string.toast_download_completed),
-                    Toast.LENGTH_SHORT).show();
+            insertDownloadedEpisode();
         } else if (taskState.state == TaskState.STATE_COMPLETED ) {
-            // When the removeAction is completed, delete episode from the database.
-            // Get downloaded episode by enclosure url
-            DownloadEntry downloadEntry = mDownloadEntryViewModel.getDownloadEntry().getValue();
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    // Delete the downloaded episode from the database by using the podcastDao
-                    mDb.podcastDao().deleteDownloadedEpisode(downloadEntry);
-                }
-            });
+            // When the removeAction is completed, delete the downloaded episode from the database.
+            deleteDownloadedEpisode();
             mStateStarted = false;
-            // Show a toast message that indicates remove the downloaded episode
-            Toast.makeText(this, getString(R.string.toast_remove_downloaded_episode),
-                    Toast.LENGTH_SHORT).show();
         } else if (taskState.state == TaskState.STATE_FAILED) {
             mStateStarted = false;
             // Show a toast message that indicates download failed
@@ -652,6 +637,42 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             // Set mStateStarted to true
             mStateStarted = true;
         }
+    }
+
+    /**
+     * Inserts a downloaded episode only when this episode does not exist in the downloads database.
+     */
+    private void insertDownloadedEpisode() {
+        if (!mIsDownloaded) {
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    // Insert a downloaded episode to the database by using the podcastDao
+                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
+                }
+            });
+        }
+        // Show a toast message that indicates download completed
+        Toast.makeText(this, getString(R.string.toast_download_completed),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Deletes the downloaded episode from the database.
+     */
+    private void deleteDownloadedEpisode() {
+        // Get downloaded episode by enclosure url
+        DownloadEntry downloadEntry = mDownloadEntryViewModel.getDownloadEntry().getValue();
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                // Delete the downloaded episode from the database by using the podcastDao
+                mDb.podcastDao().deleteDownloadedEpisode(downloadEntry);
+            }
+        });
+        // Show a toast message that indicates remove the downloaded episode
+        Toast.makeText(this, getString(R.string.toast_remove_downloaded_episode),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
