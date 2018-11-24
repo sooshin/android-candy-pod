@@ -17,9 +17,15 @@
 package com.example.android.candypod.service;
 
 import android.app.Notification;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
+import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
+import com.example.android.candypod.data.CandyPodDatabase;
+import com.example.android.candypod.data.DownloadEntry;
 import com.example.android.candypod.utilities.DownloadUtil;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
@@ -29,8 +35,11 @@ import com.google.android.exoplayer2.ui.DownloadNotificationUtil;
 import com.google.android.exoplayer2.util.NotificationUtil;
 import com.google.android.exoplayer2.util.Util;
 
+import timber.log.Timber;
+
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_CHANNEL_ID;
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_NOTIFICATION_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_DOWNLOAD_ENTRY;
 
 /**
  * The PodcastDownloadService is to run the downloading operation.
@@ -38,12 +47,36 @@ import static com.example.android.candypod.utilities.Constants.DOWNLOAD_NOTIFICA
  */
 public class PodcastDownloadService extends DownloadService {
 
+    private DownloadEntry mDownloadEntry;
+    private CandyPodDatabase mDb;
+
     public PodcastDownloadService() {
         super(
                 DOWNLOAD_NOTIFICATION_ID,
                 DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
                 DOWNLOAD_CHANNEL_ID,
                 R.string.download_channel_name);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // Get the database instance
+        mDb = CandyPodDatabase.getInstance(getApplicationContext());
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent == null) {
+            Timber.e("intent in onStartCommand is null");
+        } else {
+            Bundle b = intent.getBundleExtra(EXTRA_DOWNLOAD_ENTRY);
+            if (b != null) {
+                mDownloadEntry = b.getParcelable(EXTRA_DOWNLOAD_ENTRY);
+            }
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -95,6 +128,10 @@ public class PodcastDownloadService extends DownloadService {
                             DOWNLOAD_CHANNEL_ID,
                             null,
                             Util.fromUtf8Bytes(taskState.action.data));
+
+            // After the download completed, inserts a downloaded episode into the database
+            insertDownloadedEpisode();
+
         } else if (taskState.state == TaskState.STATE_FAILED) {
             // A notification for a failed download
             notification =
@@ -107,5 +144,22 @@ public class PodcastDownloadService extends DownloadService {
         }
         int notificationId = DOWNLOAD_NOTIFICATION_ID + 1 + taskState.taskId;
         NotificationUtil.setNotification(this, notificationId, notification);
+    }
+
+    /**
+     * Inserts a downloaded episode into the downloads database after download complete.
+     */
+    private void insertDownloadedEpisode() {
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                // Insert a downloaded episode to the database by using the podcastDao
+                mDb.podcastDao().insertDownloadedEpisode(mDownloadEntry);
+            }
+        });
+
+        // Show a toast message that indicates download completed
+        Toast.makeText(this, getString(R.string.toast_download_completed),
+                Toast.LENGTH_SHORT).show();
     }
 }

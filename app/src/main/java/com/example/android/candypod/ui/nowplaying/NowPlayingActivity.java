@@ -58,6 +58,7 @@ import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import timber.log.Timber;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_DOWNLOAD_ENTRY;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
@@ -593,6 +594,12 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
                 PodcastDownloadService.class,
                 downloadAction,
                 false);
+
+        Intent intent = new Intent(NowPlayingActivity.this, PodcastDownloadService.class);
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_DOWNLOAD_ENTRY, getDownloadEntry());
+        intent.putExtra(EXTRA_DOWNLOAD_ENTRY, b);
+        startService(intent);
     }
 
     /**
@@ -622,8 +629,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     public void onTaskStateChanged(DownloadManager downloadManager, DownloadManager.TaskState taskState) {
         // Check if the downloadAction completed
         if (taskState.state == TaskState.STATE_COMPLETED && !taskState.action.isRemoveAction) {
-            // Insert a downloaded episode only when this episode does not exist in the downloads database
-            insertDownloadedEpisode();
+            // Insert a downloaded episode after the download complete.
+            // This is done in the onTaskStateChanged() of PodcastDownloadService
         } else if (taskState.state == TaskState.STATE_COMPLETED ) {
             // When the removeAction is completed, delete the downloaded episode from the database.
             deleteDownloadedEpisode();
@@ -637,24 +644,6 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             // Set mStateStarted to true
             mStateStarted = true;
         }
-    }
-
-    /**
-     * Inserts a downloaded episode only when this episode does not exist in the downloads database.
-     */
-    private void insertDownloadedEpisode() {
-        if (!mIsDownloaded) {
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    // Insert a downloaded episode to the database by using the podcastDao
-                    mDb.podcastDao().insertDownloadedEpisode(getDownloadEntry());
-                }
-            });
-        }
-        // Show a toast message that indicates download completed
-        Toast.makeText(this, getString(R.string.toast_download_completed),
-                Toast.LENGTH_SHORT).show();
     }
 
     /**
