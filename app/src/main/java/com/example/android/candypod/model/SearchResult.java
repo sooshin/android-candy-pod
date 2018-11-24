@@ -7,12 +7,14 @@ public class SearchResult {
     @SerializedName("feedUrl")
     private String mFeedUrl;
 
+    /** The Podcast ID */
     @SerializedName("collectionId")
     private int mCollectionId;
 
     @SerializedName("artistName")
     private String mArtistName;
 
+    /** The Podcast Name */
     @SerializedName("collectionName")
     private String mCollectionName;
 

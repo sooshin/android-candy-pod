@@ -64,7 +64,7 @@ import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
  */
 public class SubscribeActivity extends AppCompatActivity {
 
-    /** The podcast ID */
+    /** The podcast ID used to a lookup request */
     private String mResultId;
     /** The podcast title */
     private String mResultName;

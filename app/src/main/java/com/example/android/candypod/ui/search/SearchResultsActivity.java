@@ -31,11 +31,14 @@ import com.example.android.candypod.databinding.ActivitySearchResultsBinding;
 import com.example.android.candypod.model.SearchResponse;
 import com.example.android.candypod.model.SearchResult;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
+import com.example.android.candypod.ui.subscribe.SubscribeActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_SEARCH;
 import static com.example.android.candypod.utilities.Constants.SEARCH_MEDIA_PODCAST;
@@ -143,8 +146,24 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
         });
     }
 
+    /**
+     * This is where we receive our callback from {@link SearchAdapter.SearchAdapterOnClickHandler}
+     *
+     * This callback is invoked when you click on an item in the list.
+     * Once the Intent has been created, starts the {@link SubscribeActivity}
+     * @param searchResult The {@link SearchResult} that was clicked
+     */
     @Override
     public void onItemClick(SearchResult searchResult) {
+        // Get the podcast ID and name
+        String podcastId = String.valueOf(searchResult.getCollectionId());
+        String podcastName = searchResult.getCollectionName();
 
+        Intent intent = new Intent(this, SubscribeActivity.class);
+        // Pass the podcast ID which will be used to a lookup request to search for the podcast
+        intent.putExtra(EXTRA_RESULT_ID, podcastId);
+        // Pass the podcast title which will be used to set the title in the app bar
+        intent.putExtra(EXTRA_RESULT_NAME, podcastName);
+        startActivity(intent);
     }
 }
