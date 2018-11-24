@@ -20,12 +20,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Defines the schema of a table in room for a single downloaded episode.
  */
 @Entity(tableName = "downloaded_episodes")
-public class DownloadEntry {
+public class DownloadEntry implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -114,6 +116,32 @@ public class DownloadEntry {
         this.itemImageUrl = itemImageUrl;
     }
 
+    protected DownloadEntry(Parcel in) {
+        podcastId = in.readString();
+        title = in.readString();
+        artworkImageUrl = in.readString();
+        itemTitle = in.readString();
+        itemDescription = in.readString();
+        itemPubDate = in.readString();
+        itemDuration = in.readString();
+        itemEnclosureUrl = in.readString();
+        itemEnclosureType = in.readString();
+        itemEnclosureLength = in.readString();
+        itemImageUrl = in.readString();
+    }
+
+    public static final Creator<DownloadEntry> CREATOR = new Creator<DownloadEntry>() {
+        @Override
+        public DownloadEntry createFromParcel(Parcel in) {
+            return new DownloadEntry(in);
+        }
+
+        @Override
+        public DownloadEntry[] newArray(int size) {
+            return new DownloadEntry[size];
+        }
+    };
+
     public int getId() {
         return id;
     }
@@ -160,5 +188,25 @@ public class DownloadEntry {
 
     public String getItemImageUrl() {
         return itemImageUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(podcastId);
+        dest.writeString(title);
+        dest.writeString(artworkImageUrl);
+        dest.writeString(itemTitle);
+        dest.writeString(itemDescription);
+        dest.writeString(itemPubDate);
+        dest.writeString(itemDuration);
+        dest.writeString(itemEnclosureUrl);
+        dest.writeString(itemEnclosureType);
+        dest.writeString(itemEnclosureLength);
+        dest.writeString(itemImageUrl);
     }
 }
