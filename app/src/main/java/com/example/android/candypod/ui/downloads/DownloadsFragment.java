@@ -80,6 +80,9 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
                 container, false);
         View rootView = mDownloadsBinding.getRoot();
 
+        // Change the title associated with this fragment
+        getActivity().setTitle(getString(R.string.downloads));
+
         // Create and set the adapter to the RecyclerView
         initAdapter();
 

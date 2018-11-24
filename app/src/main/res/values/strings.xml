@@ -30,7 +30,7 @@
     <string name="action_download">Download</string>
     <string name="search_hint">Search podcasts</string>
 
-    <!-- String-->
+    <!-- Title of navigation menu items -->
     <string name="podcasts">Podcasts</string>
     <string name="playlists">Playlists</string>
     <string name="favorites">Favorites</string>

@@ -62,6 +62,9 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
                 container, false);
         View rootView = mFavoritesBinding.getRoot();
 
+        // Change the title associated with this fragment
+        getActivity().setTitle(getString(R.string.favorites));
+
         // Create and set the adapter to the RecyclerView
         initAdapter();
 

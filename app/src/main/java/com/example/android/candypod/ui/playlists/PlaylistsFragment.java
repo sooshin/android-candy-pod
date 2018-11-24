@@ -40,6 +40,10 @@ public class PlaylistsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // Change the title associated with this fragment
+        getActivity().setTitle(getString(R.string.playlists));
+
         return inflater.inflate(R.layout.fragment_playlists, container, false);
     }
 

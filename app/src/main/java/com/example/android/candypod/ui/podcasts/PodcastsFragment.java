@@ -71,6 +71,9 @@ public class PodcastsFragment extends Fragment
                 container, false);
         View rootView = mPodcastsBinding.getRoot();
 
+        // Change the title associated with this fragment
+        getActivity().setTitle(getString(R.string.app_name));
+
         // When a FAB is clicked, start the AddPodcastActivity
         startAddPodcastActivity();
 
