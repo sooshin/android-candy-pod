@@ -153,8 +153,10 @@ public class PodcastDownloadService extends DownloadService {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                // Insert a downloaded episode to the database by using the podcastDao
-                mDb.podcastDao().insertDownloadedEpisode(mDownloadEntry);
+                if (mDownloadEntry != null) {
+                    // Insert a downloaded episode to the database by using the podcastDao
+                    mDb.podcastDao().insertDownloadedEpisode(mDownloadEntry);
+                }
             }
         });
 
