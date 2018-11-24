@@ -20,6 +20,7 @@ package com.example.android.candypod.ui.favorites;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,9 +33,20 @@ import android.view.ViewGroup;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.FavoriteEntry;
 import com.example.android.candypod.databinding.FragmentFavoritesBinding;
+import com.example.android.candypod.model.rss.Enclosure;
+import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.model.rss.ItemImage;
+import com.example.android.candypod.service.PodcastService;
+import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
+import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
+import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 
 /**
  * The FavoritesFragment displays a list of the favorite episodes.
@@ -49,6 +61,10 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
 
     /***The ViewModel for FavoritesFragment */
     private FavViewModel mFavViewModel;
+    /** Podcast Id, title, and image URL */
+    private String mPodcastId;
+    private String mPodcastTitle;
+    private String mPodcastImageUrl;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -121,12 +137,67 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
     }
 
     /**
+     * This is where we receive our callback from {@link FavoritesAdapter.FavoritesAdapterOnClickHandler}.
      *
-     * @param favoriteEntry
+     * This callback is invoked when you click on an item in the list.
+     * Once the Intent has been created, starts the NowPlayingActivity and the PodcastService.
+     *
+     * @param favoriteEntry FavoriteEntry the user clicked
      */
     @Override
     public void onFavoriteClick(FavoriteEntry favoriteEntry) {
+        // Start the NowPlayingActivity
+        Intent intent = new Intent(this.getActivity(), NowPlayingActivity.class);
+        // Wrap the parcelable into a bundle
+        Bundle b = new Bundle();
+        b.putParcelable(EXTRA_ITEM, getItem(favoriteEntry));
+        // Pass the bundle through intent
+        intent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast id
+        intent.putExtra(EXTRA_RESULT_ID, mPodcastId);
+        // Pass podcast title
+        intent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
+        // Pass the podcast image URL. If there is no item image, use this podcast image.
+        intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImageUrl);
+        startActivity(intent);
 
+        // Start the PodcastService
+        Intent serviceIntent = new Intent(this.getActivity(), PodcastService.class);
+        // Set the action to check if the old player should be released in PodcastService
+        serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
+        // Pass item that contains episode data
+        serviceIntent.putExtra(EXTRA_ITEM, b);
+        // Pass podcast title and podcast image
+        serviceIntent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
+        serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImageUrl);
+        getActivity().startService(serviceIntent);
+    }
+
+    /**
+     * Returns item used to intent extra.
+     * @param favoriteEntry favoriteEntry that the user clicks
+     */
+    private Item getItem(FavoriteEntry favoriteEntry) {
+        // Extract the episode details
+        mPodcastId = favoriteEntry.getPodcastId();
+        mPodcastTitle = favoriteEntry.getTitle();
+        mPodcastImageUrl = favoriteEntry.getArtworkImageUrl();
+
+        String itemTitle = favoriteEntry.getItemTitle();
+        String itemDescription = favoriteEntry.getItemDescription();
+        String iTunesSummary = favoriteEntry.getItemDescription();
+        String pubDate = favoriteEntry.getItemPubDate();
+        String duration = favoriteEntry.getItemDuration();
+
+        String enclosureUrl = favoriteEntry.getItemEnclosureUrl();
+        String enclosureType = favoriteEntry.getItemEnclosureType();
+        String enclosureLength = favoriteEntry.getItemEnclosureLength();
+        Enclosure enclosure = new Enclosure(enclosureUrl, enclosureType, enclosureLength);
+
+        String itemImageUrl = favoriteEntry.getItemImageUrl();
+        ItemImage itemImage = new ItemImage(itemImageUrl);
+
+        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImage);
     }
 
     /**
