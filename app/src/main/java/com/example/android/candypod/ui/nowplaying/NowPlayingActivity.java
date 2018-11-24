@@ -627,12 +627,11 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     @Override
     public void onTaskStateChanged(DownloadManager downloadManager, DownloadManager.TaskState taskState) {
-        // Check if the downloadAction completed
-        if (taskState.state == TaskState.STATE_COMPLETED && !taskState.action.isRemoveAction) {
-            // Insert a downloaded episode after the download complete.
-            // This is done in the onTaskStateChanged() of PodcastDownloadService
-        } else if (taskState.state == TaskState.STATE_COMPLETED ) {
-            // When the removeAction is completed, delete the downloaded episode from the database.
+        // Please note that inserting a downloaded episode after the 'download' action completed
+        // is done in the onTaskStateChanged() of PodcastDownloadService. Even if the user leaves
+        // NowPlayingActivity, the episode can be inserted into the database after the download completed.
+        if (taskState.state == TaskState.STATE_COMPLETED && taskState.action.isRemoveAction) {
+            // When the 'remove' action is completed, delete the downloaded episode from the database.
             deleteDownloadedEpisode();
             mStateStarted = false;
         } else if (taskState.state == TaskState.STATE_FAILED) {
