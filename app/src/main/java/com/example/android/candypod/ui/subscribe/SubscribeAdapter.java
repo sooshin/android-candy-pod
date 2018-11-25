@@ -135,9 +135,11 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
             // If the description contains the img tag, remove it, then convert HTML to plain text.
             // Reference: @see "https://stackoverflow.com/questions/11178533/how-to-skip-image-tag-in-html-data-in-android"
             // @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
-            String descriptionWithoutImageTag = description.replaceAll(IMG_HTML_TAG, REPLACEMENT_EMPTY);
-            mSubscribeListItemBinding.tvItemDescription.setText(
-                    Html.fromHtml(Html.fromHtml(descriptionWithoutImageTag).toString()));
+            if (description != null) {
+                String descriptionWithoutImageTag = description.replaceAll(IMG_HTML_TAG, REPLACEMENT_EMPTY);
+                mSubscribeListItemBinding.tvItemDescription.setText(
+                        Html.fromHtml(Html.fromHtml(descriptionWithoutImageTag).toString()));
+            }
 
             // Get the pub date of an episode
             String pubDate = item.getPubDate();
