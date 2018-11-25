@@ -57,10 +57,14 @@
         <activity
             android:name=".ui.search.SearchResultsActivity"
             android:label="@string/action_search"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.add.AddPodcastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.add.AddPodcastActivity" />
         </activity>
         <service
             android:name=".service.PodcastService"

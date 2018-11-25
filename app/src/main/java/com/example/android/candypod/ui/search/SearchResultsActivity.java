@@ -23,7 +23,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.android.candypod.R;
@@ -80,6 +82,9 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
 
         // Observe changes in the SearchResponse
         observeSearchResponse();
+
+        // Show the up button in the action bar
+        showUpButton();
     }
 
     /**
@@ -165,5 +170,30 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
         // Pass the podcast title which will be used to set the title in the app bar
         intent.putExtra(EXTRA_RESULT_NAME, podcastName);
         startActivity(intent);
+    }
+
+    /**
+     * Show an up button on the action bar.
+     */
+    private void showUpButton() {
+        ActionBar actionBar = getSupportActionBar();
+        // Set the action bar back button to look like an up button
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                // Navigate back to the AddPodcast activity when the home button is pressed
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
