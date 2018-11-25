@@ -83,4 +83,9 @@ public class Constants {
 
     /** Scheduler Job id in the PodcastDownloadService*/
     public static final int JOB_ID = 1;
+
+    /** The pubDate pattern */
+    public static final String PUB_DATE_PATTERN = "EEE, d MMM yyyy HH:mm:ss Z";
+    /** The formatted date pattern */
+    public static final String FORMATTED_PATTERN = "MMM d, yyyy";
 }

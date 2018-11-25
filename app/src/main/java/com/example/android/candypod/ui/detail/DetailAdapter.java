@@ -28,6 +28,7 @@ import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.DetailListItemBinding;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.ItemImage;
+import com.example.android.candypod.utilities.CandyPodUtils;
 
 import java.util.List;
 
@@ -159,7 +160,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
 
             // Get the pub date of an episode and set text
             String pubDate = item.getPubDate();
-            mDetailListItemBinding.tvDetailPubDate.setText(pubDate);
+            // Convert the pub date into something to display to users
+            String formattedPubDate = CandyPodUtils.getFormattedDateString(pubDate);
+            mDetailListItemBinding.tvDetailPubDate.setText(formattedPubDate);
 
             // Get the duration of an episode and set text
             String duration = item.getITunesDuration();

@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.SubscribeListItemBinding;
 import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.utilities.CandyPodUtils;
 
 import java.util.List;
 
@@ -143,7 +144,9 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
 
             // Get the pub date of an episode
             String pubDate = item.getPubDate();
-            mSubscribeListItemBinding.tvItemPubDate.setText(pubDate);
+            // Convert the pub date into something to display to users
+            String formattedPubDate = CandyPodUtils.getFormattedDateString(pubDate);
+            mSubscribeListItemBinding.tvItemPubDate.setText(formattedPubDate);
 
             // Get the duration of an episode
             String iTunesDuration = item.getITunesDuration();
