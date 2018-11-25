@@ -30,6 +30,7 @@ import com.example.android.candypod.utilities.DownloadUtil;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
 import com.google.android.exoplayer2.offline.DownloadService;
+import com.google.android.exoplayer2.scheduler.PlatformScheduler;
 import com.google.android.exoplayer2.scheduler.Scheduler;
 import com.google.android.exoplayer2.ui.DownloadNotificationUtil;
 import com.google.android.exoplayer2.util.NotificationUtil;
@@ -40,6 +41,7 @@ import timber.log.Timber;
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_CHANNEL_ID;
 import static com.example.android.candypod.utilities.Constants.DOWNLOAD_NOTIFICATION_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_DOWNLOAD_ENTRY;
+import static com.example.android.candypod.utilities.Constants.JOB_ID;
 
 /**
  * The PodcastDownloadService is to run the downloading operation.
@@ -90,7 +92,7 @@ public class PodcastDownloadService extends DownloadService {
     @Nullable
     @Override
     protected Scheduler getScheduler() {
-        return null;
+        return new PlatformScheduler(this, JOB_ID);
     }
 
     /**

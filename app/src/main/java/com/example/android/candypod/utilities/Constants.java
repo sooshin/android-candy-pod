@@ -80,4 +80,7 @@ public class Constants {
     /** The fast forward increment and rewind increment (milliseconds) */
     public static final int FAST_FORWARD_INCREMENT = 30000; // 30 sec
     public static final int REWIND_INCREMENT = 10000; // 10 sec
+
+    /** Scheduler Job id in the PodcastDownloadService*/
+    public static final int JOB_ID = 1;
 }
