@@ -58,7 +58,6 @@ import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import timber.log.Timber;
 
-import static com.example.android.candypod.utilities.Constants.CUSTOM_CACHE_KEY;
 import static com.example.android.candypod.utilities.Constants.EXTRA_DOWNLOAD_ENTRY;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
@@ -592,9 +591,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Create a progressive stream download action
         ProgressiveDownloadAction downloadAction = ProgressiveDownloadAction.createDownloadAction(
                 uri, itemTitleBytes,
-                // Specify custom cache key. If not, the download starts when leaving this
-                // NowPlayingActivity and going back to this activity again.
-                CUSTOM_CACHE_KEY);
+                null);
         // Start the service with that action
         PodcastDownloadService.startWithAction(
                 NowPlayingActivity.this,

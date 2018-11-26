@@ -89,6 +89,4 @@ public class Constants {
     /** The formatted date pattern */
     public static final String FORMATTED_PATTERN = "MMM d, yyyy";
 
-    /** The custom cache key used to create download action */
-    public static final String CUSTOM_CACHE_KEY = "a";
 }
