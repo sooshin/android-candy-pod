@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ import android.text.TextUtils;
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.DownloadUtil;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -56,6 +58,7 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +107,8 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     private String mPodcastName;
     /** The podcast image URL */
     private String mPodcastImage;
+    /** The podcast bitmap image */
+    private Bitmap mBitmap;
 
     @Override
     public void onCreate() {
@@ -214,6 +219,10 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
         // Initialize PlayerNotificationManager
         initializeNotificationManager(mItem);
+
+        // Load the podcast bitmap image from the URL using asyncTask
+        new BitmapTask().execute(mPodcastImage);
+
         // The service is not immediately destroyed, and we can explicitly terminate our service
         // when finished audio playback.
         return START_STICKY;
@@ -257,6 +266,10 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
                     @Nullable
                     @Override
                     public Bitmap getCurrentLargeIcon(Player player, BitmapCallback callback) {
+                        // Return a podcast bitmap image using AsyncTask
+                        if (mBitmap != null) {
+                            return mBitmap;
+                        }
                         return null;
                     }
                 }
@@ -498,4 +511,27 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
+    // Use AsyncTask to load the image from the URL
+
+    /**
+     * Loads the podcast bitmap image for a notification
+     */
+    public class BitmapTask extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = CandyPodUtils.loadImage(params[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            mBitmap = bitmap;
+        }
+    }
 }

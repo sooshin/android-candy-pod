@@ -16,6 +16,14 @@
 
 package com.example.android.candypod.utilities;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +33,7 @@ import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.FORMATTED_PATTERN;
 import static com.example.android.candypod.utilities.Constants.PUB_DATE_PATTERN;
+import static com.example.android.candypod.utilities.Constants.REQUEST_METHOD_GET;
 
 public class CandyPodUtils {
 
@@ -46,4 +55,58 @@ public class CandyPodUtils {
         SimpleDateFormat formatter = new SimpleDateFormat(FORMATTED_PATTERN, Locale.US);
         return formatter.format(currentTime);
     }
+
+    /**
+     * Makes a HTTP request and returns Bitmap from the given image URL.
+     * @param urlString The podcast image URL
+     *
+     * Reference: @see "https://stackoverflow.com/questions/8992964/android-load-from-url-to-bitmap"
+     *                 "https://developer.android.com/reference/java/net/HttpURLConnection"
+     */
+    public static Bitmap loadImage(String urlString) throws IOException {
+        HttpURLConnection connection = null;
+        InputStream stream = null;
+        URL url = createUrl(urlString);
+        Bitmap bitmap = null;
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(REQUEST_METHOD_GET);
+            connection.connect();
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                stream = connection.getInputStream();
+            } else {
+                Timber.e("Error response code: " + connection.getResponseCode());
+            }
+
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inSampleSize = 1;
+            bitmap = BitmapFactory.decodeStream(stream, null, bmOptions);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            if (stream != null) {
+                stream.close();
+            }
+        }
+        return bitmap;
+    }
+
+    /**
+     * Builds the URL from the given string URL.
+     * @param urlString The podcast image URL
+     */
+    private static URL createUrl(String urlString) {
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
 }

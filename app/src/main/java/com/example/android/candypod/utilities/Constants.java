@@ -92,4 +92,7 @@ public class Constants {
     /** Type of the share intent data */
     public static final String SHARE_INTENT_TYPE_TEXT = "text/plain";
 
+    /** The type of request method for reading information from the server */
+    public static final String REQUEST_METHOD_GET = "GET";
+
 }
