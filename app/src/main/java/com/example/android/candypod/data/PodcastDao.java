@@ -102,4 +102,11 @@ public interface PodcastDao {
     @Delete
     void deleteDownloadedEpisode(DownloadEntry downloadEntry);
 
+    /**
+     * Selects downloaded episode where the value in item_enclosure_url is the given enclosure URL.
+     * This method is used to avoid inserting the same episode twice.
+     * @param url The stream URL for the episode audio file
+     */
+    @Query("SELECT * FROM downloaded_episodes WHERE item_enclosure_url = :url")
+    DownloadEntry syncLoadDownload(String url);
 }

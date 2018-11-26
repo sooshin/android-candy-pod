@@ -156,8 +156,12 @@ public class PodcastDownloadService extends DownloadService {
             @Override
             public void run() {
                 if (mDownloadEntry != null) {
-                    // Insert a downloaded episode to the database by using the podcastDao
-                    mDb.podcastDao().insertDownloadedEpisode(mDownloadEntry);
+                    // Check if this episode does not exist in the downloads database
+                    // to avoid inserting the same one twice.
+                    if (mDb.podcastDao().syncLoadDownload(mDownloadEntry.getItemEnclosureUrl()) == null) {
+                        // Insert a downloaded episode to the database by using the podcastDao
+                        mDb.podcastDao().insertDownloadedEpisode(mDownloadEntry);
+                    }
                 }
             }
         });
