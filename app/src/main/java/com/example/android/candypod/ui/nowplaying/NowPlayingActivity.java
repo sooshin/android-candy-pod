@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -63,6 +64,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
+import static com.example.android.candypod.utilities.Constants.SHARE_INTENT_TYPE_TEXT;
 
 /**
  * Reference: @see "https://developer.android.com/guide/topics/media-apps/audio-app/building-a-mediabrowser-client"
@@ -412,12 +414,30 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
                 addOrRemoveFavorite();
                 return true;
             case R.id.action_share:
-                //
-                Toast.makeText(this, "share", Toast.LENGTH_SHORT).show();
+                // Share the episode data
+                shareEpisode();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * Uses the ShareCompat Intent builder to create our share intent for sharing.
+     */
+    private void shareEpisode() {
+        // Text to share
+        String shareText = getString(R.string.check_out) + mPodcastName + getString(R.string.space) +
+                mItem.getTitle() + getString(R.string.space) +
+                mItem.getEnclosure().getUrl();
+        // Create a share intent
+        Intent shareIntent = ShareCompat.IntentBuilder.from(NowPlayingActivity.this)
+                .setType(SHARE_INTENT_TYPE_TEXT)
+                .setText(shareText)
+                .setChooserTitle(getString(R.string.chooser_title))
+                .createChooserIntent();
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        startActivity(shareIntent);
     }
 
     private boolean isFavorite() {

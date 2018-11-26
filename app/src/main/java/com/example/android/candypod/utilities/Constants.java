@@ -89,4 +89,7 @@ public class Constants {
     /** The formatted date pattern */
     public static final String FORMATTED_PATTERN = "MMM d, yyyy";
 
+    /** Type of the share intent data */
+    public static final String SHARE_INTENT_TYPE_TEXT = "text/plain";
+
 }
