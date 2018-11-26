@@ -586,9 +586,12 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      */
     private void startServiceWithDownloadAction() {
         Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
+        // The episode title to display in a notification for a completed download
+        String itemTitle = mItem.getTitle();
+        byte[] itemTitleBytes = itemTitle.getBytes();
         // Create a progressive stream download action
         ProgressiveDownloadAction downloadAction = ProgressiveDownloadAction.createDownloadAction(
-                uri, null,
+                uri, itemTitleBytes,
                 // Specify custom cache key. If not, the download starts when leaving this
                 // NowPlayingActivity and going back to this activity again.
                 CUSTOM_CACHE_KEY);
