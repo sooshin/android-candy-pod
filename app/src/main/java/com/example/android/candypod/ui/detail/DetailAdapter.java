@@ -27,7 +27,6 @@ import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.DetailListItemBinding;
 import com.example.android.candypod.model.rss.Item;
-import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.utilities.CandyPodUtils;
 
 import java.util.List;
@@ -142,13 +141,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
          * @param item An episode of the podcast
          */
         void bind(Item item) {
-            ItemImage itemImage = item.getItemImage();
-            // Not all episode have the image URL, so we should check if it is null.
-            // If the episode image does not exist, use the podcast image instead.
-            String itemImageUrl = mPodcastImage;
-            if (itemImage != null) {
-                itemImageUrl = itemImage.getItemImageHref();
-            }
+            // If an episode image exists, use it. Otherwise, use the podcast image.
+            String itemImageUrl = CandyPodUtils.getItemImageUrl(item, mPodcastImage);
             // Use Glide library to upload the episode image
             Glide.with(itemView.getContext())
                     .load(itemImageUrl)

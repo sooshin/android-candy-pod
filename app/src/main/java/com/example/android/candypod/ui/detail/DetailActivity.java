@@ -238,7 +238,7 @@ public class DetailActivity extends AppCompatActivity
     public void onItemClick(Item item) {
         // Update the episode data using SharedPreferences each time the user selects the episode.
         CandyPodUtils.updateSharedPreference(this, item, mResultName,
-                CandyPodUtils.getImageUrl(item, mPodcastImage));
+                CandyPodUtils.getItemImageUrl(item, mPodcastImage));
         // Send an update broadcast message to the app widget
         CandyPodUtils.sendBroadcastToWidget(this);
 

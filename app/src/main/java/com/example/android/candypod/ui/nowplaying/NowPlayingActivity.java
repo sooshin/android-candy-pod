@@ -48,9 +48,9 @@ import com.example.android.candypod.data.DownloadEntry;
 import com.example.android.candypod.data.FavoriteEntry;
 import com.example.android.candypod.databinding.ActivityNowPlayingBinding;
 import com.example.android.candypod.model.rss.Item;
-import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.service.PodcastDownloadService;
 import com.example.android.candypod.service.PodcastService;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.DownloadUtil;
 import com.example.android.candypod.utilities.InjectorUtils;
 import com.google.android.exoplayer2.offline.DownloadManager;
@@ -73,9 +73,14 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     /** The podcast episode */
     private Item mItem;
-
     /** The podcast image URL used when there is no the current episode's image */
     private String mPodcastImage;
+    /** The episode image URL */
+    private String mItemImageUrl;
+    /** The podcast title */
+    private String mPodcastName;
+    /** The podcast id */
+    private String mPodcastId;
 
     /** The MediaBrowser connects to a MediaBrowserService, and upon connecting it creates the
      * MediaController for the UI*/
@@ -83,11 +88,6 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     /** This field is used for data binding */
     private ActivityNowPlayingBinding mNowPlayingBinding;
-    /** The podcast title */
-    private String mPodcastName;
-
-    /** The podcast id */
-    private String mPodcastId;
 
     /** Member variable for FavoriteEntry which represents a single favorite episode */
     private FavoriteEntry mFavoriteEntry;
@@ -152,16 +152,11 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             mNowPlayingBinding.playingInfo.tvPodcastTitle.setText(mPodcastName);
         }
 
-        // Not all episode has its image. If it exists, use the episode image. Otherwise,
-        // use the podcast image.
-        String itemImageUrl = mPodcastImage;
-        ItemImage itemImage = mItem.getItemImage();
-        if (itemImage != null) {
-            itemImageUrl = itemImage.getItemImageHref();
-        }
+        // If an episode image exists, use it. Otherwise, use the podcast image.
+        mItemImageUrl = CandyPodUtils.getItemImageUrl(mItem, mPodcastImage);
         // Use Glide library to upload the image
         Glide.with(this)
-                .load(itemImageUrl)
+                .load(mItemImageUrl)
                 .into(mNowPlayingBinding.ivNowEpisode);
     }
 
@@ -536,49 +531,25 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     }
 
     /**
-     * Returns item image URL.
-     */
-    private String getItemImageUrl() {
-        // Not all episode have the image URL, so we should check if it is null.
-        // If the episode image does not exist, use the podcast image instead.
-        String itemImageUrl;
-        ItemImage itemImage = mItem.getItemImage();
-        if (itemImage == null) {
-            itemImageUrl = mPodcastImage;
-        } else {
-            itemImageUrl = itemImage.getItemImageHref();
-        }
-        return itemImageUrl;
-    }
-
-    /**
      * Returns FavoriteEntry which holds the current episode data.
      */
     private FavoriteEntry getFavoriteEntry() {
-        // Get item image URL
-        String itemImageUrl = getItemImageUrl();
-
-        // Create a FavoriteEntry
         return new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
                 mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
                 mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
                 mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
-                itemImageUrl);
+                mItemImageUrl);
     }
 
     /**
      * Returns DownloadEntry which holds the current episode data.
      */
     private DownloadEntry getDownloadEntry() {
-        // Get item image URL
-        String itemImageUrl = getItemImageUrl();
-
-        // Create a DownloadEntry
         return new DownloadEntry(mPodcastId, mPodcastName, mPodcastImage,
                 mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
                 mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
                 mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
-                itemImageUrl);
+                mItemImageUrl);
     }
 
     /**

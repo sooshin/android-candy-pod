@@ -169,7 +169,7 @@ public class CandyPodUtils {
      * @param item Item object which contains an episode data
      * @param podcastImage The podcast image URL
      */
-    public static String getImageUrl(Item item, String podcastImage) {
+    public static String getItemImageUrl(Item item, String podcastImage) {
         ItemImage itemImage = item.getItemImage();
         String itemImageUrl = null;
         if (itemImage != null) {

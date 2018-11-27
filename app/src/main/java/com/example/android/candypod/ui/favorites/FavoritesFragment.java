@@ -150,7 +150,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         Item item = getItem(favoriteEntry);
         // Update the episode data using SharedPreferences each time the user selects the episode
         CandyPodUtils.updateSharedPreference(this.getContext(), item,
-                mPodcastTitle, CandyPodUtils.getImageUrl(item, mPodcastImage));
+                mPodcastTitle, CandyPodUtils.getItemImageUrl(item, mPodcastImage));
         // Send an update broadcast message to the app widget
         CandyPodUtils.sendBroadcastToWidget(this.getContext());
 

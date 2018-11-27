@@ -220,8 +220,10 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         // Initialize PlayerNotificationManager
         initializeNotificationManager(mItem);
 
-        // Load the podcast bitmap image from the URL using asyncTask
-        new BitmapTask().execute(mPodcastImage);
+        // If an episode image exists, use it. Otherwise, use the podcast image.
+        String itemImageUrl = CandyPodUtils.getItemImageUrl(mItem, mPodcastImage);
+        // Load a bitmap image from the URL using asyncTask
+        new BitmapTask().execute(itemImageUrl);
 
         // The service is not immediately destroyed, and we can explicitly terminate our service
         // when finished audio playback.
@@ -514,7 +516,7 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     // Use AsyncTask to load the image from the URL
 
     /**
-     * Loads the podcast bitmap image for a notification
+     * Loads a bitmap image for a notification
      */
     public class BitmapTask extends AsyncTask<String, Void, Bitmap> {
 
