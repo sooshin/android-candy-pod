@@ -232,12 +232,13 @@ public class DetailActivity extends AppCompatActivity
 
     /**
      * When an episode is selected, start the NowPlayingActivity.
-     * @param item The podcast episode
+     * @param item Item object which contains an episode data
      */
     @Override
     public void onItemClick(Item item) {
         // Update the episode data using SharedPreferences each time the user selects the episode.
-        CandyPodUtils.updateSharedPreference(this, item, mResultName);
+        CandyPodUtils.updateSharedPreference(this, item, mResultName,
+                CandyPodUtils.getImageUrl(item, mPodcastImage));
         // Send an update broadcast message to the app widget
         CandyPodUtils.sendBroadcastToWidget(this);
 

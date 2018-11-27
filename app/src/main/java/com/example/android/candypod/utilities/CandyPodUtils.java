@@ -24,9 +24,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.widget.PodcastWidgetProvider;
 
 import java.io.IOException;
@@ -124,10 +126,11 @@ public class CandyPodUtils {
     /**
      * Updates the episode data using SharedPreferences each time the user selects the episode.
      * @param context Context we use to utility methods, app resources and layout inflaters
-     * @param item The podcast episode
+     * @param item Item object which contains an episode data
      * @param podcastTitle The podcast title
+     * @param imageUrl The episode image URL. If the episode image does not exist, use the podcast image instead.
      */
-    public static void updateSharedPreference(Context context, Item item, String podcastTitle) {
+    public static void updateSharedPreference(Context context, Item item, String podcastTitle, String imageUrl) {
         // Get an instance of SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         // Get the editor object
@@ -136,6 +139,7 @@ public class CandyPodUtils {
         // Save the string used for displaying in the app widget
         editor.putString(context.getString(R.string.pref_podcast_title_key), podcastTitle);
         editor.putString(context.getString(R.string.pref_episode_title_key), item.getTitle());
+        editor.putString(context.getString(R.string.pref_episode_image_key), imageUrl);
 
         // Save results
         editor.apply();
@@ -157,5 +161,23 @@ public class CandyPodUtils {
         updateAppWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         updateAppWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
         context.sendBroadcast(updateAppWidgetIntent);
+    }
+
+    /**
+     * Not all episodes have the image URL, so we should check if it is null.
+     * Returns the episode image URL. If the episode image does not exist, returns the podcast image URL.
+     * @param item Item object which contains an episode data
+     * @param podcastImage The podcast image URL
+     */
+    public static String getImageUrl(Item item, String podcastImage) {
+        ItemImage itemImage = item.getItemImage();
+        String itemImageUrl = null;
+        if (itemImage != null) {
+            itemImageUrl = itemImage.getItemImageHref();
+        }
+        if (TextUtils.isEmpty(itemImageUrl)) {
+            itemImageUrl = podcastImage;
+        }
+        return itemImageUrl;
     }
 }

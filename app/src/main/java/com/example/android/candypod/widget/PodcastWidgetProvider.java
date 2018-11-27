@@ -21,12 +21,19 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.widget.RemoteViews;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.AppWidgetTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.android.candypod.R;
 
 import static com.example.android.candypod.utilities.Constants.PREF_DEF_VALUE;
+import static com.example.android.candypod.utilities.Constants.SIZE_BITMAP;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,14 +48,39 @@ public class PodcastWidgetProvider extends AppWidgetProvider {
                 context.getString(R.string.pref_episode_title_key), PREF_DEF_VALUE);
         String podcastTitle = sharedPreferences.getString(
                 context.getString(R.string.pref_podcast_title_key), PREF_DEF_VALUE);
+        String episodeImage = sharedPreferences.getString(
+                context.getString(R.string.pref_episode_image_key), PREF_DEF_VALUE);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.podcast_widget);
         views.setTextViewText(R.id.widget_episode_title, episodeTitle);
         views.setTextViewText(R.id.widget_podcast_title, podcastTitle);
+        loadImage(context, views, appWidgetId, episodeImage);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    /**
+     * Loads episode image from URL into RemoteViews.
+     * Reference: @see "https://stackoverflow.com/questions/47993270/widget-load-image-from-url-into-remote-view"
+     */
+    private static void loadImage(Context context, RemoteViews remoteViews, int appWidgetId, String imageUrl) {
+        AppWidgetTarget target = new AppWidgetTarget(context, R.id.widget_artwork, remoteViews, appWidgetId) {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, Transition<? super Bitmap> transition) {
+                super.onResourceReady(resource, transition);
+            }
+        };
+
+        RequestOptions options = new RequestOptions().
+                override(SIZE_BITMAP, SIZE_BITMAP);
+
+        Glide.with(context.getApplicationContext())
+                .asBitmap()
+                .load(imageUrl)
+                .apply(options)
+                .into(target);
     }
 
     @Override

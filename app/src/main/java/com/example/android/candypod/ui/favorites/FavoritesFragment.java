@@ -65,7 +65,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
     /** Podcast Id, title, and image URL */
     private String mPodcastId;
     private String mPodcastTitle;
-    private String mPodcastImageUrl;
+    private String mPodcastImage;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -147,8 +147,10 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
      */
     @Override
     public void onFavoriteClick(FavoriteEntry favoriteEntry) {
+        Item item = getItem(favoriteEntry);
         // Update the episode data using SharedPreferences each time the user selects the episode
-        CandyPodUtils.updateSharedPreference(this.getContext(), getItem(favoriteEntry), mPodcastTitle);
+        CandyPodUtils.updateSharedPreference(this.getContext(), item,
+                mPodcastTitle, CandyPodUtils.getImageUrl(item, mPodcastImage));
         // Send an update broadcast message to the app widget
         CandyPodUtils.sendBroadcastToWidget(this.getContext());
 
@@ -156,7 +158,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         Intent intent = new Intent(this.getActivity(), NowPlayingActivity.class);
         // Wrap the parcelable into a bundle
         Bundle b = new Bundle();
-        b.putParcelable(EXTRA_ITEM, getItem(favoriteEntry));
+        b.putParcelable(EXTRA_ITEM, item);
         // Pass the bundle through intent
         intent.putExtra(EXTRA_ITEM, b);
         // Pass podcast id
@@ -164,7 +166,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         // Pass podcast title
         intent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
         // Pass the podcast image URL. If there is no item image, use this podcast image.
-        intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImageUrl);
+        intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
         startActivity(intent);
 
         // Start the PodcastService
@@ -175,7 +177,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         serviceIntent.putExtra(EXTRA_ITEM, b);
         // Pass podcast title and podcast image
         serviceIntent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
-        serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImageUrl);
+        serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
         getActivity().startService(serviceIntent);
     }
 
@@ -187,7 +189,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         // Extract the episode details
         mPodcastId = favoriteEntry.getPodcastId();
         mPodcastTitle = favoriteEntry.getTitle();
-        mPodcastImageUrl = favoriteEntry.getArtworkImageUrl();
+        mPodcastImage = favoriteEntry.getArtworkImageUrl();
 
         String itemTitle = favoriteEntry.getItemTitle();
         String itemDescription = favoriteEntry.getItemDescription();

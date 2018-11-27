@@ -98,4 +98,8 @@ public class Constants {
     /** The default value of String from SharedPreference */
     public static final String PREF_DEF_VALUE = "";
 
+    /** Desired width or height in pixels of the bitmap (Needs to be manually put because of
+     * RemoteViews limitation) */
+    public static final int SIZE_BITMAP = 300;
+
 }
