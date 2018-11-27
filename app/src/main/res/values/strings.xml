@@ -82,4 +82,12 @@
     <!-- Text for share intent-->
     <string name="check_out">Check out\u0020</string>
     <string name="chooser_title">Share Episode</string>
+
+    <!-- Widget -->
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <!-- Key name in SharedPreferences -->
+    <string name="pref_podcast_title_key" translatable="false">pref_podcast_title</string>
+    <string name="pref_episode_title_key" translatable="false">pref_episode_title</string>
 </resources>

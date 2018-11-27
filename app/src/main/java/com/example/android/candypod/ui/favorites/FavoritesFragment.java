@@ -38,6 +38,7 @@ import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.ItemImage;
 import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.List;
@@ -146,6 +147,11 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
      */
     @Override
     public void onFavoriteClick(FavoriteEntry favoriteEntry) {
+        // Update the episode data using SharedPreferences each time the user selects the episode
+        CandyPodUtils.updateSharedPreference(this.getContext(), getItem(favoriteEntry), mPodcastTitle);
+        // Send an update broadcast message to the app widget
+        CandyPodUtils.sendBroadcastToWidget(this.getContext());
+
         // Start the NowPlayingActivity
         Intent intent = new Intent(this.getActivity(), NowPlayingActivity.class);
         // Wrap the parcelable into a bundle

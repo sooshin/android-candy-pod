@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -47,13 +47,12 @@
         <activity
             android:name=".ui.detail.DetailActivity"
             android:label="@string/detail"
-            android:theme="@style/Theme.Subscribe.Detail"></activity>
+            android:theme="@style/Theme.Subscribe.Detail" />
         <activity
             android:name=".ui.nowplaying.NowPlayingActivity"
-            android:launchMode="singleTop"
             android:label="@string/now_playing"
-            android:theme="@style/Theme.Subscribe.NowPlaying">
-        </activity>
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Subscribe.NowPlaying"></activity>
         <activity
             android:name=".ui.search.SearchResultsActivity"
             android:label="@string/action_search"
@@ -62,10 +61,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.add.AddPodcastActivity" />
         </activity>
+
         <service
             android:name=".service.PodcastService"
             android:enabled="true"
@@ -75,9 +76,20 @@
             </intent-filter>
         </service>
         <service android:name=".service.PodcastDownloadService" />
-        <service android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <service
+            android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name=".widget.PodcastWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/podcast_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

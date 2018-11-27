@@ -20,7 +20,6 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -33,11 +32,10 @@ import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
 import com.example.android.candypod.model.rss.Item;
-import com.example.android.candypod.service.PodcastDownloadService;
 import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
-import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -238,8 +236,12 @@ public class DetailActivity extends AppCompatActivity
      */
     @Override
     public void onItemClick(Item item) {
-        Intent intent = new Intent(this, NowPlayingActivity.class);
+        // Update the episode data using SharedPreferences each time the user selects the episode.
+        CandyPodUtils.updateSharedPreference(this, item, mResultName);
+        // Send an update broadcast message to the app widget
+        CandyPodUtils.sendBroadcastToWidget(this);
 
+        Intent intent = new Intent(this, NowPlayingActivity.class);
         // Wrap the parcelable into a bundle
         Bundle b = new Bundle();
         b.putParcelable(EXTRA_ITEM, item);

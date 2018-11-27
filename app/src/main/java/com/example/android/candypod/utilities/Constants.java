@@ -95,4 +95,7 @@ public class Constants {
     /** The type of request method for reading information from the server */
     public static final String REQUEST_METHOD_GET = "GET";
 
+    /** The default value of String from SharedPreference */
+    public static final String PREF_DEF_VALUE = "";
+
 }

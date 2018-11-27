@@ -16,8 +16,18 @@
 
 package com.example.android.candypod.utilities;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
+
+import com.example.android.candypod.R;
+import com.example.android.candypod.model.rss.Item;
+import com.example.android.candypod.widget.PodcastWidgetProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,4 +119,43 @@ public class CandyPodUtils {
         return url;
     }
 
+    // Update App widgets
+
+    /**
+     * Updates the episode data using SharedPreferences each time the user selects the episode.
+     * @param context Context we use to utility methods, app resources and layout inflaters
+     * @param item The podcast episode
+     * @param podcastTitle The podcast title
+     */
+    public static void updateSharedPreference(Context context, Item item, String podcastTitle) {
+        // Get an instance of SharedPreferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        // Get the editor object
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        // Save the string used for displaying in the app widget
+        editor.putString(context.getString(R.string.pref_podcast_title_key), podcastTitle);
+        editor.putString(context.getString(R.string.pref_episode_title_key), item.getTitle());
+
+        // Save results
+        editor.apply();
+    }
+
+    /**
+     * Sends the update broadcast message to the app widget.
+     * @param context Context we use to utility methods, app resources and layout inflaters
+     *
+     * Reference: @see "https://stackoverflow.com/questions/10663800/sending-an-update-broadcast
+     * -to-an-app-widget"
+     */
+    public static void sendBroadcastToWidget(Context context) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+                new ComponentName(context, PodcastWidgetProvider.class));
+
+        Intent updateAppWidgetIntent = new Intent();
+        updateAppWidgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        updateAppWidgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        context.sendBroadcast(updateAppWidgetIntent);
+    }
 }
