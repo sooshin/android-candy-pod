@@ -41,6 +41,7 @@ import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
@@ -204,8 +205,10 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
 
         String itemImageUrl = favoriteEntry.getItemImageUrl();
         ItemImage itemImage = new ItemImage(itemImageUrl);
+        List<ItemImage> itemImages = new ArrayList<>();
+        itemImages.add(itemImage);
 
-        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImage);
+        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImages);
     }
 
     /**

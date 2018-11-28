@@ -39,6 +39,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -170,10 +171,10 @@ public class CandyPodUtils {
      * @param podcastImage The podcast image URL
      */
     public static String getItemImageUrl(Item item, String podcastImage) {
-        ItemImage itemImage = item.getItemImage();
+        List<ItemImage> itemImages = item.getItemImages();
         String itemImageUrl = null;
-        if (itemImage != null) {
-            itemImageUrl = itemImage.getItemImageHref();
+        if (itemImages != null) {
+            itemImageUrl = itemImages.get(0).getItemImageHref();
         }
         if (TextUtils.isEmpty(itemImageUrl)) {
             itemImageUrl = podcastImage;
