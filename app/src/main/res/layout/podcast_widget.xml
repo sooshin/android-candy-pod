@@ -17,7 +17,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/widget_background"
     android:padding="@dimen/widget_margin">
 
     <ImageView
@@ -33,6 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/widget_artwork"
         android:layout_toRightOf="@+id/widget_artwork"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
         tools:text="episode title" />
 
     <TextView
@@ -42,6 +46,20 @@
         android:layout_below="@+id/widget_episode_title"
         android:layout_toEndOf="@+id/widget_artwork"
         android:layout_toRightOf="@+id/widget_artwork"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/white"
         tools:text="podcast title" />
+
+    <ImageButton
+        android:id="@+id/widget_play_pause"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/widget_podcast_title"
+        android:layout_toEndOf="@+id/widget_artwork"
+        android:layout_toRightOf="@+id/widget_artwork"
+        android:background="@null"
+        android:contentDescription="@string/play_pause_content_description"
+        android:scaleType="centerCrop" />
 
 </RelativeLayout>
