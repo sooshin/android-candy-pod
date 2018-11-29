@@ -141,10 +141,13 @@ public class PodcastsFragment extends Fragment
             public void onChanged(@Nullable List<PodcastEntry> podcastEntries) {
                 // When the podcasts list is empty, show an empty view, otherwise, show podcasts.
                 if (podcastEntries != null && podcastEntries.size() != 0) {
-                    showPodcastsView();
+                   // Make the view for podcasts visible.
+                    mPodcastsBinding.setHasPodcasts(true);
+
                     // Update the list of PodcastEntries and notify the adapter of any changes
                     mPodcastsAdapter.setPodcastEntries(podcastEntries);
                 } else {
+                    // When the podcasts list is empty, show an empty view.
                     showEmptyView();
                 }
             }
@@ -179,22 +182,13 @@ public class PodcastsFragment extends Fragment
     }
 
     /**
-     * This method will make the view for podcasts visible.
-     */
-    private void showPodcastsView() {
-        // First, hide an empty view
-        mPodcastsBinding.tvEmptyPodcasts.setVisibility(View.GONE);
-        // Then, make sure the podcasts list data is visible
-        mPodcastsBinding.rvPodcasts.setVisibility(View.VISIBLE);
-    }
-
-    /**
      * When the podcasts list is empty, show an empty view.
      */
     private void showEmptyView() {
-        // First, hide the view for the podcasts
-        mPodcastsBinding.rvPodcasts.setVisibility(View.GONE);
-        // Then, show an empty view
-        mPodcastsBinding.tvEmptyPodcasts.setVisibility(View.VISIBLE);
+        // Show an empty view
+        mPodcastsBinding.setHasPodcasts(false);
+        // Set text programmatically in order to make text invisible when the user changes the menu
+        // items in the navigation drawer
+        mPodcastsBinding.tvEmptyPodcasts.setText(getString(R.string.empty_podcasts));
     }
 }

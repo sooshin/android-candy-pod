@@ -132,9 +132,12 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
             @Override
             public void onChanged(@Nullable List<DownloadEntry> downloadEntries) {
                 if (downloadEntries != null && downloadEntries.size() != 0) {
-                    showDownloadsView();
+                    // Make the view for downloads visible
+                    mDownloadsBinding.setHasDownloads(true);
+
                     mDownloadsAdapter.setDownloadEntries(downloadEntries);
                 } else {
+                    // When the download list is empty, show an empty view.
                     showEmptyView();
                 }
             }
@@ -204,22 +207,13 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
     }
 
     /**
-     * This method will make the view for downloads visible.
-     */
-    private void showDownloadsView() {
-        // First, hide an empty view
-        mDownloadsBinding.tvEmptyDownloads.setVisibility(View.GONE);
-        // Then, make sure the downloads list data is visible
-        mDownloadsBinding.rvDownloads.setVisibility(View.VISIBLE);
-    }
-
-    /**
      * When the favorite list is empty, show an empty view.
      */
     private void showEmptyView() {
-        // First, hide the view for the downloads
-        mDownloadsBinding.rvDownloads.setVisibility(View.GONE);
-        // Then, show an empty view
-        mDownloadsBinding.tvEmptyDownloads.setVisibility(View.VISIBLE);
+        // Show an empty view
+        mDownloadsBinding.setHasDownloads(false);
+        // Set text programmatically in order to make text invisible when the user changes the menu
+        // items in the navigation drawer
+        mDownloadsBinding.tvEmptyDownloads.setText(getString(R.string.empty_downloads));
     }
 }

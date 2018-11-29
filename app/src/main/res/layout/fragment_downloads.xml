@@ -15,8 +15,17 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.downloads.DownloadsFragment">
+
+    <data>
+
+        <variable
+            name="hasDownloads"
+            type="boolean" />
+
+    </data>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -26,7 +35,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_downloads"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:visibleGone="@{hasDownloads}" />
 
         <!-- An empty view that will be shown to users to indicate that there are no downloaded episodes -->
         <TextView
@@ -37,10 +47,10 @@
             android:paddingStart="@dimen/padding_empty_podcasts"
             android:paddingEnd="@dimen/padding_empty_podcasts"
             android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
-            android:text="@string/empty_downloads"
             android:textAlignment="center"
             android:textSize="18sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:visibleGone="@{!hasDownloads}" />
 
     </FrameLayout>
 </layout>

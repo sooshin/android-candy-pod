@@ -19,6 +19,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.podcasts.PodcastsFragment">
 
+    <data>
+
+        <variable
+            name="hasPodcasts"
+            type="boolean" />
+
+    </data>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,7 +35,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_podcasts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:visibleGone="@{hasPodcasts}" />
 
         <!-- Empty view -->
         <TextView
@@ -38,10 +47,10 @@
             android:paddingStart="@dimen/padding_empty_podcasts"
             android:paddingEnd="@dimen/padding_empty_podcasts"
             android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
-            android:text="@string/empty_podcasts"
             android:textAlignment="center"
             android:textSize="18sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:visibleGone="@{!hasPodcasts}" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"

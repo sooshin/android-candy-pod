@@ -129,9 +129,12 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
             @Override
             public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
                 if (favoriteEntries != null && favoriteEntries.size() != 0) {
-                    showFavoritesView();
+                    // Make the view for favorites visible
+                    mFavoritesBinding.setHasFavorites(true);
+
                     mFavoritesAdapter.setFavoriteEntries(favoriteEntries);
                 } else {
+                    // When the favorite list is empty, show an empty view.
                     showEmptyView();
                 }
             }
@@ -212,22 +215,13 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
     }
 
     /**
-     * This method will make the view for favorites visible.
-     */
-    private void showFavoritesView() {
-        // First, hide an empty view
-        mFavoritesBinding.tvEmptyFavorites.setVisibility(View.GONE);
-        // Then, make sure the favorites list data is visible
-        mFavoritesBinding.rvFavorites.setVisibility(View.VISIBLE);
-    }
-
-    /**
      * When the favorite list is empty, show an empty view.
      */
     private void showEmptyView() {
-        // First, hide the view for the favorites
-        mFavoritesBinding.rvFavorites.setVisibility(View.GONE);
-        // Then, show an empty view
-        mFavoritesBinding.tvEmptyFavorites.setVisibility(View.VISIBLE);
+        // Show an empty view
+        mFavoritesBinding.setHasFavorites(false);
+        // Set text programmatically in order to make text invisible when the user changes the menu
+        // items in the navigation drawer
+        mFavoritesBinding.tvEmptyFavorites.setText(getString(R.string.empty_favorites));
     }
 }
