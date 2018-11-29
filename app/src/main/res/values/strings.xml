@@ -28,7 +28,7 @@
     <string name="action_share">Share</string>
     <string name="action_search">Search</string>
     <string name="action_download">Download</string>
-    <string name="search_hint">Search podcasts</string>
+    <string name="search_hint">Search for podcasts</string>
 
     <!-- Title of navigation menu items -->
     <string name="podcasts">Podcasts</string>
