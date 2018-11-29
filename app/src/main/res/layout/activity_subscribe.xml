@@ -95,6 +95,7 @@
                             android:layout_height="wrap_content"
                             android:onClick="onSubscribeClick"
                             android:text="@string/subscribe"
+                            android:visibility="gone"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 

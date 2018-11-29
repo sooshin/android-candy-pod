@@ -215,6 +215,8 @@ public class SubscribeActivity extends AppCompatActivity {
                 if (rssFeed != null) {
                     // Hide the loading indicator
                     mSubscribeBinding.setIsLoading(false);
+                    // Show the subscribe button
+                    mSubscribeBinding.btSubscribe.setVisibility(View.VISIBLE);
 
                     Channel channel = rssFeed.getChannel();
 
@@ -416,9 +418,13 @@ public class SubscribeActivity extends AppCompatActivity {
         if (CandyPodUtils.isOnline(this)) {
             // Show the loading indicator
             mSubscribeBinding.setIsLoading(true);
+            // Hide the subscribe button when loading data
+            mSubscribeBinding.btSubscribe.setVisibility(View.GONE);
         } else {
             // Show a text that indicates there is no internet connectivity
             mSubscribeBinding.setIsOffline(true);
+            // Hide the subscribe button when offline
+            mSubscribeBinding.btSubscribe.setVisibility(View.GONE);
         }
     }
 }
