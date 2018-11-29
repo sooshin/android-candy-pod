@@ -46,6 +46,7 @@ import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.RssFeed;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModel;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModelFactory;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
@@ -167,10 +168,16 @@ public class SubscribeActivity extends AppCompatActivity {
      * update the UI.
      */
     private void observeLookupResponse() {
+        // When online, show a loading indicator. When offline, show offline message.
+        showLoadingOrOffline();
+
         mSubscribeViewModel.getLookupResponse().observe(this, new Observer<LookupResponse>() {
             @Override
             public void onChanged(@Nullable LookupResponse lookupResponse) {
                 if (lookupResponse != null) {
+                    // Hide the loading indicator
+                    mSubscribeBinding.setIsLoading(false);
+
                     List<LookupResult> lookupResults = lookupResponse.getLookupResults();
                     String feedUrl = lookupResults.get(0).getFeedUrl();
                     Timber.e("feedUrl: " + feedUrl);
@@ -199,10 +206,16 @@ public class SubscribeActivity extends AppCompatActivity {
      * Observe changes in the RssFeed
      */
     private void observeRssFeed() {
+        // When online, show a loading indicator.
+        showLoadingOrOffline();
+
         mRssFeedViewModel.getRssFeed().observe(this, new Observer<RssFeed>() {
             @Override
             public void onChanged(@Nullable RssFeed rssFeed) {
                 if (rssFeed != null) {
+                    // Hide the loading indicator
+                    mSubscribeBinding.setIsLoading(false);
+
                     Channel channel = rssFeed.getChannel();
 
                     // Show the details of the podcast
@@ -394,5 +407,18 @@ public class SubscribeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * When online, show a loading indicator. When offline, show offline message.
+     */
+    private void showLoadingOrOffline() {
+        if (CandyPodUtils.isOnline(this)) {
+            // Show the loading indicator
+            mSubscribeBinding.setIsLoading(true);
+        } else {
+            // Show a text that indicates there is no internet connectivity
+            mSubscribeBinding.setIsOffline(true);
+        }
     }
 }
