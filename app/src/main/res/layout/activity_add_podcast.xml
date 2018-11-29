@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +15,16 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.add.AddPodcastActivity">
+
+    <data>
+
+        <variable
+            name="isLoading"
+            type="boolean" />
+    </data>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -26,7 +33,16 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_add_pod"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:visibleGone="@{!isLoading}" />
+
+        <!-- A progress bar that will be shown to users to indicate that podcast data is loading -->
+        <ProgressBar
+            android:id="@+id/pb_loading_indicator"
+            android:layout_width="@dimen/size_loading"
+            android:layout_height="@dimen/size_loading"
+            android:layout_gravity="center"
+            app:visibleGone="@{isLoading}" />
 
     </FrameLayout>
 </layout>

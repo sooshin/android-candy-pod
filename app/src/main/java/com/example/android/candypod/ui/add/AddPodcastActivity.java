@@ -122,10 +122,16 @@ public class AddPodcastActivity extends AppCompatActivity
      * update the UI.
      */
     private void observeITunesResponse() {
+        // Show the loading indicator
+        mAddPodBinding.setIsLoading(true);
+
         mAddPodViewModel.getITunesResponse().observe(this, new Observer<ITunesResponse>() {
             @Override
             public void onChanged(@Nullable ITunesResponse iTunesResponse) {
                 if (iTunesResponse != null) {
+                    // Hide the loading indicator
+                    mAddPodBinding.setIsLoading(false);
+
                     Feed feed = iTunesResponse.getFeed();
                     List<Result> results = feed.getResults();
                     mAddPodAdapter.addAll(results);
