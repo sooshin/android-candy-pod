@@ -151,7 +151,15 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
                     mSearchBinding.setIsLoading(false);
 
                     mSearchResults = searchResponse.getSearchResults();
-                    mSearchAdapter.addAll(mSearchResults);
+
+                    // Check if the search results are empty
+                    if (mSearchResults.isEmpty()) {
+                        // Display "No results found" text when there are no search results.
+                        mSearchBinding.setIsEmpty(true);
+                    } else {
+                        // Update a list of search results and notify the adapter of any changes.
+                        mSearchAdapter.addAll(mSearchResults);
+                    }
                 }
             }
         });
