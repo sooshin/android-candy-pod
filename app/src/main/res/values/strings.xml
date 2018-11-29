@@ -65,6 +65,7 @@
     <string name="empty_favorites">Start adding your favorite episodes by tapping a heart button!</string>
     <string name="empty_downloads">You have no downloaded episodes</string>
     <string name="empty_search_results">No results found</string>
+    <string name="empty_offline">Please check your internet connection and try again</string>
 
     <!-- Notification actions -->
     <string name="notification_play">Play</string>

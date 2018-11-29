@@ -24,6 +24,10 @@
         <variable
             name="isLoading"
             type="boolean" />
+
+        <variable
+            name="isOffline"
+            type="boolean" />
     </data>
 
     <FrameLayout
@@ -43,6 +47,21 @@
             android:layout_height="@dimen/size_loading"
             android:layout_gravity="center"
             app:visibleGone="@{isLoading}" />
+
+        <!-- Text that indicates there is no internet connectivity -->
+        <TextView
+            android:id="@+id/tv_empty_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="@dimen/padding_empty_podcasts"
+            android:paddingEnd="@dimen/padding_empty_podcasts"
+            android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
+            android:text="@string/empty_offline"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:visibleGone="@{isOffline}" />
 
     </FrameLayout>
 </layout>

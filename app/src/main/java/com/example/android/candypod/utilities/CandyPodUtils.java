@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -180,5 +182,17 @@ public class CandyPodUtils {
             itemImageUrl = podcastImage;
         }
         return itemImageUrl;
+    }
+
+    /**
+     * Check if there is the network connectivity.
+     * @return True if connected to the network
+     */
+    public static boolean isOnline(Context context) {
+        // Get a reference to the ConnectivityManager to check the state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 }

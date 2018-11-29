@@ -34,6 +34,7 @@ import com.example.android.candypod.model.SearchResponse;
 import com.example.android.candypod.model.SearchResult;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
 import com.example.android.candypod.ui.subscribe.SubscribeActivity;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
@@ -140,8 +141,8 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
      * Observe changes in the SearchResponse.
      */
     private void observeSearchResponse() {
-        // Show the loading indicator
-        mSearchBinding.setIsLoading(true);
+        // When online, show a loading indicator. When offline, show offline message.
+        showLoadingOrOffline();
 
         mSearchViewModel.getSearchResponse().observe(this, new Observer<SearchResponse>() {
             @Override
@@ -208,6 +209,19 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * When online, show a loading indicator. When offline, show offline message.
+     */
+    private void showLoadingOrOffline() {
+        if (CandyPodUtils.isOnline(this)) {
+            // Show the loading indicator
+            mSearchBinding.setIsLoading(true);
+        } else {
+            // Show a text that indicates there is no internet connectivity
+            mSearchBinding.setIsOffline(true);
         }
     }
 }

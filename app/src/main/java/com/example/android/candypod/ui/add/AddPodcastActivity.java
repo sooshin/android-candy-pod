@@ -39,6 +39,7 @@ import com.example.android.candypod.model.Result;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
 import com.example.android.candypod.ui.search.SearchResultsActivity;
 import com.example.android.candypod.ui.subscribe.SubscribeActivity;
+import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
 
 import java.util.ArrayList;
@@ -122,8 +123,8 @@ public class AddPodcastActivity extends AppCompatActivity
      * update the UI.
      */
     private void observeITunesResponse() {
-        // Show the loading indicator
-        mAddPodBinding.setIsLoading(true);
+        // When online, show a loading indicator. When offline, show offline message.
+        showLoadingOrOffline();
 
         mAddPodViewModel.getITunesResponse().observe(this, new Observer<ITunesResponse>() {
             @Override
@@ -224,5 +225,18 @@ public class AddPodcastActivity extends AppCompatActivity
         intent.putExtra(EXTRA_RESULT_NAME, result.getName());
         // Once the Intent has been created, start the SubscribeActivity
         startActivity(intent);
+    }
+
+    /**
+     * When online, show a loading indicator. When offline, show offline message.
+     */
+    private void showLoadingOrOffline() {
+        if (CandyPodUtils.isOnline(this)) {
+            // Show the loading indicator
+            mAddPodBinding.setIsLoading(true);
+        } else {
+            // Show a text that indicates there is no internet connectivity
+            mAddPodBinding.setIsOffline(true);
+        }
     }
 }
