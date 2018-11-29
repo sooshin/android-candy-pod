@@ -205,13 +205,15 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         String enclosureType = favoriteEntry.getItemEnclosureType();
         String enclosureLength = favoriteEntry.getItemEnclosureLength();
         Enclosure enclosure = new Enclosure(enclosureUrl, enclosureType, enclosureLength);
+        List<Enclosure> enclosures = new ArrayList<>();
+        enclosures.add(enclosure);
 
         String itemImageUrl = favoriteEntry.getItemImageUrl();
         ItemImage itemImage = new ItemImage(itemImageUrl);
         List<ItemImage> itemImages = new ArrayList<>();
         itemImages.add(itemImage);
 
-        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImages);
+        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosures, itemImages);
     }
 
     /**

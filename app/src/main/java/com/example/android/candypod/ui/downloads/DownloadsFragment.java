@@ -197,13 +197,15 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
         String enclosureType = downloadEntry.getItemEnclosureType();
         String enclosureLength = downloadEntry.getItemEnclosureLength();
         Enclosure enclosure = new Enclosure(enclosureUrl, enclosureType, enclosureLength);
+        List<Enclosure> enclosures = new ArrayList<>();
+        enclosures.add(enclosure);
 
         String itemImageUrl = downloadEntry.getItemImageUrl();
         ItemImage itemImage = new ItemImage(itemImageUrl);
         List<ItemImage> itemImages = new ArrayList<>();
         itemImages.add(itemImage);
 
-        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosure, itemImages);
+        return new Item(itemTitle, itemDescription, iTunesSummary, pubDate, duration, enclosures, itemImages);
     }
 
     /**

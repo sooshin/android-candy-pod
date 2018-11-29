@@ -203,7 +203,7 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         if (b != null) {
             mItem = b.getParcelable(EXTRA_ITEM);
             String itemTitle = mItem.getTitle();
-            mUrl = mItem.getEnclosure().getUrl();
+            mUrl = mItem.getEnclosures().get(0).getUrl();
             Timber.d("onStartCommand: " + itemTitle + " Url: " + mUrl);
         }
         // Get the podcast title

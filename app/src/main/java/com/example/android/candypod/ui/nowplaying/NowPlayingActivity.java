@@ -124,7 +124,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Check if the episode is downloaded or not
         mIsDownloaded = isDownloaded();
 
-        Timber.d("enclosure url: " + mItem.getEnclosure().getUrl());
+        Timber.d("enclosure url: " + mItem.getEnclosures().get(0).getUrl());
 
         // Create MediaBrowserCompat
         createMediaBrowserCompat();
@@ -424,7 +424,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Text to share
         String shareText = getString(R.string.check_out) + mPodcastName + getString(R.string.space) +
                 mItem.getTitle() + getString(R.string.space) +
-                mItem.getEnclosure().getUrl();
+                mItem.getEnclosures().get(0).getUrl();
         // Create a share intent
         Intent shareIntent = ShareCompat.IntentBuilder.from(NowPlayingActivity.this)
                 .setType(SHARE_INTENT_TYPE_TEXT)
@@ -458,7 +458,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * Returns true when the user downloaded the current episode.
      */
     private boolean isDownloaded() {
-        String enclosureUrl = mItem.getEnclosure().getUrl();
+        String enclosureUrl = mItem.getEnclosures().get(0).getUrl();
         // Get the DownloadEntryViewModel from the factory
         DownloadEntryViewModelFactory downloadEntryFactory =
                 InjectorUtils.provideDownloadEntryViewModelFactory(this, enclosureUrl);
@@ -536,8 +536,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     private FavoriteEntry getFavoriteEntry() {
         return new FavoriteEntry(mPodcastId, mPodcastName, mPodcastImage,
                 mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
-                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
-                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
+                mItem.getITunesDuration(), mItem.getEnclosures().get(0).getUrl(),
+                mItem.getEnclosures().get(0).getType(), mItem.getEnclosures().get(0).getLength(),
                 mItemImageUrl);
     }
 
@@ -547,8 +547,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     private DownloadEntry getDownloadEntry() {
         return new DownloadEntry(mPodcastId, mPodcastName, mPodcastImage,
                 mItem.getTitle(), mItem.getDescription(), mItem.getPubDate(),
-                mItem.getITunesDuration(), mItem.getEnclosure().getUrl(),
-                mItem.getEnclosure().getType(), mItem.getEnclosure().getLength(),
+                mItem.getITunesDuration(), mItem.getEnclosures().get(0).getUrl(),
+                mItem.getEnclosures().get(0).getType(), mItem.getEnclosures().get(0).getLength(),
                 mItemImageUrl);
     }
 
@@ -575,7 +575,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * When the user clicks the download button, triggers the download to start from our activity.
      */
     private void startServiceWithDownloadAction() {
-        Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
+        Uri uri = Uri.parse(mItem.getEnclosures().get(0).getUrl());
         // The episode title to display in a notification for a completed download
         String itemTitle = mItem.getTitle();
         byte[] itemTitleBytes = itemTitle.getBytes();
@@ -601,7 +601,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * Removes downloaded episode.
      */
     private void startServiceWithRemoveAction() {
-        Uri uri = Uri.parse(mItem.getEnclosure().getUrl());
+        Uri uri = Uri.parse(mItem.getEnclosures().get(0).getUrl());
         // Create a progressive stream remove action
         ProgressiveDownloadAction removeAction = ProgressiveDownloadAction.createRemoveAction(
                 uri, null, null);
