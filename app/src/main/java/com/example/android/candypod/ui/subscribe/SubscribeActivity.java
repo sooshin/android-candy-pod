@@ -27,6 +27,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -258,9 +259,12 @@ public class SubscribeActivity extends AppCompatActivity {
 
         // Get the description
         String description = channel.getDescription();
-        // Convert HTML to plain text and set the text
-        // Reference: @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
-        mSubscribeBinding.tvDescription.setText(Html.fromHtml(Html.fromHtml(description).toString()));
+        // Check if the description is empty
+        if (!TextUtils.isEmpty(description)) {
+            // Convert HTML to plain text and set the text
+            // Reference: @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
+            mSubscribeBinding.tvDescription.setText(Html.fromHtml(Html.fromHtml(description).toString()));
+        }
 
         // Get the list of items
         mItemList = channel.getItemList();
