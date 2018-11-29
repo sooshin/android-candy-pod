@@ -140,10 +140,16 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
      * Observe changes in the SearchResponse.
      */
     private void observeSearchResponse() {
+        // Show the loading indicator
+        mSearchBinding.setIsLoading(true);
+
         mSearchViewModel.getSearchResponse().observe(this, new Observer<SearchResponse>() {
             @Override
             public void onChanged(@Nullable SearchResponse searchResponse) {
                 if (searchResponse != null) {
+                    // Hide the loading indicator
+                    mSearchBinding.setIsLoading(false);
+
                     mSearchResults = searchResponse.getSearchResults();
                     mSearchAdapter.addAll(mSearchResults);
                 }
