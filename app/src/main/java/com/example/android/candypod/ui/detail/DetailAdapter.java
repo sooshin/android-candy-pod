@@ -19,6 +19,8 @@ package com.example.android.candypod.ui.detail;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,9 @@ import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.utilities.CandyPodUtils;
 
 import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.IMG_HTML_TAG;
+import static com.example.android.candypod.utilities.Constants.REPLACEMENT_EMPTY;
 
 /**
  * Exposes a list of episodes from a list of {@link Item} to a {@link RecyclerView}.
@@ -152,6 +157,17 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             String title = item.getTitle();
             mDetailListItemBinding.tvDetailTitle.setText(title);
 
+            // Get the description of an episode
+            String description = item.getDescription();
+            // If the description contains the img tag, remove it, then convert HTML to plain text.
+            // Reference: @see "https://stackoverflow.com/questions/11178533/how-to-skip-image-tag-in-html-data-in-android"
+            // @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
+            if (description != null) {
+                String descriptionWithoutImageTag = description.replaceAll(IMG_HTML_TAG, REPLACEMENT_EMPTY);
+                mDetailListItemBinding.tvDetailDescription.setText(
+                        Html.fromHtml(Html.fromHtml(descriptionWithoutImageTag).toString()));
+            }
+
             // Get the pub date of an episode and set text
             String pubDate = item.getPubDate();
             // Convert the pub date into something to display to users
@@ -160,7 +176,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
 
             // Get the duration of an episode and set text
             String duration = item.getITunesDuration();
-            mDetailListItemBinding.tvDetailDuration.setText(duration);
+            if (TextUtils.isEmpty(duration)) {
+                // Hide the duration TextView when the duration is empty
+                mDetailListItemBinding.tvDetailDuration.setVisibility(View.GONE);
+            } else {
+                mDetailListItemBinding.tvDetailDuration.setText(duration);
+            }
         }
 
         /**

@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
@@ -40,7 +41,11 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 import static com.example.android.candypod.utilities.Constants.ACTION_RELEASE_OLD_PLAYER;
+import static com.example.android.candypod.utilities.Constants.BLUR_RADIUS;
+import static com.example.android.candypod.utilities.Constants.BLUR_SAMPLING;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
@@ -161,6 +166,12 @@ public class DetailActivity extends AppCompatActivity
         String artworkImageUrl = podcastEntry.getArtworkImageUrl();
         String title = podcastEntry.getTitle();
         String author = podcastEntry.getAuthor();
+
+        // Load blurry artwork using Glide Transformations library
+        Glide.with(this)
+                .load(artworkImageUrl)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(BLUR_RADIUS, BLUR_SAMPLING)))
+                .into(mDetailBinding.ivBlur);
 
         // Use Glide library to upload the artwork
         Glide.with(this)
