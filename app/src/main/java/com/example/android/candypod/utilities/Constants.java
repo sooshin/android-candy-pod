@@ -102,4 +102,13 @@ public class Constants {
      * RemoteViews limitation) */
     public static final int SIZE_BITMAP = 300;
 
+    /** Glide Transformation */
+    public static final int BLUR_RADIUS = 25;
+    public static final int BLUR_SAMPLING = 3;
+
+    /** The maximum color count for the palette */
+    public static final int MAX_COLOR_COUNT = 16;
+    /** The default value of vibrant color used if the Vibrant swatch is null*/
+    public static final int DEF_VIBRANT_COLOR = 0xFFDB7093;
+
 }

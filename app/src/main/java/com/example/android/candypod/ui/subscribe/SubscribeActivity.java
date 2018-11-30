@@ -20,11 +20,13 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.TextUtils;
@@ -32,6 +34,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.CandyPodDatabase;
@@ -53,11 +57,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
+import static com.example.android.candypod.utilities.Constants.BLUR_RADIUS;
+import static com.example.android.candypod.utilities.Constants.BLUR_SAMPLING;
+import static com.example.android.candypod.utilities.Constants.DEF_VIBRANT_COLOR;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
+import static com.example.android.candypod.utilities.Constants.MAX_COLOR_COUNT;
 
 /**
  * The SubscribeActivity displays the detailed information of the podcast such as the title, the image,
@@ -93,6 +102,9 @@ public class SubscribeActivity extends AppCompatActivity {
     private PodcastEntry mPodcastEntry;
     /** True when the user subscribed the podcast, otherwise false */
     private boolean mIsSubscribed;
+
+    /** The default value of vibrant color used if the Vibrant swatch is null */
+    private int mVibrantColor = DEF_VIBRANT_COLOR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,6 +258,42 @@ public class SubscribeActivity extends AppCompatActivity {
                 artworkImageUrl = image.getImageUrl();
             }
         }
+
+        // Set the background color from a palette
+        Glide.with(this)
+                .asBitmap()
+                .load(artworkImageUrl)
+                .into(new ImageViewTarget<Bitmap>(mSubscribeBinding.ivPalette) {
+                    @Override
+                    protected void setResource(@Nullable Bitmap resource) {
+                        if (resource != null) {
+                            // Generate the palette asynchronously using an AsyncTask to gather
+                            // the Palette swatch information from the bitmap
+                            // Reference: @see "https://github.com/codepath/android_guides/wiki/Dynamic-Color-using-Palettes"
+                            // @see "https://developer.android.com/training/material/palette-colors#java"
+                            Palette.from(resource).maximumColorCount(MAX_COLOR_COUNT).generate(new Palette.PaletteAsyncListener() {
+                                @Override
+                                public void onGenerated(@Nullable Palette palette) {
+                                    Palette.Swatch vibrant = palette.getVibrantSwatch();
+                                    // Check that the Vibrant swatch is available
+                                    if (vibrant != null) {
+                                        mVibrantColor = vibrant.getRgb();
+                                    }
+                                    // Set the background color of an ImageView based on the vibrant color
+                                    mSubscribeBinding.ivPalette.setBackgroundColor(mVibrantColor);
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+        // Load blurry artwork using Glide Transformations library
+        Glide.with(this)
+                .load(artworkImageUrl)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(BLUR_RADIUS, BLUR_SAMPLING)))
+                .into(mSubscribeBinding.ivBlur);
+
         // Use Glide library to upload the artwork
         Glide.with(this)
                 .load(artworkImageUrl)
