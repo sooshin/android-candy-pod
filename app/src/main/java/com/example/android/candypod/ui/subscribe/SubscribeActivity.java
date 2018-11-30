@@ -79,6 +79,8 @@ public class SubscribeActivity extends AppCompatActivity {
     private String mResultId;
     /** The podcast title */
     private String mResultName;
+    /** The podcast image used when there is no episode image */
+    private String mPodcastImage;
 
     /** ViewModel for SubscribeActivity */
     private SubscribeViewModel mSubscribeViewModel;
@@ -147,7 +149,7 @@ public class SubscribeActivity extends AppCompatActivity {
         // Create an empty ArrayList
         mItemList = new ArrayList<>();
         // SubscribeAdapter is responsible for displaying each item in the list.
-        mSubscribeAdapter = new SubscribeAdapter(mItemList);
+        mSubscribeAdapter = new SubscribeAdapter(mItemList, mPodcastImage);
         // Set adapter to the RecyclerView
         mSubscribeBinding.rvItem.setAdapter(mSubscribeAdapter);
     }
@@ -258,6 +260,11 @@ public class SubscribeActivity extends AppCompatActivity {
                 artworkImageUrl = image.getImageUrl();
             }
         }
+
+        // Set the podcast image in order to display it in the list of items when there are no
+        // episode images.
+        mPodcastImage = artworkImageUrl;
+        mSubscribeAdapter.setPodcastImage(mPodcastImage);
 
         // Set the background color from a palette
         Glide.with(this)

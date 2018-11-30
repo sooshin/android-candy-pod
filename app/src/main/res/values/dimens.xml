@@ -28,6 +28,7 @@
     <dimen name="guideline_begin">16dp</dimen>
     <!-- Size of the image in the subscribe activity -->
     <dimen name="size_image_subscribe">130dp</dimen>
+    <dimen name="size_image_item">80dp</dimen>
 
     <!-- FAB -->
     <dimen name="fab_margin">16dp</dimen>
@@ -35,6 +36,8 @@
 
     <!-- CardView -->
     <dimen name="card_corner_radius">0dp</dimen>
+    <dimen name="card_margin_subscribe">3dp</dimen>
+    <dimen name="card_content_padding">8dp</dimen>
 
     <!-- Margins for the empty view -->
     <dimen name="padding_empty_podcasts">32dp</dimen>

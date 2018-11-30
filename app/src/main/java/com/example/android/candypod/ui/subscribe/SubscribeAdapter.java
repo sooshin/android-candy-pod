@@ -20,9 +20,12 @@ import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.SubscribeListItemBinding;
 import com.example.android.candypod.model.rss.Item;
@@ -41,12 +44,17 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
     /** Member variable for the list of {@link Item}s which is the episodes in the podcast */
     private List<Item> mItems;
 
+    /** The podcast image URL used when there is no episode image */
+    private String mPodcastImage;
+
     /**
      * Constructor for SubscribeAdapter that accepts the list of items to display.
      * @param items The list of items to display
+     * @param podcastImage The podcast image
      */
-    public SubscribeAdapter(List<Item> items) {
+    public SubscribeAdapter(List<Item> items, String podcastImage) {
         mItems = items;
+        mPodcastImage = podcastImage;
     }
 
     /**
@@ -103,6 +111,14 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
     }
 
     /**
+     * Sets the podcast image.
+     * @param podcastImage The podcast image
+     */
+    public void setPodcastImage(String podcastImage) {
+        mPodcastImage = podcastImage;
+    }
+
+    /**
      * Cache of the children views for a list item.
      */
     public class SubscribeViewHolder extends RecyclerView.ViewHolder {
@@ -142,6 +158,13 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
                         Html.fromHtml(Html.fromHtml(descriptionWithoutImageTag).toString()));
             }
 
+            // If an episode image exists, use it. Otherwise, use the podcast image.
+            String imageUrl = CandyPodUtils.getItemImageUrl(item, mPodcastImage);
+            // Use Glide library to load the episode image
+            Glide.with(itemView.getContext())
+                    .load(imageUrl)
+                    .into(mSubscribeListItemBinding.ivItemArtwork);
+
             // Get the pub date of an episode
             String pubDate = item.getPubDate();
             // Convert the pub date into something to display to users
@@ -150,7 +173,12 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
 
             // Get the duration of an episode
             String iTunesDuration = item.getITunesDuration();
-            mSubscribeListItemBinding.tvItemDuration.setText(iTunesDuration);
+            if (TextUtils.isEmpty(iTunesDuration)) {
+                // Hide the duration TextView when the duration is empty
+                mSubscribeListItemBinding.tvItemDuration.setVisibility(View.GONE);
+            } else {
+                mSubscribeListItemBinding.tvItemDuration.setText(iTunesDuration);
+            }
         }
     }
 }
