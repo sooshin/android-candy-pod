@@ -145,11 +145,11 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Set episode title
         String episodeTitle = mItem.getTitle();
         if (episodeTitle != null) {
-            mNowPlayingBinding.playingInfo.tvEpisodeTitle.setText(episodeTitle);
+            mNowPlayingBinding.tvEpisodeTitle.setText(episodeTitle);
         }
         // Set podcast title
         if (mPodcastName != null) {
-            mNowPlayingBinding.playingInfo.tvPodcastTitle.setText(mPodcastName);
+            mNowPlayingBinding.tvPodcastTitle.setText(mPodcastName);
         }
 
         // If an episode image exists, use it. Otherwise, use the podcast image.
@@ -264,7 +264,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     void buildTransportControls() {
         // Attach a listener to the play/pause button
-        mNowPlayingBinding.playingInfo.ibPlayPause.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.ibPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pbState = MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -283,7 +283,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         });
 
         // Attach a listener to the fast forward button
-        mNowPlayingBinding.playingInfo.ibFastforward.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.ibFastforward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -292,7 +292,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         });
 
         // Attach a listener to the rewind button
-        mNowPlayingBinding.playingInfo.ibRewind.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.ibRewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -300,7 +300,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             }
         });
 
-        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mNowPlayingBinding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -324,9 +324,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         PlaybackStateCompat pbState = mediaController.getPlaybackState();
 
         if (pbState.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
         } else {
-            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
         }
 
         // Register a Callback to stay in sync
@@ -346,9 +346,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
             if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
             } else {
-                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
             }
         }
     };

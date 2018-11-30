@@ -25,6 +25,7 @@
     <dimen name="margin_horizontal_small">8dp</dimen>
     <dimen name="margin_vertical_4">4dp</dimen>
     <dimen name="margin_vertical_24">24dp</dimen>
+    <dimen name="margin_title">24dp</dimen>
 
     <dimen name="guideline_begin">16dp</dimen>
     <!-- Size of the image -->
