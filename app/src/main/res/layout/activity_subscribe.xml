@@ -45,7 +45,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-
                 <android.support.design.widget.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
@@ -59,33 +58,78 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <!-- Blurry artwork -->
+                        <ImageView
+                            android:id="@+id/iv_blur"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:contentDescription="@string/blur_content_desc"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintBottom_toTopOf="@+id/bt_subscribe"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- ImageView for gradient scrim -->
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:background="@drawable/scrim_gradient"
+                            android:contentDescription="@string/scrim_content_desc"
+                            app:layout_constraintBottom_toTopOf="@+id/bt_subscribe"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- ImageView for background color -->
+                        <ImageView
+                            android:id="@+id/iv_palette"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:contentDescription="@string/palette_content_desc"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_blur" />
+
                         <ImageView
                             android:id="@+id/iv_artwork"
-                            android:layout_width="160dp"
-                            android:layout_height="160dp"
-                            android:layout_margin="24dp"
+                            android:layout_width="@dimen/size_image_subscribe"
+                            android:layout_height="@dimen/size_image_subscribe"
+                            android:layout_marginTop="?android:attr/actionBarSize"
                             android:contentDescription="@string/artwork_content_description"
                             android:scaleType="centerCrop"
                             app:layout_collapseMode="parallax"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/left_guideline"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/tv_title"
                             style="@style/Base.TextAppearance.AppCompat.Subhead"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/iv_artwork"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="?android:attr/actionBarSize"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+                            app:layout_constraintStart_toEndOf="@+id/iv_artwork"
+                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="Bag Man" />
 
                         <TextView
                             android:id="@+id/tv_author"
                             style="@style/Base.TextAppearance.AppCompat.Body1"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_vertical_4"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+                            app:layout_constraintStart_toEndOf="@+id/iv_artwork"
                             app:layout_constraintTop_toBottomOf="@+id/tv_title"
                             tools:text="MSNBC, Rachel Maddow" />
 
@@ -93,37 +137,67 @@
                             android:id="@+id/bt_subscribe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:layout_marginTop="@dimen/margin_vertical_small"
                             android:onClick="onSubscribeClick"
                             android:text="@string/subscribe"
                             android:visibility="gone"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_artwork"
+                            app:layout_constraintStart_toEndOf="@+id/iv_artwork"
                             app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 
                         <TextView
                             android:id="@+id/tv_category"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/bt_subscribe"
+                            android:layout_marginTop="@dimen/activity_vertical_margin"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+                            app:layout_constraintStart_toStartOf="@+id/left_guideline"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_artwork"
                             tools:text="News &amp; Politics" />
 
                         <TextView
                             android:id="@+id/tv_language"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="@dimen/margin_vertical_4"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="@+id/left_guideline"
                             app:layout_constraintTop_toBottomOf="@+id/tv_category"
                             tools:text="en" />
 
                         <TextView
                             android:id="@+id/tv_description"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_vertical_small"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:ellipsize="end"
-                            android:maxLines="5"
-                            app:layout_constraintStart_toStartOf="parent"
+                            android:maxLines="10"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/right_guideline"
+                            app:layout_constraintStart_toStartOf="@+id/left_guideline"
                             app:layout_constraintTop_toBottomOf="@+id/tv_language"
                             tools:text="description" />
+
+                        <!-- Guideline for left(start) margin -->
+                        <android.support.constraint.Guideline
+                            android:id="@+id/left_guideline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="@dimen/guideline_begin" />
+
+                        <!-- Guideline for right(end) margin -->
+                        <android.support.constraint.Guideline
+                            android:id="@+id/right_guideline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="@dimen/guideline_begin" />
 
                     </android.support.constraint.ConstraintLayout>
 

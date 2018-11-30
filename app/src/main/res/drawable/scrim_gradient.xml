@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +14,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
-    <!-- Color used to gradient scrim -->
-    <color name="color_start_gradient">#00000000</color>
-    <color name="color_center_gradient">#20000000</color>
-    <color name="color_end_gradient">#40000000</color>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="-90"
+        android:centerColor="@color/color_center_gradient"
+        android:endColor="@color/color_end_gradient"
+        android:startColor="@color/color_start_gradient"
+        android:type="linear" />
+</shape>

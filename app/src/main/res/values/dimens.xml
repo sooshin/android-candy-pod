@@ -23,6 +23,11 @@
 
     <dimen name="margin_vertical_small">8dp</dimen>
     <dimen name="margin_horizontal_small">8dp</dimen>
+    <dimen name="margin_vertical_4">4dp</dimen>
+
+    <dimen name="guideline_begin">16dp</dimen>
+    <!-- Size of the image in the subscribe activity -->
+    <dimen name="size_image_subscribe">130dp</dimen>
 
     <!-- FAB -->
     <dimen name="fab_margin">16dp</dimen>

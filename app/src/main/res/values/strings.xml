@@ -44,6 +44,9 @@
     <string name="play_pause_content_description">Play or pause</string>
     <string name="fast_forward_content_description">Fast forward</string>
     <string name="download_content_description">Download</string>
+    <string name="blur_content_desc">Blurry artwork</string>
+    <string name="scrim_content_desc">Gradient scrim</string>
+    <string name="palette_content_desc">Background color extracted from artwork</string>
 
     <!-- Text for the subscribe button and label for the SubscribeActivity -->
     <string name="subscribe">Subscribe</string>
