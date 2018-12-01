@@ -20,8 +20,16 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <!-- Color used to gradient scrim -->
+    <!-- Colors used to gradient scrim -->
     <color name="color_start_gradient">#00000000</color>
     <color name="color_center_gradient">#20000000</color>
     <color name="color_end_gradient">#40000000</color>
+
+    <color name="color_start_now">#66000000</color>
+    <color name="color_center_now">#40000000</color>
+    <color name="color_end_now">#99000000</color>
+
+    <color name="color_start_now_land">#99000000</color>
+    <color name="color_center_now_land">#66000000</color>
+    <color name="color_end_now_land">#40000000</color>
 </resources>

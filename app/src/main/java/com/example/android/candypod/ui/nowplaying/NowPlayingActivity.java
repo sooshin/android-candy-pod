@@ -41,6 +41,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.CandyPodDatabase;
@@ -57,8 +58,11 @@ import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
 import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
+import static com.example.android.candypod.utilities.Constants.BLUR_RADIUS;
+import static com.example.android.candypod.utilities.Constants.BLUR_SAMPLING;
 import static com.example.android.candypod.utilities.Constants.EXTRA_DOWNLOAD_ENTRY;
 import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
@@ -145,11 +149,11 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         // Set episode title
         String episodeTitle = mItem.getTitle();
         if (episodeTitle != null) {
-            mNowPlayingBinding.tvEpisodeTitle.setText(episodeTitle);
+            mNowPlayingBinding.playingInfo.tvEpisodeTitle.setText(episodeTitle);
         }
         // Set podcast title
         if (mPodcastName != null) {
-            mNowPlayingBinding.tvPodcastTitle.setText(mPodcastName);
+            mNowPlayingBinding.playingInfo.tvPodcastTitle.setText(mPodcastName);
         }
 
         // If an episode image exists, use it. Otherwise, use the podcast image.
@@ -158,6 +162,12 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         Glide.with(this)
                 .load(mItemImageUrl)
                 .into(mNowPlayingBinding.ivNowEpisode);
+
+        // Load blurry artwork using Glide Transformations library
+        Glide.with(this)
+                .load(mItemImageUrl)
+                .apply(RequestOptions.bitmapTransform(new BlurTransformation(BLUR_RADIUS, BLUR_SAMPLING)))
+                .into(mNowPlayingBinding.ivBlur);
     }
 
     /**
@@ -264,7 +274,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
     void buildTransportControls() {
         // Attach a listener to the play/pause button
-        mNowPlayingBinding.ibPlayPause.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int pbState = MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -283,7 +293,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         });
 
         // Attach a listener to the fast forward button
-        mNowPlayingBinding.ibFastforward.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibFastforward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -292,7 +302,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         });
 
         // Attach a listener to the rewind button
-        mNowPlayingBinding.ibRewind.setOnClickListener(new View.OnClickListener() {
+        mNowPlayingBinding.playingInfo.ibRewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
@@ -300,7 +310,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             }
         });
 
-        mNowPlayingBinding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -324,9 +334,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         PlaybackStateCompat pbState = mediaController.getPlaybackState();
 
         if (pbState.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
         } else {
-            mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
         }
 
         // Register a Callback to stay in sync
@@ -346,9 +356,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
             if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
             } else {
-                mNowPlayingBinding.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
             }
         }
     };
