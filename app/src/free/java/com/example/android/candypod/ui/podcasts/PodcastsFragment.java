@@ -35,10 +35,8 @@ import com.example.android.candypod.databinding.FragmentPodcastsBinding;
 import com.example.android.candypod.ui.GridAutofitLayoutManager;
 import com.example.android.candypod.ui.add.AddPodcastActivity;
 import com.example.android.candypod.ui.detail.DetailActivity;
-import com.example.android.candypod.ui.podcasts.PodcastsAdapter;
-import com.example.android.candypod.ui.podcasts.PodcastsViewModel;
-import com.example.android.candypod.ui.podcasts.PodcastsViewModelFactory;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.android.gms.ads.AdRequest;
 
 import java.util.List;
 
@@ -82,6 +80,9 @@ public class PodcastsFragment extends Fragment
 
         // Create a GridAutofitLayoutManager and PodcastsAdapter, and set them to the RecyclerView
         initAdapter();
+
+        // Enable test ads
+        setupTestAds();
 
         return rootView;
     }
@@ -193,5 +194,18 @@ public class PodcastsFragment extends Fragment
         // Set text programmatically in order to make text invisible when the user changes the menu
         // items in the navigation drawer
         mPodcastsBinding.tvEmptyPodcasts.setText(getString(R.string.empty_podcasts));
+    }
+
+    /**
+     * Enables test ads.
+     */
+    private void setupTestAds() {
+        // Create an ad request. Check logcat output for the hashed device ID to
+        // get test ads on a physical device. e.g.
+        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        mPodcastsBinding.adView.loadAd(adRequest);
     }
 }

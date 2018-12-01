@@ -15,6 +15,7 @@
   -->
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.podcasts.PodcastsFragment">
@@ -27,41 +28,63 @@
 
     </data>
 
-    <FrameLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Display the subscribed podcast list -->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_podcasts"
+        <FrameLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:visibleGone="@{hasPodcasts}" />
+            android:layout_height="0dp"
+            ads:layout_constraintEnd_toEndOf="parent"
+            ads:layout_constraintStart_toStartOf="parent"
+            ads:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/adView">
 
-        <!-- Empty view -->
-        <TextView
-            android:id="@+id/tv_empty_podcasts"
+            <!-- Display the subscribed podcast list -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_podcasts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:visibleGone="@{hasPodcasts}" />
+
+            <!-- Empty view -->
+            <TextView
+                android:id="@+id/tv_empty_podcasts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/padding_empty_podcasts"
+                android:paddingEnd="@dimen/padding_empty_podcasts"
+                android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:visibility="gone"
+                app:visibleGone="@{!hasPodcasts}" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:contentDescription="@string/add_podcast"
+                android:src="@drawable/ic_add"
+                app:fabSize="normal"
+                app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+
+        </FrameLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingStart="@dimen/padding_empty_podcasts"
-            android:paddingEnd="@dimen/padding_empty_podcasts"
-            android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:visibility="gone"
-            app:visibleGone="@{!hasPodcasts}" />
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frame" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:contentDescription="@string/add_podcast"
-            android:src="@drawable/ic_add"
-            app:fabSize="normal"
-            app:pressedTranslationZ="@dimen/fab_press_translation_z" />
-
-    </FrameLayout>
+    </android.support.constraint.ConstraintLayout>
 </layout>
