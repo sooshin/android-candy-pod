@@ -23,6 +23,7 @@
 
     <dimen name="margin_vertical_small">8dp</dimen>
     <dimen name="margin_horizontal_small">8dp</dimen>
+    <dimen name="margin_vertical_2">2dp</dimen>
     <dimen name="margin_vertical_4">4dp</dimen>
     <dimen name="margin_vertical_24">24dp</dimen>
     <dimen name="margin_title">24dp</dimen>

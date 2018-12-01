@@ -20,6 +20,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,12 @@ import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.FavoriteEntry;
 import com.example.android.candypod.databinding.FavoritesListItemBinding;
+import com.example.android.candypod.utilities.CandyPodUtils;
 
 import java.util.List;
+
+import static com.example.android.candypod.utilities.Constants.IMG_HTML_TAG;
+import static com.example.android.candypod.utilities.Constants.REPLACEMENT_EMPTY;
 
 /**
  * Exposes a list of favorite episodes from a list of {@link FavoriteEntry} to a {@link RecyclerView}
@@ -134,13 +139,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
          * the appropriate text within a list item.
          */
         void bind(FavoriteEntry favoriteEntry) {
-
+            // Get the podcast title and set the text
             String podcastTitle = favoriteEntry.getTitle();
+            mFavListItemBinding.tvPodcastTitle.setText(podcastTitle);
+
+            // Get image URL, and load the image using Glide
             String podcastImage = favoriteEntry.getArtworkImageUrl();
-            String itemTitle = favoriteEntry.getItemTitle();
-
             String itemImageUrl = favoriteEntry.getItemImageUrl();
-
             if (TextUtils.isEmpty(itemImageUrl)) {
                 itemImageUrl = podcastImage;
             }
@@ -148,8 +153,35 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
                     .load(itemImageUrl)
                     .into(mFavListItemBinding.ivEpisode);
 
+            // Get an episode title and set the text
+            String itemTitle = favoriteEntry.getItemTitle();
             mFavListItemBinding.tvEpisodeTitle.setText(itemTitle);
-            mFavListItemBinding.tvPodcastTitle.setText(podcastTitle);
+
+            // Get the description of an episode and set the text
+            String description = favoriteEntry.getItemDescription();
+            // If the description contains the img tag, remove it, then convert HTML to plain text.
+            // Reference: @see "https://stackoverflow.com/questions/11178533/how-to-skip-image-tag-in-html-data-in-android"
+            // @see "https://stackoverflow.com/questions/22573319/how-to-convert-html-text-to-plain-text-in-android"
+            if (description != null) {
+                String descriptionWithoutImageTag = description.replaceAll(IMG_HTML_TAG, REPLACEMENT_EMPTY);
+                mFavListItemBinding.tvDescription.setText(
+                        Html.fromHtml(Html.fromHtml(descriptionWithoutImageTag).toString()));
+            }
+
+            // Get the pub date of an episode and set the text
+            String pubDate = favoriteEntry.getItemPubDate();
+            // Convert the pub date into something to display to users
+            String formattedPubDate = CandyPodUtils.getFormattedDateString(pubDate);
+            mFavListItemBinding.tvPubDate.setText(formattedPubDate);
+
+            // Get the duration of an episode and set the text
+            String duration = favoriteEntry.getItemDuration();
+            if (TextUtils.isEmpty(duration)) {
+                // Hide the duration TextView when the duration is empty
+                mFavListItemBinding.tvDuration.setVisibility(View.GONE);
+            } else {
+                mFavListItemBinding.tvDuration.setText(duration);
+            }
         }
 
         /**
