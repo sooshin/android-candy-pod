@@ -21,11 +21,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -38,6 +40,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -526,7 +529,6 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
                     mDb.podcastDao().insertFavoriteEpisode(getFavoriteEntry());
                 }
             });
-            Toast.makeText(this, "inserted", Toast.LENGTH_SHORT).show();
         } else {
             mFavoriteEntry = mFavoriteEntryViewModel.getFavoriteEntry().getValue();
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
@@ -536,8 +538,31 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
                     mDb.podcastDao().deleteFavoriteEpisode(mFavoriteEntry);
                 }
             });
-            Toast.makeText(this, "deleted", Toast.LENGTH_SHORT).show();
         }
+        // Show a snackbar message
+        showSnackbar();
+    }
+
+    /**
+     * Shows a snackbar message when the user clicks a favorite button.
+     * Reference: @see "https://stackoverflow.com/questions/34020891/how-to-change-background-color-of-the-snackbar"
+     */
+    private void showSnackbar() {
+        String snackMessage;
+        Snackbar snackbar;
+        if (mIsFavorite) {
+            snackMessage = getString(R.string.snackbar_removed_from_fav);
+        } else {
+            snackMessage = getString(R.string.snackbar_added_to_fav);
+        }
+        snackbar = Snackbar.make(mNowPlayingBinding.coordinator, snackMessage, Snackbar.LENGTH_SHORT);
+        // Set the background color of the snackbar
+        View sbView = snackbar.getView();
+        sbView.setBackgroundColor(Color.GREEN);
+        // Set the text color of the snackbar
+        TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.BLACK);
+        snackbar.show();
     }
 
     /**

@@ -88,6 +88,8 @@
     <string name="snackbar_subscribed">Subscribed</string>
     <string name="snackbar_removed">Removed</string>
     <string name="snackbar_action_go">Go to Podcasts</string>
+    <string name="snackbar_added_to_fav">Added to Favorites</string>
+    <string name="snackbar_removed_from_fav">Removed from Favorites</string>
 
     <!-- Text for share intent-->
     <string name="check_out">Check out\u0020</string>
