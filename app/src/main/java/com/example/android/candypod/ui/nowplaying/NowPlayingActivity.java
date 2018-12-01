@@ -456,7 +456,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     private boolean isFavorite() {
         // Get the FavoriteEntryViewModel from the factory
         FavoriteEntryViewModelFactory favEntryFactory =
-                InjectorUtils.provideFavoriteEntryViewModelFactory(this, mItem.getTitle());
+                InjectorUtils.provideFavoriteEntryViewModelFactory(this, mEnclosureUrl);
         mFavoriteEntryViewModel = ViewModelProviders.of(this, favEntryFactory)
                 .get(FavoriteEntryViewModel.class);
 

@@ -52,11 +52,11 @@ public interface PodcastDao {
     LiveData<List<FavoriteEntry>> loadFavorites();
 
     /**
-     * Selects episode where the value in column item_title is the given item title.
-     * @param itemTitle The podcast episode name
+     * Selects episode where the value in column item_enclosure_url is the given enclosure URL.
+     * @param url The stream URL for the episode audio file
      */
-    @Query("SELECT * FROM favorite_episodes WHERE item_title = :itemTitle")
-    LiveData<FavoriteEntry> loadFavoriteEpisodeByItemTitle(String itemTitle);
+    @Query("SELECT * FROM favorite_episodes WHERE item_enclosure_url = :url")
+    LiveData<FavoriteEntry> loadFavoriteEpisodeByUrl(String url);
 
     /**
      * Inserts a {@link FavoriteEntry} into the favorite_episodes table.

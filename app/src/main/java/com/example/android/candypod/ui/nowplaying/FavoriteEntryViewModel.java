@@ -30,9 +30,9 @@ public class FavoriteEntryViewModel extends ViewModel {
     private final CandyPodRepository mRepository;
     private LiveData<FavoriteEntry> mFavoriteEntry;
 
-    public FavoriteEntryViewModel(CandyPodRepository repository, String itemTitle) {
+    public FavoriteEntryViewModel(CandyPodRepository repository, String url) {
         mRepository = repository;
-        mFavoriteEntry = mRepository.getFavoriteEpisodeByItemTitle(itemTitle);
+        mFavoriteEntry = mRepository.getFavoriteEpisodeByUrl(url);
     }
 
     public LiveData<FavoriteEntry> getFavoriteEntry() {

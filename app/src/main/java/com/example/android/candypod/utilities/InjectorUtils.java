@@ -71,9 +71,9 @@ public class InjectorUtils {
         return new PodcastsViewModelFactory(repository);
     }
 
-    public static FavoriteEntryViewModelFactory provideFavoriteEntryViewModelFactory(Context context, String itemTitle) {
+    public static FavoriteEntryViewModelFactory provideFavoriteEntryViewModelFactory(Context context, String url) {
         CandyPodRepository repository = provideRepository(context.getApplicationContext());
-        return new FavoriteEntryViewModelFactory(repository, itemTitle);
+        return new FavoriteEntryViewModelFactory(repository, url);
     }
 
     public static FavViewModelFactory provideFavViewModelFactory(Context context) {

@@ -29,17 +29,17 @@ import com.example.android.candypod.data.CandyPodRepository;
 public class FavoriteEntryViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final CandyPodRepository mRepository;
-    private final String mItemTitle;
+    private final String mUrl;
 
-    public FavoriteEntryViewModelFactory(CandyPodRepository repository, String itemTitle) {
+    public FavoriteEntryViewModelFactory(CandyPodRepository repository, String url) {
         mRepository = repository;
-        mItemTitle = itemTitle;
+        mUrl = url;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new FavoriteEntryViewModel(mRepository, mItemTitle);
+        return (T) new FavoriteEntryViewModel(mRepository, mUrl);
     }
 }

@@ -197,11 +197,11 @@ public class CandyPodRepository {
 
     /**
      * Get the favorite episode by item title from the favorite_episode table.
-     * @param itemTitle The podcast episode title
+     * @param url The stream URL for the episode audio file
      * @return {@link LiveData} {@link FavoriteEntry} from the database.
      */
-    public LiveData<FavoriteEntry> getFavoriteEpisodeByItemTitle(String itemTitle) {
-        return mPodcastDao.loadFavoriteEpisodeByItemTitle(itemTitle);
+    public LiveData<FavoriteEntry> getFavoriteEpisodeByUrl(String url) {
+        return mPodcastDao.loadFavoriteEpisodeByUrl(url);
     }
 
     /**
