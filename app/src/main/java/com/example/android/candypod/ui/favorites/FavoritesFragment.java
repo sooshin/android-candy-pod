@@ -98,7 +98,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
     }
 
     /**
-     * Create a LinearLayoutManager and FavoritesAdapter, and set them to the RecyclerView.
+     * Creates a LinearLayoutManager and FavoritesAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A LinearLayoutManager is responsible for measuring and positioning item views within a
@@ -217,7 +217,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
     }
 
     /**
-     * When the favorite list is empty, show an empty view.
+     * When the favorite list is empty, shows an empty view.
      */
     private void showEmptyView() {
         // Show an empty view

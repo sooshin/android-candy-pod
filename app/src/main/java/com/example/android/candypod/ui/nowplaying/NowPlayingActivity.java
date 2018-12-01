@@ -372,7 +372,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     };
 
     /**
-     * Show the up button on the tool bar.
+     * Shows the up button on the tool bar.
      */
     private void showUpButton() {
         // Set the toolbar as the app bar
@@ -387,7 +387,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     }
 
     /**
-     * Modify the options menu based on events. If the current episode is not in the favorites,
+     * Modifies the options menu based on events. If the current episode is not in the favorites,
      * the heart button icon image will be border heart image, otherwise full heart image.
      * When an event occurs and you want to perform a menu update, you must call
      * invalidateOptionsMenu() to request that the system call onPrepareOptionsMenu().
@@ -397,7 +397,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // Change the hear button icon based on whether or not the episode exists in the favorites
+        // Change the heart button icon based on whether or not the episode exists in the favorites
         changeFavIcon(mIsFavorite, menu);
         // Change the download button icon based on whether or not the user downloaded the episode
         changeDownloadIcon(mIsDownloaded, menu);
@@ -453,6 +453,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         startActivity(shareIntent);
     }
 
+    /**
+     * Returns true when the current episode is in the favorites, otherwise returns false.
+     */
     private boolean isFavorite() {
         // Get the FavoriteEntryViewModel from the factory
         FavoriteEntryViewModelFactory favEntryFactory =
@@ -495,7 +498,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     }
 
     /**
-     * Change the hear button icon based on whether or not the episode exists in the favorites.
+     * Changes the heart button icon based on whether or not the episode exists in the favorites.
      * @param isFavorite True when the current episode is in the favorites, otherwise false
      * @param menu The menu object
      */

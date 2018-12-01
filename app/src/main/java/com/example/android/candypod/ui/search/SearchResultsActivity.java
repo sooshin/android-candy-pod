@@ -107,7 +107,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     }
 
     /**
-     * Create a LinearLayoutManager and SearchAdapter, and set them to the RecyclerView.
+     * Creates a LinearLayoutManager and SearchAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A GridAutofitLayoutManager is responsible for calculating the amount of GridView columns
@@ -127,7 +127,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     }
 
     /**
-     * Get the ViewModel from the factory.
+     * Gets the ViewModel from the factory.
      */
     private void setupViewModel() {
         if (mQuery != null) {
@@ -138,7 +138,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     }
 
     /**
-     * Observe changes in the SearchResponse.
+     * Observes changes in the SearchResponse.
      */
     private void observeSearchResponse() {
         // When online, show a loading indicator. When offline, show offline message.
@@ -188,7 +188,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     }
 
     /**
-     * Show an up button on the action bar.
+     * Shows an up button on the action bar.
      */
     private void showUpButton() {
         ActionBar actionBar = getSupportActionBar();

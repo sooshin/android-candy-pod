@@ -192,7 +192,7 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
         }
 
         /**
-         * Delete the podcast when the user clicks "Delete" menu option.
+         * Deletes the podcast when the user clicks "Delete" menu option.
          * @param podcastEntry The PodcastEntry the user want to delete
          */
         private void delete(final PodcastEntry podcastEntry) {

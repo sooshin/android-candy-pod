@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_BASE_URL;
 
 /**
- * Create a Retrofit object.
+ * Creates a Retrofit object.
  */
 public class RetrofitClient {
 

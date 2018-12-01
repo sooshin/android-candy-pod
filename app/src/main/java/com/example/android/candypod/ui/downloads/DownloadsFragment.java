@@ -100,7 +100,7 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
     }
 
     /**
-     * Create a LinearLayoutManager and DownloadsAdapter, and set them to the RecyclerView.
+     * Creates a LinearLayoutManager and DownloadsAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A LinearLayoutManager is responsible for measuring and positioning item views within a
@@ -118,7 +118,7 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
     }
 
     /**
-     * Every time the downloaded episode data is updated, update the UI.
+     * Every time the downloaded episode data is updated, updates the UI.
      */
     private void setupViewModel(Context context) {
         // Get the ViewModel from the factory
@@ -209,7 +209,7 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
     }
 
     /**
-     * When the favorite list is empty, show an empty view.
+     * When the favorite list is empty, shows an empty view.
      */
     private void showEmptyView() {
         // Show an empty view

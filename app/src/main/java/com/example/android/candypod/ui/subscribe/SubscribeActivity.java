@@ -137,7 +137,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Create a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView.
+     * Creates a LinearLayoutManager and SubscribeAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -156,8 +156,8 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the podcast ID which is used to create a lookup request to search for content.
-     * Get the podcast title used to set the title in the app bar.
+     * Gets the podcast ID which is used to create a lookup request to search for content.
+     * Gets the podcast title used to set the title in the app bar.
      */
     private void getResultData() {
         Intent intent = getIntent();
@@ -170,7 +170,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the ViewModel from the factory.
+     * Gets the ViewModel from the factory.
      */
     private void setupViewModel() {
         SubscribeViewModelFactory factory = InjectorUtils.provideSubscribeViewModelFactory(
@@ -207,7 +207,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the RssFeedViewModel from the factory.
+     * Gets the RssFeedViewModel from the factory.
      * @param feedUrl The feed URL extracted from the list of LookupResults has the episode
      *                  metadata and stream URLs for the audio file.
      */
@@ -218,7 +218,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Observe changes in the RssFeed
+     * Observes changes in the RssFeed
      */
     private void observeRssFeed() {
         // When online, show a loading indicator.
@@ -245,7 +245,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Show the details of the podcast and create the PodcastEntry based on the data.
+     * Shows the details of the podcast and create the PodcastEntry based on the data.
      * @param channel Channel object that contains data, such as title, description, author,
      *                language, categories, image, items.
      */
@@ -345,7 +345,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Show the episodes of the podcast.
+     * Shows the episodes of the podcast.
      * @param channel Channel object that includes the items data which is the podcast episodes.
      */
     private void showItems(Channel channel) {
@@ -356,7 +356,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Return true when the user subscribed the podcast otherwise, return false.
+     * Returns true when the user subscribed the podcast otherwise, returns false.
      */
     private boolean isSubscribed() {
         // Get the PodcastEntryViewModel from the factory
@@ -441,7 +441,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Show the up button on the Collapsing Toolbar.
+     * Shows the up button on the Collapsing Toolbar.
      */
     private void showUpButton() {
         // Set the toolbar as the app bar
@@ -465,7 +465,7 @@ public class SubscribeActivity extends AppCompatActivity {
     }
 
     /**
-     * Show the title in the app bar when a CollapsingToolbarLayout is fully collapsed, otherwise
+     * Shows the title in the app bar when a CollapsingToolbarLayout is fully collapsed, otherwise
      * hide the title.
      *
      * References: @see "https://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed"

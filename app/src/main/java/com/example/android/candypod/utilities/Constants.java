@@ -17,7 +17,7 @@
 package com.example.android.candypod.utilities;
 
 /**
- * Constants class is to define constants used in the app.
+ * Defines constants used in the app.
  */
 public class Constants {
 

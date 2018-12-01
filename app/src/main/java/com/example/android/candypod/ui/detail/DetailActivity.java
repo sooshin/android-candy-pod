@@ -99,9 +99,9 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Get the podcast ID which is used to retrieve the PodcastEntry from the podcast table.
-     * Get the podcast title used to set the title in the app bar.
-     * Get the podcast image URL from the PodcastFragment, which is used when there is no episode image.
+     * Gets the podcast ID which is used to retrieve the PodcastEntry from the podcast table.
+     * Gets the podcast title used to set the title in the app bar.
+     * Gets the podcast image URL from the PodcastFragment, which is used when there is no episode image.
      */
     private void getResultData() {
         Intent intent = getIntent();
@@ -117,7 +117,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Observe the data and update the UI.
+     * Observes the data and update the UI.
      */
     private void setupViewModel() {
         // Get the PodcastEntryViewModel from the factory
@@ -138,7 +138,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Create a LinearLayoutManager and DetailAdapter, and set them to the RecyclerView.
+     * Creates a LinearLayoutManager and DetailAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A LinearLayoutManager is responsible for measuring and positioning item views within a
@@ -157,7 +157,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Show the details of the podcast.
+     * Shows the details of the podcast.
      *
      * @param podcastEntry A single row from podcast table that has the data of the podcast
      */
@@ -188,7 +188,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Show the up button on the Collapsing Toolbar.
+     * Shows the up button on the Collapsing Toolbar.
      */
     private void showUpButton() {
         // Set the toolbar as the app bar
@@ -212,7 +212,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * Show the title in the app bar when a CollapsingToolbarLayout is fully collapsed, otherwise
+     * Shows the title in the app bar when a CollapsingToolbarLayout is fully collapsed, otherwise
      * hide the title.
      *
      * References: @see "https://stackoverflow.com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed"
@@ -242,7 +242,7 @@ public class DetailActivity extends AppCompatActivity
     }
 
     /**
-     * When an episode is selected, start the NowPlayingActivity.
+     * When an episode is selected, starts the NowPlayingActivity.
      * @param item Item object which contains an episode data
      */
     @Override
@@ -271,10 +271,12 @@ public class DetailActivity extends AppCompatActivity
         Intent serviceIntent = new Intent(this, PodcastService.class);
         // Set the action to check if the old player should be released in PodcastService
         serviceIntent.setAction(ACTION_RELEASE_OLD_PLAYER);
+        // Pass an Item object
         serviceIntent.putExtra(EXTRA_ITEM, b);
         // Pass podcast title and podcast image
         serviceIntent.putExtra(EXTRA_RESULT_NAME, mResultName);
         serviceIntent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
+        // Start the PodcastService
         startService(serviceIntent);
 
     }

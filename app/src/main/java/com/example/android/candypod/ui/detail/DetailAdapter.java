@@ -120,7 +120,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     }
 
     /**
-     * Cache of the children views for a list item.
+     * Caches of the children views for a list item.
      */
     public class DetailViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

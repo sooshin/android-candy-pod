@@ -68,7 +68,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     /**
      * This method is to update a list of {@link SearchResult}s and notify the adapter of any changes.
-     * @param searchResults
+     * @param searchResults The list of searchResults
      */
     public void addAll(List<SearchResult> searchResults) {
         mSearchResults.clear();

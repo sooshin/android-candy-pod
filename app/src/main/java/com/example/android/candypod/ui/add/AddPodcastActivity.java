@@ -87,7 +87,7 @@ public class AddPodcastActivity extends AppCompatActivity
     }
 
     /**
-     * Create a GridAutofitLayoutManager and AddPodcastAdapter, and set them to the RecyclerView.
+     * Creates a GridAutofitLayoutManager and AddPodcastAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A GridAutofitLayoutManager is responsible for calculating the amount of GridView columns
@@ -110,7 +110,7 @@ public class AddPodcastActivity extends AppCompatActivity
     }
 
     /**
-     * Get the ViewModel from the factory.
+     * Gets the ViewModel from the factory.
      */
     private void setupViewModel(String country) {
         AddPodViewModelFactory factory = InjectorUtils.provideAddPodViewModelFactory(
@@ -142,7 +142,7 @@ public class AddPodcastActivity extends AppCompatActivity
     }
 
     /**
-     * Show an up button on the action bar.
+     * Shows an up button on the action bar.
      */
     private void showUpButton() {
         ActionBar actionBar = getSupportActionBar();

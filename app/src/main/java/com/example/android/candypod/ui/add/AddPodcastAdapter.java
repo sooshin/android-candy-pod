@@ -113,7 +113,7 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
     }
 
     /**
-     * Caches of the children views for a result list item.
+     * Cache of the children views for a result list item.
      */
     public class AddPodcastViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

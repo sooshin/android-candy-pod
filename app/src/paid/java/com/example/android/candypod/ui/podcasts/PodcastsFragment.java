@@ -107,7 +107,7 @@ public class PodcastsFragment extends Fragment
     }
 
     /**
-     * Create a GridAutofitLayoutManager and PodcastsAdapter, and set them to the RecyclerView.
+     * Creates a GridAutofitLayoutManager and PodcastsAdapter, and set them to the RecyclerView.
      */
     private void initAdapter() {
         // A GridAutofitLayoutManager is responsible for calculating the amount of GridView columns
@@ -127,7 +127,7 @@ public class PodcastsFragment extends Fragment
     }
 
     /**
-     * Every time the podcast data is updated, update the UI.
+     * Every time the podcast data is updated, updates the UI.
      */
     private void setupViewModel(Context context) {
         // Get the ViewModel from the factory
