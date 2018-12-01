@@ -84,6 +84,11 @@
     <string name="toast_remove_downloaded_episode">Remove downloaded episode</string>
     <string name="toast_download_failed">Download failed</string>
 
+    <!-- Snackbar messages -->
+    <string name="snackbar_subscribed">Subscribed</string>
+    <string name="snackbar_removed">Removed</string>
+    <string name="snackbar_action_go">Go to Podcasts</string>
+
     <!-- Text for share intent-->
     <string name="check_out">Check out\u0020</string>
     <string name="chooser_title">Share Episode</string>

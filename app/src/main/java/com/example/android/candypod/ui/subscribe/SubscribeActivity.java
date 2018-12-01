@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
@@ -31,7 +32,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -48,6 +48,7 @@ import com.example.android.candypod.model.rss.Category;
 import com.example.android.candypod.model.rss.Channel;
 import com.example.android.candypod.model.rss.Item;
 import com.example.android.candypod.model.rss.RssFeed;
+import com.example.android.candypod.ui.MainActivity;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModel;
 import com.example.android.candypod.ui.detail.PodcastEntryViewModelFactory;
 import com.example.android.candypod.utilities.CandyPodUtils;
@@ -397,7 +398,6 @@ public class SubscribeActivity extends AppCompatActivity {
                         mDb.podcastDao().insertPodcast(mPodcastEntry);
                     }
                 });
-                Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
             } else {
                 mPodcastEntry = mPodcastEntryViewModel.getPodcastEntry().getValue();
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
@@ -407,9 +407,37 @@ public class SubscribeActivity extends AppCompatActivity {
                         mDb.podcastDao().deletePodcast(mPodcastEntry);
                     }
                 });
-                Toast.makeText(this, "Removed", Toast.LENGTH_SHORT).show();
             }
+            // Show a snackbar message
+            showSnackbar();
         }
+    }
+
+    /**
+     * Shows a snackbar message when the user clicks subscribe or unsubscribe button.
+     */
+    private void showSnackbar() {
+        String snackMessage;
+        Snackbar snackbar;
+        if (mIsSubscribed) {
+            // Removed
+            snackMessage = getString(R.string.snackbar_removed);
+            snackbar = Snackbar.make(mSubscribeBinding.coordinator, snackMessage, Snackbar.LENGTH_LONG);
+        } else {
+            snackMessage = getString(R.string.snackbar_subscribed);
+            snackbar = Snackbar.make(mSubscribeBinding.coordinator, snackMessage, Snackbar.LENGTH_LONG);
+            // Add an action "Go to Podcasts"
+            // Reference: @see "https://www.androidhive.info/2015/09/android-material-design-snackbar-example/"
+            snackbar.setAction(getString(R.string.snackbar_action_go), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Start the MainActivity
+                    Intent intent = new Intent(SubscribeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+        snackbar.show();
     }
 
     /**
