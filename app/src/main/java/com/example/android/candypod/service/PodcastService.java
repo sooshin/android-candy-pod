@@ -444,7 +444,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             mMediaSession.setActive(true);
 
             // Start the player
-            mExoPlayer.setPlayWhenReady(true);
+            if (mExoPlayer != null) {
+                mExoPlayer.setPlayWhenReady(true);
+            }
         }
 
         @Override
