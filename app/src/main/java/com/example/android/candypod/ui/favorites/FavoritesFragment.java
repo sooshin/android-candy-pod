@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
+import static com.example.android.candypod.utilities.Constants.NO_DRAWABLES;
 
 /**
  * The FavoritesFragment displays a list of the favorite episodes.
@@ -225,5 +227,22 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         // Set text programmatically in order to make text invisible when the user changes the menu
         // items in the navigation drawer
         mFavoritesBinding.tvEmptyFavorites.setText(getString(R.string.empty_favorites));
+        // Set the favorite icon above the text
+        setDrawable();
+    }
+
+    /**
+     * Sets the favorite icon above the text.
+     * Reference: @see "https://stackoverflow.com/questions/4919703/how-to-set-property-androiddrawabletop-of-a-button-at-runtime"
+     */
+    private void setDrawable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // API level 17
+            mFavoritesBinding.tvEmptyFavorites.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    NO_DRAWABLES, R.drawable.favorite_large, NO_DRAWABLES, NO_DRAWABLES);
+        } else {
+            mFavoritesBinding.tvEmptyFavorites.setCompoundDrawablesWithIntrinsicBounds(
+                    NO_DRAWABLES, R.drawable.favorite_large, NO_DRAWABLES, NO_DRAWABLES);
+        }
     }
 }

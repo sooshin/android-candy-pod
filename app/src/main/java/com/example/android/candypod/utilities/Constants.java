@@ -111,4 +111,7 @@ public class Constants {
     /** The default value of vibrant color used if the Vibrant swatch is null*/
     public static final int DEF_VIBRANT_COLOR = 0xFFDB7093;
 
+    /** The value used to set CompoundDrawablesWithIntrinsicBounds */
+    public static final int NO_DRAWABLES = 0;
+
 }

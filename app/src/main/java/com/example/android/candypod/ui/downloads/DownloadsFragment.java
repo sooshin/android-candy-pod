@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +51,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
+import static com.example.android.candypod.utilities.Constants.NO_DRAWABLES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -217,5 +219,22 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
         // Set text programmatically in order to make text invisible when the user changes the menu
         // items in the navigation drawer
         mDownloadsBinding.tvEmptyDownloads.setText(getString(R.string.empty_downloads));
+        // Set the download icon above the text
+        setDrawable();
+    }
+
+    /**
+     * Sets the download icon above the text.
+     * Reference: @see "https://stackoverflow.com/questions/4919703/how-to-set-property-androiddrawabletop-of-a-button-at-runtime"
+     */
+    private void setDrawable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // API level 17
+            mDownloadsBinding.tvEmptyDownloads.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    NO_DRAWABLES, R.drawable.download_large, NO_DRAWABLES, NO_DRAWABLES);
+        } else {
+            mDownloadsBinding.tvEmptyDownloads.setCompoundDrawablesWithIntrinsicBounds(
+                    NO_DRAWABLES, R.drawable.download_large, NO_DRAWABLES, NO_DRAWABLES);
+        }
     }
 }
