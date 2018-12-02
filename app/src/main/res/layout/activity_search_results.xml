@@ -59,6 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_magnifier"
+            android:drawablePadding="@dimen/margin_vertical_4"
             android:paddingStart="@dimen/padding_empty_podcasts"
             android:paddingEnd="@dimen/padding_empty_podcasts"
             android:paddingBottom="@dimen/padding_bottom_empty_podcasts"
@@ -67,12 +69,13 @@
             android:textSize="18sp"
             app:visibleGone="@{isEmpty}" />
 
-        <!-- Text that indicates there is no internet connectivity -->
+        <!-- Text that indicates there is no internet connectivity. Visible when offline. -->
         <TextView
             android:id="@+id/tv_empty_offline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_wifi"
             android:paddingStart="@dimen/padding_empty_podcasts"
             android:paddingEnd="@dimen/padding_empty_podcasts"
             android:paddingBottom="@dimen/padding_bottom_empty_podcasts"

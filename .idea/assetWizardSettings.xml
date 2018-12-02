@@ -14,9 +14,11 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_download_outline" />
+                            <entry key="height" value="100" />
+                            <entry key="outputName" value="ic_magnifier" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="D:\downloads-d\download_outline.svg" />
+                            <entry key="sourceFile" value="D:\downloads-d\magnifier.svg" />
+                            <entry key="width" value="100" />
                           </map>
                         </option>
                       </PersistentState>
