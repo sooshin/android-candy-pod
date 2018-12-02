@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "1072367271639",
+    "firebase_url": "https://candypod-46eab.firebaseio.com",
+    "project_id": "candypod-46eab",
+    "storage_bucket": "candypod-46eab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072367271639:android:50d6ef6f3c3a454a",
+        "android_client_info": {
+          "package_name": "com.example.android.candypod.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072367271639-g27pjt7amtl1jtbgqgfunklgjt5srrdq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOv_j5aBF1295DwZ9sc9hctFBCA0cjvcI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1072367271639:android:e0e0180b63bf8e82",
+        "android_client_info": {
+          "package_name": "com.example.android.candypod.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1072367271639-g27pjt7amtl1jtbgqgfunklgjt5srrdq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOv_j5aBF1295DwZ9sc9hctFBCA0cjvcI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
