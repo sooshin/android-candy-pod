@@ -30,6 +30,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.R;
+import com.example.android.candypod.analytics.Analytics;
 import com.example.android.candypod.data.PodcastEntry;
 import com.example.android.candypod.databinding.ActivityDetailBinding;
 import com.example.android.candypod.model.rss.Item;
@@ -37,6 +38,7 @@ import com.example.android.candypod.service.PodcastService;
 import com.example.android.candypod.ui.nowplaying.NowPlayingActivity;
 import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +80,9 @@ public class DetailActivity extends AppCompatActivity
      * NowPlayingActivity via Intent */
     private String mPodcastImage;
 
+    /** Member variable for FirebaseAnalytics */
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +101,9 @@ public class DetailActivity extends AppCompatActivity
         showUpButton();
         // Show the title in the app bar when a CollapsingToolbarLayout is fully collapsed
         setCollapsingToolbarTitle();
+
+        // Get the FirebaseAnalytics instance
+        mFirebaseAnalytics = Analytics.getInstance(this);
     }
 
     /**
@@ -279,5 +287,7 @@ public class DetailActivity extends AppCompatActivity
         // Start the PodcastService
         startService(serviceIntent);
 
+        // Log select content event when a user has selected content in an app
+        Analytics.logEventSelectContent(mResultName, item.getTitle());
     }
 }

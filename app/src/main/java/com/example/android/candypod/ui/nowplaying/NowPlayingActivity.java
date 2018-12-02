@@ -47,6 +47,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.AppExecutors;
 import com.example.android.candypod.R;
+import com.example.android.candypod.analytics.Analytics;
 import com.example.android.candypod.data.CandyPodDatabase;
 import com.example.android.candypod.data.DownloadEntry;
 import com.example.android.candypod.data.FavoriteEntry;
@@ -60,6 +61,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import com.google.android.exoplayer2.offline.DownloadManager;
 import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
 import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
@@ -117,6 +119,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     /** Member variable for the DownloadEntryViewModel to store and manage LiveData DownloadEntry */
     private DownloadEntryViewModel mDownloadEntryViewModel;
 
+    /** Member variable for FirebaseAnalytics */
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +148,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         setTitle(getString(R.string.space));
         // Show the up button on the Toolbar
         showUpButton();
+
+        // Get the FirebaseAnalytics instance
+        mFirebaseAnalytics = Analytics.getInstance(this);
     }
 
     /**
@@ -473,6 +481,9 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
                 .createChooserIntent();
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         startActivity(shareIntent);
+
+        // Log share event when a user has shared the episode
+        Analytics.logEventShare(mPodcastName, mItem.getTitle());
     }
 
     /**

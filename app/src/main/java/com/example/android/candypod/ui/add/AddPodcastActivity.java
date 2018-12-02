@@ -32,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.android.candypod.R;
+import com.example.android.candypod.analytics.Analytics;
 import com.example.android.candypod.databinding.ActivityAddPodcastBinding;
 import com.example.android.candypod.model.Feed;
 import com.example.android.candypod.model.ITunesResponse;
@@ -41,6 +42,7 @@ import com.example.android.candypod.ui.search.SearchResultsActivity;
 import com.example.android.candypod.ui.subscribe.SubscribeActivity;
 import com.example.android.candypod.utilities.CandyPodUtils;
 import com.example.android.candypod.utilities.InjectorUtils;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +70,9 @@ public class AddPodcastActivity extends AppCompatActivity
     /** ViewModel for AddPodcastActivity */
     private AddPodViewModel mAddPodViewModel;
 
+    /** Member variable for FirebaseAnalytics */
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +89,9 @@ public class AddPodcastActivity extends AppCompatActivity
 
         // Show the up button in the action bar
         showUpButton();
+
+        // Get the FirebaseAnalytics instance
+        mFirebaseAnalytics = Analytics.getInstance(this);
     }
 
     /**
@@ -181,6 +189,10 @@ public class AddPodcastActivity extends AppCompatActivity
                 intent.setAction(Intent.ACTION_SEARCH);
                 intent.putExtra(SearchManager.QUERY, s);
                 startActivity(intent);
+
+                // Log search event when a user searches in the app
+                Analytics.logEventSearch(s);
+
                 return true;
             }
 
