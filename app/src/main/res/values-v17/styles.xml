@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright 2018 Soojeong Shin
   ~
@@ -15,41 +16,6 @@
   -->
 
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <!-- Theme applied to the SubscribeActivity -->
-    <style name="Theme.Subscribe" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@android:color/white</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <!-- Theme applied to the DetailActivity -->
-    <style name="Theme.Subscribe.Detail" >
-
-    </style>
-
-    <!-- Theme applied to the NowPlayingActivity -->
-    <style name="Theme.Subscribe.NowPlaying" >
-
-    </style>
-
     <!-- Style for an empty view -->
     <style name="EmptyTextViewStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -60,7 +26,7 @@
         <item name="android:paddingEnd">@dimen/padding_empty_podcasts</item>
         <item name="android:paddingRight">@dimen/padding_empty_podcasts</item>
         <item name="android:paddingBottom">@dimen/padding_bottom_empty_podcasts</item>
+        <item name="android:textAlignment">center</item>
         <item name="android:textSize">18sp</item>
     </style>
-
 </resources>
