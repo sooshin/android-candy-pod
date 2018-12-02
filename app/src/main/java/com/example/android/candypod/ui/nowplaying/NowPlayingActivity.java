@@ -72,6 +72,7 @@ import static com.example.android.candypod.utilities.Constants.EXTRA_PODCAST_IMA
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.SHARE_INTENT_TYPE_TEXT;
+import static com.example.android.candypod.utilities.Constants.TYPE_AUDIO;
 
 /**
  * Reference: @see "https://developer.android.com/guide/topics/media-apps/audio-app/building-a-mediabrowser-client"
@@ -176,6 +177,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
 
         // Extract the enclosure URL
         mEnclosureUrl = mItem.getEnclosures().get(0).getUrl();
+        // If the current episode is not audio, displays a snackbar message.
+        handleEnclosureType();
     }
 
     /**
@@ -383,6 +386,25 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         if (actionBar != null) {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    /**
+     * This app currently only supports audio podcasts. If the current episode is not audio,
+     * displays a snackbar message.
+     */
+    private void handleEnclosureType() {
+        String enclosureType = mItem.getEnclosures().get(0).getType();
+        if (!enclosureType.equals(TYPE_AUDIO)) {
+            String snackMessage = getString(R.string.snackbar_support_audio);
+            Snackbar snackbar = Snackbar.make(mNowPlayingBinding.coordinator, snackMessage, Snackbar.LENGTH_LONG);
+            // Set the background color of the snackbar
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(Color.RED);
+            // Set the text color of the snackbar
+            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+            textView.setTextColor(Color.WHITE);
+            snackbar.show();
         }
     }
 
