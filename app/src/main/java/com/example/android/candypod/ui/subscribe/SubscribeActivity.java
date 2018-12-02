@@ -32,6 +32,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -195,12 +196,20 @@ public class SubscribeActivity extends AppCompatActivity {
 
                     List<LookupResult> lookupResults = lookupResponse.getLookupResults();
                     String feedUrl = lookupResults.get(0).getFeedUrl();
-                    Timber.e("feedUrl: " + feedUrl);
-
-                    // Get the RssFeedViewModel from the factory
-                    setupRssFeedViewModel(feedUrl);
-                    // Observe changes in the RssFeed
-                    observeRssFeed();
+                    Timber.e(feedUrl);
+                    // Check if the feedUrl exists
+                    if (TextUtils.isEmpty(feedUrl)) {
+                        // If the feedUrl is null, show a toast message
+                        Toast.makeText(SubscribeActivity.this,
+                                getString(R.string.toast_feed_url_null), Toast.LENGTH_SHORT).show();
+                        // Hide the loading indicator
+                        mSubscribeBinding.setIsLoading(false);
+                    } else {
+                        // Get the RssFeedViewModel from the factory
+                        setupRssFeedViewModel(feedUrl);
+                        // Observe changes in the RssFeed
+                        observeRssFeed();
+                    }
                 }
             }
         });

@@ -83,6 +83,7 @@
     <string name="toast_download_completed">Download completed</string>
     <string name="toast_remove_downloaded_episode">Remove downloaded episode</string>
     <string name="toast_download_failed">Download failed</string>
+    <string name="toast_feed_url_null">The podcast feed URL is null</string>
 
     <!-- Snackbar messages -->
     <string name="snackbar_subscribed">Subscribed</string>
