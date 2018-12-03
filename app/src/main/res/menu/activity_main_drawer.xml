@@ -25,10 +25,6 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/podcasts" />
         <item
-            android:id="@+id/nav_playlists"
-            android:icon="@drawable/ic_menu_playlist"
-            android:title="@string/playlists" />
-        <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_menu_favorite"
             android:title="@string/favorites" />

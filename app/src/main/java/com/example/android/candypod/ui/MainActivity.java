@@ -30,7 +30,6 @@ import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.ActivityMainBinding;
 import com.example.android.candypod.ui.downloads.DownloadsFragment;
 import com.example.android.candypod.ui.favorites.FavoritesFragment;
-import com.example.android.candypod.ui.playlists.PlaylistsFragment;
 import com.example.android.candypod.ui.podcasts.PodcastsFragment;
 
 import timber.log.Timber;
@@ -109,10 +108,6 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_podcasts) {
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, new PodcastsFragment())
-                    .commit();
-        } else if (id == R.id.nav_playlists) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, new PlaylistsFragment())
                     .commit();
         } else if (id == R.id.nav_favorites) {
             fragmentManager.beginTransaction()
