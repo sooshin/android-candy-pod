@@ -213,6 +213,8 @@ public class SubscribeActivity extends AppCompatActivity {
                 }
             }
         });
+        // Hide the loading indicator
+        mSubscribeBinding.setIsLoading(false);
     }
 
     /**
