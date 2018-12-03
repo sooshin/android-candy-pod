@@ -24,12 +24,14 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.analytics.Analytics;
@@ -226,17 +228,30 @@ public class AddPodcastActivity extends AppCompatActivity
      * This callback is invoked when you click on an item in the list.
      *
      * @param result Result object
+     * @param imageView The shared element
      */
     @Override
-    public void onItemClick(Result result) {
+    public void onItemClick(Result result, ImageView imageView) {
         // Create the Intent that will start the SubscribeActivity
         Intent intent = new Intent(this, SubscribeActivity.class);
         // Pass the podcast ID
         intent.putExtra(EXTRA_RESULT_ID, result.getId());
         // Pass the podcast title
         intent.putExtra(EXTRA_RESULT_NAME, result.getName());
-        // Once the Intent has been created, start the SubscribeActivity
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Apply the shared element transition to the podcast image
+            String transitionName = imageView.getTransitionName();
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    imageView,
+                    transitionName
+            ).toBundle();
+            startActivity(intent, bundle);
+        } else {
+            // Once the Intent has been created, start the SubscribeActivity
+            startActivity(intent);
+        }
     }
 
     /**

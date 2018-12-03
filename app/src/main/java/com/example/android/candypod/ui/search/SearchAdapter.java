@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
@@ -37,7 +38,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private final SearchAdapterOnClickHandler mOnClickHandler;
 
     public interface SearchAdapterOnClickHandler {
-        void onItemClick(SearchResult searchResult);
+        void onItemClick(SearchResult searchResult, ImageView imageView);
     }
 
     public SearchAdapter(List<SearchResult> searchResults, SearchAdapterOnClickHandler onClickHandler) {
@@ -100,7 +101,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             SearchResult searchResult = mSearchResults.get(adapterPosition);
-            mOnClickHandler.onItemClick(searchResult);
+            mOnClickHandler.onItemClick(searchResult, mSearchListItemBinding.ivArtwork);
         }
     }
 }

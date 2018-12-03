@@ -104,4 +104,8 @@
     <string name="pref_podcast_title_key" translatable="false">pref_podcast_title</string>
     <string name="pref_episode_title_key" translatable="false">pref_episode_title</string>
     <string name="pref_episode_image_key" translatable="false">pref_episode_image</string>
+
+    <!-- The transition name -->
+    <string name="transition_detail" translatable="false">transition_detail</string>
+    <string name="transition_subscribe" translatable="false">transition_subscribe</string>
 </resources>

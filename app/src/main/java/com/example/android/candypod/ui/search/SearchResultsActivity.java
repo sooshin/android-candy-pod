@@ -23,9 +23,11 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.candypod.R;
@@ -172,9 +174,10 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
      * This callback is invoked when you click on an item in the list.
      * Once the Intent has been created, starts the {@link SubscribeActivity}
      * @param searchResult The {@link SearchResult} that was clicked
+     * @param imageView The shared element
      */
     @Override
-    public void onItemClick(SearchResult searchResult) {
+    public void onItemClick(SearchResult searchResult, ImageView imageView) {
         // Get the podcast ID and name
         String podcastId = String.valueOf(searchResult.getCollectionId());
         String podcastName = searchResult.getCollectionName();
@@ -184,7 +187,20 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
         intent.putExtra(EXTRA_RESULT_ID, podcastId);
         // Pass the podcast title which will be used to set the title in the app bar
         intent.putExtra(EXTRA_RESULT_NAME, podcastName);
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Apply the shared element transition to the podcast image
+            String transitionName = imageView.getTransitionName();
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    imageView,
+                    transitionName
+            ).toBundle();
+            startActivity(intent, bundle);
+        } else {
+            // Once the Intent has been created, start the SubscribeActivity
+            startActivity(intent);
+        }
     }
 
     /**

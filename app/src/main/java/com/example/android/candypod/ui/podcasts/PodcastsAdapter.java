@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.AppExecutors;
@@ -60,7 +61,7 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
      * The interface that receives onClick messages.
      */
     public interface PodcastsAdapterOnClickHandler {
-        void onPodcastClick(PodcastEntry podcastEntry);
+        void onPodcastClick(PodcastEntry podcastEntry, ImageView imageView);
     }
 
     /**
@@ -155,7 +156,7 @@ public class PodcastsAdapter extends RecyclerView.Adapter<PodcastsAdapter.Podcas
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             PodcastEntry podcastEntry = mPodcastEntries.get(adapterPosition);
-            mOnClickHandler.onPodcastClick(podcastEntry);
+            mOnClickHandler.onPodcastClick(podcastEntry, mPodcastsListItemBinding.ivArtwork);
         }
 
         /**

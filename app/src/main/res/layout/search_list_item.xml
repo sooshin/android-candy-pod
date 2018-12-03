@@ -33,6 +33,7 @@
                 android:layout_height="0dp"
                 android:contentDescription="@string/artwork_content_description"
                 android:scaleType="centerCrop"
+                android:transitionName="@string/transition_subscribe"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

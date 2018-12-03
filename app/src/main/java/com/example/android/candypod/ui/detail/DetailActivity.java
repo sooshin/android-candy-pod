@@ -215,7 +215,8 @@ public class DetailActivity extends AppCompatActivity
      */
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        // Allow the animation to be reversed
+        supportFinishAfterTransition();
         return true;
     }
 

@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
@@ -44,7 +45,7 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
      * The interface that receives onClick messages.
      */
     public interface AddPodcastAdapterOnClickHandler {
-        void onItemClick(Result result);
+        void onItemClick(Result result, ImageView imageView);
     }
 
     /**
@@ -159,7 +160,7 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             Result result = mResults.get(adapterPosition);
-            mOnClickHandler.onItemClick(result);
+            mOnClickHandler.onItemClick(result, mAddPodListItemBinding.ivArtwork);
         }
     }
 }

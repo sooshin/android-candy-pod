@@ -21,4 +21,39 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowReenterTransition">@transition/main_reenter</item>
+    </style>
+
+    <!-- Theme applied to the DetailActivity -->
+    <style name="Theme.Subscribe.Detail" >
+
+        <!-- Enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/detail_enter</item>
+        <item name="android:windowReturnTransition">@transition/detail_return</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_photo</item>
+        <item name="android:windowSharedElementExitTransition">@transition/shared_photo</item>
+    </style>
+
+    <!-- Theme applied to the SubscribeActivity -->
+    <style name="Theme.Subscribe" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- Enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_photo</item>
+    </style>
 </resources>
