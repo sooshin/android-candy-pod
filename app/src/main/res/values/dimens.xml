@@ -45,6 +45,12 @@
     <dimen name="card_corner_radius">0dp</dimen>
     <dimen name="card_margin_subscribe">3dp</dimen>
     <dimen name="card_content_padding">8dp</dimen>
+    <dimen name="card_margin_add_pod">4dp</dimen>
+    <dimen name="card_margin_pod">1dp</dimen>
+
+    <!-- Size of ImageButton -->
+    <dimen name="size_image_bt">56dp</dimen>
+    <dimen name="widget_size_image_bt">40dp</dimen>
 
     <!-- Margins for the empty view -->
     <dimen name="padding_empty_podcasts">32dp</dimen>

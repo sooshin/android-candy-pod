@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/widget_artwork"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/size_image_item"
+        android:layout_height="@dimen/size_image_item"
         android:contentDescription="@string/artwork_content_description"
         android:scaleType="centerCrop" />
 
@@ -53,8 +53,8 @@
 
     <ImageButton
         android:id="@+id/widget_play_pause"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/widget_size_image_bt"
+        android:layout_height="@dimen/widget_size_image_bt"
         android:layout_below="@+id/widget_podcast_title"
         android:layout_toEndOf="@+id/widget_artwork"
         android:layout_toRightOf="@+id/widget_artwork"
