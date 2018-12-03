@@ -83,7 +83,7 @@ public class AddPodcastActivity extends AppCompatActivity
         // Create a GridLayoutManager and AddPodcastAdapter, and set them to the RecyclerView
         initAdapter();
 
-        String country = "us";
+        String country = getString(R.string.country_us);
         // Get the ViewModel from the factory
         setupViewModel(country);
         // Observe changes in the ITunesResponse

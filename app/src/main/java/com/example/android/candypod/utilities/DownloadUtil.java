@@ -29,6 +29,9 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 
+import static com.example.android.candypod.utilities.Constants.FILE_ACTIONS;
+import static com.example.android.candypod.utilities.Constants.FILE_DOWNLOADS;
+
 /**
  * Reference: @see "https://github.com/google/ExoPlayer/tree/io18"
  */
@@ -44,7 +47,7 @@ public class DownloadUtil {
     public static synchronized Cache getCache(Context context) {
         if (sCache == null) {
             // Create a file which points to a directory where we're going to store the downloads
-            File cacheDirectory = new File(context.getExternalFilesDir(null), "downloads");
+            File cacheDirectory = new File(context.getExternalFilesDir(null), FILE_DOWNLOADS);
             // Instantiate a simple cache
             sCache = new SimpleCache(cacheDirectory, new NoOpCacheEvictor());
         }
@@ -58,7 +61,7 @@ public class DownloadUtil {
         if (sDownloadManager == null) {
             // Create a file, because it needs to persist some information about downloads that are
             // in progress
-            File actionFile = new File(context.getExternalCacheDir(), "actions");
+            File actionFile = new File(context.getExternalCacheDir(), FILE_ACTIONS);
             // Instantiate a DownloadManager
             sDownloadManager =
                     new DownloadManager(

@@ -83,6 +83,7 @@
     <string name="toast_remove_downloaded_episode">Remove downloaded episode</string>
     <string name="toast_download_failed">Download failed</string>
     <string name="toast_feed_url_null">The podcast feed URL is null</string>
+    <string name="toast_query">query:\u0020</string>
 
     <!-- Snackbar messages -->
     <string name="snackbar_subscribed">Subscribed</string>
@@ -108,4 +109,6 @@
     <!-- The transition name -->
     <string name="transition_detail" translatable="false">transition_detail</string>
     <string name="transition_subscribe" translatable="false">transition_subscribe</string>
+
+    <string name="country_us" translatable="false">us</string>
 </resources>

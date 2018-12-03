@@ -103,8 +103,8 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             mQuery = intent.getStringExtra(SearchManager.QUERY);
-            //
-            Toast.makeText(this, "query: " + mQuery, Toast.LENGTH_SHORT).show();
+            // Show a toast message to display the query string
+            Toast.makeText(this, getString(R.string.toast_query) + mQuery, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -134,7 +134,8 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     private void setupViewModel() {
         if (mQuery != null) {
             SearchViewModelFactory searchFactory = InjectorUtils.provideSearchViewModelFactory(
-                    this, I_TUNES_SEARCH, "us", SEARCH_MEDIA_PODCAST, mQuery);
+                    this, I_TUNES_SEARCH, getString(R.string.country_us),
+                    SEARCH_MEDIA_PODCAST, mQuery);
             mSearchViewModel = ViewModelProviders.of(this, searchFactory).get(SearchViewModel.class);
         }
     }

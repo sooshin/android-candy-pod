@@ -118,4 +118,9 @@ public class Constants {
     /** The enclosure type */
     public static final String TYPE_AUDIO = "audio/mpeg";
 
+    /** Cache directory */
+    public static final String FILE_DOWNLOADS = "downloads";
+    /** Action file */
+    public static final String FILE_ACTIONS = "actions";
+
 }
