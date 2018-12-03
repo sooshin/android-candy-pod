@@ -461,7 +461,6 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         @Override
         public void onRewind() {
             mExoPlayer.seekTo(Math.max(mExoPlayer.getCurrentPosition() - REWIND_INCREMENT, 0));
-            Timber.e("onRewind:");
         }
 
         @Override
