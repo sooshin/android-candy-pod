@@ -35,6 +35,7 @@
     <dimen name="size_image_subscribe">130dp</dimen>
     <dimen name="size_image_detail">130dp</dimen>
     <dimen name="size_image_item">80dp</dimen>
+    <dimen name="size_image_nav">60dp</dimen>
 
     <!-- FAB -->
     <dimen name="fab_margin">16dp</dimen>

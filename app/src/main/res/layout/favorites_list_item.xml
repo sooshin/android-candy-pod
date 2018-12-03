@@ -57,7 +57,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/color_pod_title_list"
                 app:layout_constraintStart_toEndOf="@+id/iv_episode"
                 app:layout_constraintTop_toTopOf="@+id/iv_episode"
                 tools:text="podcast title" />

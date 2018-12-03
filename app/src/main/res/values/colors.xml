@@ -16,9 +16,9 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimaryDark">#7B1FA2</color>
+    <color name="colorAccent">#c6ff00</color>
 
     <!-- Colors used to gradient scrim -->
     <color name="color_start_gradient">#00000000</color>
@@ -32,4 +32,12 @@
     <color name="color_start_now_land">#99000000</color>
     <color name="color_center_now_land">#66000000</color>
     <color name="color_end_now_land">#40000000</color>
+
+    <!-- The gradient colors for side_nav_bar -->
+    <color name="color_start_nav">#E6EE9C</color>
+    <color name="color_center_nav">#CDDC39</color>
+    <color name="color_end_nav">#C0CA33</color>
+
+    <!-- Text color for the podcast title in the list item -->
+    <color name="color_pod_title_list">#00796b</color>
 </resources>
