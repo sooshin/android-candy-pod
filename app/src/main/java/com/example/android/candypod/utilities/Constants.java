@@ -86,6 +86,7 @@ public class Constants {
 
     /** The pubDate pattern */
     public static final String PUB_DATE_PATTERN = "EEE, d MMM yyyy HH:mm:ss Z";
+    public static final String PUB_DATE_PATTERN_TIME_ZONE = "EEE, d MMM yyyy HH:mm z";
     /** The formatted date pattern */
     public static final String FORMATTED_PATTERN = "MMM d, yyyy";
 

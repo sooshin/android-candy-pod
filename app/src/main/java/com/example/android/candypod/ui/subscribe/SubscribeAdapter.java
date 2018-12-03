@@ -167,9 +167,11 @@ public class SubscribeAdapter extends RecyclerView.Adapter<SubscribeAdapter.Subs
 
             // Get the pub date of an episode
             String pubDate = item.getPubDate();
-            // Convert the pub date into something to display to users
-            String formattedPubDate = CandyPodUtils.getFormattedDateString(pubDate);
-            mSubscribeListItemBinding.tvItemPubDate.setText(formattedPubDate);
+            if (pubDate != null) {
+                // Convert the pub date into something to display to users
+                String formattedPubDate = CandyPodUtils.getFormattedDateString(pubDate);
+                mSubscribeListItemBinding.tvItemPubDate.setText(formattedPubDate);
+            }
 
             // Get the duration of an episode
             String iTunesDuration = item.getITunesDuration();

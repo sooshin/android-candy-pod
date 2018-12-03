@@ -48,6 +48,7 @@ import timber.log.Timber;
 
 import static com.example.android.candypod.utilities.Constants.FORMATTED_PATTERN;
 import static com.example.android.candypod.utilities.Constants.PUB_DATE_PATTERN;
+import static com.example.android.candypod.utilities.Constants.PUB_DATE_PATTERN_TIME_ZONE;
 import static com.example.android.candypod.utilities.Constants.REQUEST_METHOD_GET;
 
 public class CandyPodUtils {
@@ -65,6 +66,31 @@ public class CandyPodUtils {
             currentTime = simpleDateFormat.parse(pubDate);
         } catch (ParseException e) {
             Timber.e("Error formatting date: " + e.getMessage());
+            // If the pubDate pattern is different from "Tue, 25 Nov 2018 05:00:00 -0000",
+            // use getFormattedDateStringFromGmt() method.
+            return getFormattedDateStringFromGmt(pubDate);
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat(FORMATTED_PATTERN, Locale.US);
+        return formatter.format(currentTime);
+    }
+
+    /**
+     * Converts the publication date into something to display to users.
+     *
+     * @param pubDate The publication date (i.e. Tue, 25 Nov 2018 05:00 GMT)
+     * @return The formatted date (i.e. Nov 25, 2018)
+     */
+    private static String getFormattedDateStringFromGmt(String pubDate) {
+        SimpleDateFormat simpleDateFormat =
+                new SimpleDateFormat(PUB_DATE_PATTERN_TIME_ZONE, Locale.US);
+        Date currentTime = null;
+        try {
+            currentTime = simpleDateFormat.parse(pubDate);
+        } catch (ParseException e) {
+            Timber.e("Error formatting date: " + e.getMessage());
+            // If failed converting a date, use pubDate.
+            return pubDate;
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat(FORMATTED_PATTERN, Locale.US);
@@ -84,6 +110,10 @@ public class CandyPodUtils {
         URL url = createUrl(urlString);
         Bitmap bitmap = null;
         try {
+            // If the URL is null, then return early
+            if (url == null) {
+                return null;
+            }
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod(REQUEST_METHOD_GET);
             connection.connect();
