@@ -16,6 +16,7 @@
 
 package com.example.android.candypod.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -31,9 +32,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.AppWidgetTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.android.candypod.R;
+import com.example.android.candypod.ui.MainActivity;
 
 import static com.example.android.candypod.utilities.Constants.PREF_DEF_VALUE;
 import static com.example.android.candypod.utilities.Constants.SIZE_BITMAP;
+import static com.example.android.candypod.utilities.Constants.WIDGET_PENDING_INTENT_ID;
 
 /**
  * Implementation of App Widget functionality.
@@ -56,6 +59,12 @@ public class PodcastWidgetProvider extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_episode_title, episodeTitle);
         views.setTextViewText(R.id.widget_podcast_title, podcastTitle);
         loadImage(context, views, appWidgetId, episodeImage);
+
+        // Create a pending intent that relaunches the MainActivity
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, WIDGET_PENDING_INTENT_ID,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setOnClickPendingIntent(R.id.widget_artwork, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

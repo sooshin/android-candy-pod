@@ -76,6 +76,7 @@ public class Constants {
 
     /** The pending intent id is used to uniquely reference the pending intent */
     public static final int NOTIFICATION_PENDING_INTENT_ID = 0;
+    public static final int WIDGET_PENDING_INTENT_ID = 1;
 
     /** The fast forward increment and rewind increment (milliseconds) */
     public static final int FAST_FORWARD_INCREMENT = 30000; // 30 sec
