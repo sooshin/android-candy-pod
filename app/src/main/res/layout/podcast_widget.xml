@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -22,44 +22,72 @@
     android:padding="@dimen/widget_margin">
 
     <ImageView
-        android:id="@+id/widget_artwork"
         android:layout_width="@dimen/size_image_item"
         android:layout_height="@dimen/size_image_item"
-        android:contentDescription="@string/artwork_content_description"
-        android:scaleType="centerCrop" />
+        android:contentDescription="@string/widget_empty_content_des"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:src="@drawable/ic_candy" />
 
-    <TextView
-        android:id="@+id/widget_episode_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/widget_artwork"
-        android:layout_toRightOf="@+id/widget_artwork"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@android:color/white"
-        tools:text="episode title" />
+    <RelativeLayout
+        android:id="@+id/widget_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/widget_podcast_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/widget_episode_title"
-        android:layout_toEndOf="@+id/widget_artwork"
-        android:layout_toRightOf="@+id/widget_artwork"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@android:color/white"
-        tools:text="podcast title" />
+        <!-- The episode image -->
+        <ImageView
+            android:id="@+id/widget_artwork"
+            android:layout_width="@dimen/size_image_item"
+            android:layout_height="@dimen/size_image_item"
+            android:contentDescription="@string/artwork_content_description"
+            android:scaleType="centerCrop" />
 
-    <ImageButton
-        android:id="@+id/widget_play_pause"
-        android:layout_width="@dimen/widget_size_image_bt"
-        android:layout_height="@dimen/widget_size_image_bt"
-        android:layout_below="@+id/widget_podcast_title"
-        android:layout_toEndOf="@+id/widget_artwork"
-        android:layout_toRightOf="@+id/widget_artwork"
-        android:background="@null"
-        android:contentDescription="@string/play_pause_content_description"
-        android:scaleType="centerCrop" />
+        <!-- The episode title -->
+        <TextView
+            android:id="@+id/widget_episode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/margin_vertical_4"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@+id/widget_artwork"
+            android:layout_toRightOf="@+id/widget_artwork"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            tools:text="episode title" />
 
-</RelativeLayout>
+        <!-- The podcast title -->
+        <TextView
+            android:id="@+id/widget_podcast_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/widget_episode_title"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@+id/widget_artwork"
+            android:layout_toRightOf="@+id/widget_artwork"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            tools:text="podcast title" />
+
+        <ImageButton
+            android:id="@+id/widget_play_pause"
+            android:layout_width="@dimen/widget_size_image_bt"
+            android:layout_height="@dimen/widget_size_image_bt"
+            android:layout_below="@+id/widget_podcast_title"
+            android:layout_toEndOf="@+id/widget_artwork"
+            android:layout_toRightOf="@+id/widget_artwork"
+            android:background="@null"
+            android:contentDescription="@string/play_pause_content_description"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</FrameLayout>
