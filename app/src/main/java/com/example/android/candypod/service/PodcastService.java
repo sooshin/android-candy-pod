@@ -30,6 +30,7 @@ import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.model.rss.Item;
@@ -495,7 +496,8 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
-
+        Timber.e("onPlayerError: " + error.getMessage());
+        Toast.makeText(this, getString(R.string.toast_source_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override

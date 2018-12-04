@@ -85,6 +85,7 @@
     <string name="toast_download_failed">Download failed</string>
     <string name="toast_feed_url_null">The podcast feed URL is null</string>
     <string name="toast_query">query:\u0020</string>
+    <string name="toast_source_error">Source error</string>
 
     <!-- Snackbar messages -->
     <string name="snackbar_subscribed">Subscribed</string>
