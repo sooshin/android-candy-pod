@@ -141,6 +141,7 @@
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
                             android:layout_marginLeft="@dimen/activity_horizontal_margin"
                             android:layout_marginTop="@dimen/margin_vertical_small"
+                            android:nextFocusDown="@+id/rv_item"
                             android:onClick="onSubscribeClick"
                             android:text="@string/subscribe"
                             android:visibility="gone"
@@ -217,6 +218,8 @@
                 android:id="@+id/rv_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:descendantFocusability="afterDescendants"
+                android:nextFocusUp="@+id/bt_subscribe"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         </android.support.design.widget.CoordinatorLayout>

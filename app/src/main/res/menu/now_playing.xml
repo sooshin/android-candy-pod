@@ -19,19 +19,26 @@
 
     <item
         android:id="@+id/action_download"
+        android:focusable="true"
         android:icon="@drawable/ic_menu_download"
+        android:nextFocusRight="@+id/action_favorite"
         android:title="@string/action_download"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_favorite"
+        android:focusable="true"
         android:icon="@drawable/ic_favorite_border"
+        android:nextFocusLeft="@+id/action_download"
+        android:nextFocusRight="@+id/action_share"
         android:title="@string/action_favorite"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_share"
+        android:focusable="true"
         android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        android:nextFocusLeft="@+id/action_favorite"
         android:title="@string/action_share"
         app:showAsAction="ifRoom" />
 </menu>

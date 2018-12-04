@@ -20,8 +20,9 @@
     Reference: @see "https://developer.android.com/training/search/setup#add-sv" -->
     <item
         android:id="@+id/action_search"
+        android:focusable="true"
         android:icon="@drawable/ic_search"
         android:title="@string/action_search"
-        app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
 </menu>

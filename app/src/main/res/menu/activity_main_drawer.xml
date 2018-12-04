@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2018 Soojeong Shin
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +21,22 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_podcasts"
+            android:focusable="true"
             android:icon="@drawable/ic_menu_home"
+            android:nextFocusDown="@+id/nav_favorites"
             android:title="@string/podcasts" />
         <item
             android:id="@+id/nav_favorites"
+            android:focusable="true"
             android:icon="@drawable/ic_menu_favorite"
+            android:nextFocusUp="@+id/nav_podcasts"
+            android:nextFocusDown="@+id/nav_downloads"
             android:title="@string/favorites" />
         <item
             android:id="@+id/nav_downloads"
+            android:focusable="true"
             android:icon="@drawable/ic_menu_download"
+            android:nextFocusUp="@+id/nav_favorites"
             android:title="@string/downloads" />
     </group>
 
