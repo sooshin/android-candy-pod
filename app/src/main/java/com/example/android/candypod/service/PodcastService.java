@@ -368,7 +368,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mMediaSession.release();
         // If the player is released it must be removed from the manager by calling setPlayer(null)
         // which will cancel the notification
-        mPlayerNotificationManager.setPlayer(null);
+        if (mPlayerNotificationManager != null) {
+            mPlayerNotificationManager.setPlayer(null);
+        }
         releasePlayer();
 
         super.onDestroy();
