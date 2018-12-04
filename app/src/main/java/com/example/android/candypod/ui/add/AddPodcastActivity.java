@@ -49,6 +49,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ARTWORK_100;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
@@ -257,6 +258,8 @@ public class AddPodcastActivity extends AppCompatActivity
         intent.putExtra(EXTRA_RESULT_ID, result.getId());
         // Pass the podcast title
         intent.putExtra(EXTRA_RESULT_NAME, result.getName());
+        // Pass the podcast image (artworkUrl 100)
+        intent.putExtra(EXTRA_RESULT_ARTWORK_100, result.getArtworkUrl());
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Apply the shared element transition to the podcast image

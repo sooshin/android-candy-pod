@@ -65,6 +65,7 @@ import timber.log.Timber;
 import static com.example.android.candypod.utilities.Constants.BLUR_RADIUS;
 import static com.example.android.candypod.utilities.Constants.BLUR_SAMPLING;
 import static com.example.android.candypod.utilities.Constants.DEF_VIBRANT_COLOR;
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ARTWORK_100;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.I_TUNES_LOOKUP;
@@ -83,6 +84,7 @@ public class SubscribeActivity extends AppCompatActivity {
     private String mResultName;
     /** The podcast image used when there is no episode image */
     private String mPodcastImage;
+    private String mResultArtwork100;
 
     /** ViewModel for SubscribeActivity */
     private SubscribeViewModel mSubscribeViewModel;
@@ -167,6 +169,9 @@ public class SubscribeActivity extends AppCompatActivity {
         }
         if(intent.hasExtra(EXTRA_RESULT_NAME)) {
             mResultName = intent.getStringExtra(EXTRA_RESULT_NAME);
+        }
+        if(intent.hasExtra(EXTRA_RESULT_ARTWORK_100)) {
+            mResultArtwork100 = intent.getStringExtra(EXTRA_RESULT_ARTWORK_100);
         }
     }
 
@@ -261,15 +266,17 @@ public class SubscribeActivity extends AppCompatActivity {
      *                language, categories, image, items.
      */
     private void showDetails(Channel channel) {
-        // Get the two types of image URL. One has a href attribute, the other has an url element.
-        // First, use the href attribute. If the href attribute is null, use the url element.
+        // Get the image URL. If the artworkImageUrl does not exist, use mResultArtwork100
+        // which is received via Intent
         List<ArtworkImage> artworkImage = channel.getImages();
-        ArtworkImage image = artworkImage.get(0);
-        String artworkImageUrl = image.getImageHref();
-        if (artworkImageUrl == null) {
-            artworkImageUrl = artworkImage.get(1).getImageHref();
-            if (artworkImageUrl == null) {
-                artworkImageUrl = image.getImageUrl();
+        String artworkImageUrl = mResultArtwork100;
+        if (!artworkImage.isEmpty()) {
+            ArtworkImage image = artworkImage.get(0);
+            if (image != null) {
+                artworkImageUrl = image.getImageHref();
+                if (TextUtils.isEmpty(artworkImageUrl)) {
+                    artworkImageUrl = mResultArtwork100;
+                }
             }
         }
 
@@ -328,16 +335,21 @@ public class SubscribeActivity extends AppCompatActivity {
 
         // Get the categories and set the categories
         List<Category> categories = channel.getCategories();
-        for (Category category:categories) {
-            String categoryText = category.getText();
-            if (categoryText != null) {
-                mSubscribeBinding.tvCategory.append(categoryText + getString(R.string.space));
+        String categoryText;
+        if(categories != null && !categories.isEmpty()) {
+            for (Category category:categories) {
+                categoryText = category.getText();
+                if (categoryText != null) {
+                    mSubscribeBinding.tvCategory.append(categoryText + getString(R.string.space));
+                }
             }
         }
 
         // Get the language and set the text
         String language = channel.getLanguage();
-        mSubscribeBinding.tvLanguage.setText(language);
+        if (!TextUtils.isEmpty(language)) {
+            mSubscribeBinding.tvLanguage.setText(language);
+        }
 
         // Get the description
         String description = channel.getDescription();
@@ -350,9 +362,11 @@ public class SubscribeActivity extends AppCompatActivity {
 
         // Get the list of items
         mItemList = channel.getItemList();
-        // Create the PodcastEntry based on the data
-        mPodcastEntry = new PodcastEntry(mResultId, title, description, author,
-                artworkImageUrl, mItemList, new Date());
+        if (mItemList != null && !mItemList.isEmpty()) {
+            // Create the PodcastEntry based on the data
+            mPodcastEntry = new PodcastEntry(mResultId, title, description, author,
+                    artworkImageUrl, mItemList, new Date());
+        }
     }
 
     /**
@@ -362,8 +376,10 @@ public class SubscribeActivity extends AppCompatActivity {
     private void showItems(Channel channel) {
         // Get the list of items
         mItemList = channel.getItemList();
-        // Update the data source and notify the adapter of any changes.
-        mSubscribeAdapter.addAll(mItemList);
+        if (mItemList != null && !mItemList.isEmpty()) {
+            // Update the data source and notify the adapter of any changes.
+            mSubscribeAdapter.addAll(mItemList);
+        }
     }
 
     /**

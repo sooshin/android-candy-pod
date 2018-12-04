@@ -42,6 +42,7 @@ import com.example.android.candypod.utilities.InjectorUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ARTWORK_100;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
@@ -182,12 +183,15 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
         // Get the podcast ID and name
         String podcastId = String.valueOf(searchResult.getCollectionId());
         String podcastName = searchResult.getCollectionName();
+        String artwork600 = searchResult.getArtworkUrl600();
 
         Intent intent = new Intent(this, SubscribeActivity.class);
         // Pass the podcast ID which will be used to a lookup request to search for the podcast
         intent.putExtra(EXTRA_RESULT_ID, podcastId);
         // Pass the podcast title which will be used to set the title in the app bar
         intent.putExtra(EXTRA_RESULT_NAME, podcastName);
+        // Pass the podcast image
+        intent.putExtra(EXTRA_RESULT_ARTWORK_100, artwork600);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             // Apply the shared element transition to the podcast image

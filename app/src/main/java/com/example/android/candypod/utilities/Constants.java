@@ -46,6 +46,7 @@ public class Constants {
     public static final String EXTRA_ITEM = "extra_item";
     public static final String EXTRA_PODCAST_IMAGE = "extra_podcast_image";
     public static final String EXTRA_DOWNLOAD_ENTRY = "extra_download_entry";
+    public static final String EXTRA_RESULT_ARTWORK_100 = "extra_result_artwork_100";
 
     public static final String ACTION_RELEASE_OLD_PLAYER = "action_release_old_player";
 
