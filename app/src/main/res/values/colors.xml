@@ -40,4 +40,9 @@
 
     <!-- Text color for the podcast title in the list item -->
     <color name="color_pod_title_list">#00796b</color>
+
+    <!-- Selector -->
+    <color name="color_pressed">#f5f5f5</color>
+    <color name="color_focused">#f3e5f5</color>
+    <color name="color_hovered">#f3e5f5</color>
 </resources>

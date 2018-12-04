@@ -22,13 +22,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/card_margin_subscribe"
-        android:focusable="true"
-        app:contentPadding="@dimen/card_content_padding">
+        android:focusable="true">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true">
+            android:background="@drawable/list_item_focus"
+            android:focusable="true"
+            android:padding="@dimen/margin_horizontal_small">
 
             <ImageView
                 android:id="@+id/iv_detail_artwork"
