@@ -67,8 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_vertical_4"
+                app:layout_constraintBottom_toTopOf="@+id/tv_item_duration"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_item_description"
+                app:layout_constraintVertical_bias="1"
                 tools:text="pub date" />
 
             <TextView
@@ -78,6 +80,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_item_pub_date"
+                app:layout_constraintVertical_bias="1"
                 tools:text="duration" />
 
         </android.support.constraint.ConstraintLayout>
