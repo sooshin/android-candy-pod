@@ -124,4 +124,7 @@ public class Constants {
     /** Action file */
     public static final String FILE_ACTIONS = "actions";
 
+    /** A key for saving the current state */
+    public static final String STATE_SEARCH_QUERY = "state_search_query";
+
 }

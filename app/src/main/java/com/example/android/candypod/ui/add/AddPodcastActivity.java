@@ -52,6 +52,7 @@ import java.util.List;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.example.android.candypod.utilities.Constants.EXTRA_RESULT_NAME;
 import static com.example.android.candypod.utilities.Constants.GRID_AUTO_FIT_COLUMN_WIDTH;
+import static com.example.android.candypod.utilities.Constants.STATE_SEARCH_QUERY;
 
 /**
  * The AddPodcastActivity displays the list of podcasts. When the user clicks one of the podcasts
@@ -75,6 +76,11 @@ public class AddPodcastActivity extends AppCompatActivity
     /** Member variable for FirebaseAnalytics */
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    /** The search query the user entered */
+    private String mSearchQuery;
+    /** Member variable for SearchView */
+    private SearchView mSearchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +97,11 @@ public class AddPodcastActivity extends AppCompatActivity
 
         // Show the up button in the action bar
         showUpButton();
+
+        // Load the saved state if there is one
+        if (savedInstanceState != null) {
+            mSearchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
+        }
 
         // Get the FirebaseAnalytics instance
         mFirebaseAnalytics = Analytics.getInstance(this);
@@ -172,17 +183,25 @@ public class AddPodcastActivity extends AppCompatActivity
         // Reference: @see "https://developer.android.com/training/search/setup#create-sc"
         // "https://www.youtube.com/watch?v=9OWmnYPX1uc"
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        // If the search query exists, set the query.
+        if (mSearchQuery != null) {
+            mSearchView.setIconified(true);
+            mSearchView.onActionViewExpanded();
+            mSearchView.setQuery(mSearchQuery,false);
+            mSearchView.setFocusable(true);
+        }
 
         // Display a hint text in the search text field.
         // android:hint attribute in the searchable.xml is not working.
         // Reference: @see "https://stackoverflow.com/questions/37919328/searchview-hint-not-showing"
-        searchView.setQueryHint(getString(R.string.search_hint));
+        mSearchView.setQueryHint(getString(R.string.search_hint));
 
         // Set onQueryTextListener
         // Reference: @see "https://www.youtube.com/watch?v=9OWmnYPX1uc"
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             // Called when the user submits the query
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -265,5 +284,18 @@ public class AddPodcastActivity extends AppCompatActivity
             // Show a text that indicates there is no internet connectivity
             mAddPodBinding.setIsOffline(true);
         }
+    }
+
+    /**
+     * Saves the current state of this activity.
+     * Reference: @see "https://stackoverflow.com/questions/22582201/restore-state-of-androids-search-view-widget"
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Get the query string and store it to our bundle
+        mSearchQuery = mSearchView.getQuery().toString();
+        outState.putString(STATE_SEARCH_QUERY, mSearchQuery);
+        super.onSaveInstanceState(outState);
     }
 }
