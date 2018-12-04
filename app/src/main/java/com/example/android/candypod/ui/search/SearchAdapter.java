@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.SearchListItemBinding;
 import com.example.android.candypod.model.SearchResult;
@@ -89,9 +90,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
 
         void bind(SearchResult searchResult) {
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.candy_error);
 
             Glide.with(itemView.getContext())
                     .load(searchResult.getArtworkUrl600())
+                    .apply(options)
                     .into(mSearchListItemBinding.ivArtwork);
 
             mSearchListItemBinding.tvName.setText(searchResult.getCollectionName());

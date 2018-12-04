@@ -320,9 +320,13 @@ public class SubscribeActivity extends AppCompatActivity {
                 .apply(RequestOptions.bitmapTransform(new BlurTransformation(BLUR_RADIUS, BLUR_SAMPLING)))
                 .into(mSubscribeBinding.ivBlur);
 
-        // Use Glide library to upload the artwork
+        // Use Glide library to load the artwork
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.candy_error);
         Glide.with(this)
                 .load(artworkImageUrl)
+                .apply(options)
                 .into(mSubscribeBinding.ivArtwork);
 
         // Get the title and set the text

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.candypod.R;
 import com.example.android.candypod.databinding.AddPodListItemBinding;
 import com.example.android.candypod.model.Result;
@@ -144,8 +145,12 @@ public class AddPodcastAdapter extends RecyclerView.Adapter<AddPodcastAdapter.Ad
             // Get the artwork URL
             String artworkUrl = result.getArtworkUrl();
             // Use Glide library to upload the artwork image
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.candy_error);
             Glide.with(itemView.getContext())
                     .load(artworkUrl)
+                    .apply(options)
                     .into(mAddPodListItemBinding.ivArtwork);
 
             // Set the name
