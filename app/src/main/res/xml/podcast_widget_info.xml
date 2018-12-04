@@ -19,7 +19,7 @@
     android:initialLayout="@layout/podcast_widget"
     android:minWidth="@dimen/widget_size_min"
     android:minHeight="@dimen/widget_size_min"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@mipmap/ic_launcher"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen" />
