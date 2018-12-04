@@ -43,6 +43,7 @@
         <TextView
             android:id="@+id/tv_empty_favorites"
             style="@style/EmptyTextViewStyle"
+            android:textColor="@color/color_empty_favorites"
             android:visibility="gone"
             app:visibleGone="@{!hasFavorites}" />
 

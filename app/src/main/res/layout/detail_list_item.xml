@@ -60,6 +60,7 @@
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:ellipsize="end"
                 android:maxLines="3"
+                android:textColor="@color/color_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_detail_artwork"
                 app:layout_constraintTop_toTopOf="@+id/iv_detail_artwork"

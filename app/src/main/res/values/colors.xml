@@ -45,4 +45,10 @@
     <color name="color_pressed">#f5f5f5</color>
     <color name="color_focused">#f3e5f5</color>
     <color name="color_hovered">#f3e5f5</color>
+
+    <!-- Text color -->
+    <color name="color_empty_podcasts">#1a237e</color>
+    <color name="color_empty_favorites">#a645cb</color>
+    <color name="color_empty_downloads">#376a95</color>
+    <color name="color_description">#1b1b1b</color>
 </resources>

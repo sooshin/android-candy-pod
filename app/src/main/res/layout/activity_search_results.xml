@@ -61,6 +61,7 @@
             android:drawableTop="@drawable/ic_magnifier"
             android:drawablePadding="@dimen/margin_vertical_4"
             android:text="@string/empty_search_results"
+            android:textColor="@color/color_description"
             app:visibleGone="@{isEmpty}" />
 
         <!-- Text that indicates there is no internet connectivity. Visible when offline. -->

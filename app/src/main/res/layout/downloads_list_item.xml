@@ -74,6 +74,7 @@
                 android:layout_marginTop="@dimen/margin_vertical_2"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:textColor="@color/color_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_episode"
                 app:layout_constraintTop_toBottomOf="@+id/tv_podcast_title"
