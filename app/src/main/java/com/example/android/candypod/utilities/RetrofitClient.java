@@ -16,6 +16,8 @@
 
 package com.example.android.candypod.utilities;
 
+import com.example.android.candypod.BuildConfig;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -32,17 +34,20 @@ public class RetrofitClient {
 
     public static Retrofit getClient() {
         if (sRetrofit == null) {
-            // OkHttp interceptor which logs HTTP request and response data.
+            // Add OkHttp interceptor which logs HTTP request and response data only when the debug mode is true.
             // Reference: @see "https://stackoverflow.com/questions/32514410/logging-with-retrofit-2"
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+            if (BuildConfig.DEBUG_MODE) {
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                okHttpClientBuilder.addInterceptor(interceptor);
+            }
 
             // Create a Retrofit instance using the builder
             sRetrofit = new Retrofit.Builder()
                     // Set the API base URL
                     .baseUrl(I_TUNES_BASE_URL)
-                    .client(client)
+                    .client(okHttpClientBuilder.build())
                     // Use custom ConverterFactory where you delegate to either GsonConverterFactory
                     // or SimpleXmlConverterFactory
                     // Reference: @see "https://stackoverflow.com/questions/40824122/android-retrofit-2-multiple-converters-gson-simplexml-error"
