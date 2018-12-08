@@ -309,6 +309,8 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mPlayerNotificationManager.setRewindIncrementMs(REWIND_INCREMENT);
         // Omit the stop action
         mPlayerNotificationManager.setStopAction(null);
+        // Make the notification not ongoing
+        mPlayerNotificationManager.setOngoing(false);
     }
 
     /**
@@ -360,6 +362,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             mExoPlayer.stop(true);
         }
         stopSelf();
+        // Allow the notification to be swipe dismissed when paused
+        // Reference: @see "https://stackoverflow.com/questions/26496670/dismissing-mediastyle-notifications"
+        mPlayerNotificationManager.setOngoing(false);
     }
 
 
