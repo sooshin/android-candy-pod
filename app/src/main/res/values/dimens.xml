@@ -41,6 +41,9 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
 
+    <!-- Rounded button -->
+    <dimen name="btn_rounded_radius">30dp</dimen>
+
     <!-- CardView -->
     <dimen name="card_corner_radius">0dp</dimen>
     <dimen name="card_margin_subscribe">3dp</dimen>

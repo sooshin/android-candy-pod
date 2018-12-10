@@ -109,13 +109,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
                             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="?android:attr/actionBarSize"
+                            android:layout_marginBottom="@dimen/margin_vertical_4"
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toTopOf="@+id/tv_author"
                             app:layout_constraintEnd_toEndOf="@+id/right_guideline"
                             app:layout_constraintStart_toEndOf="@+id/iv_artwork"
-                            app:layout_constraintTop_toTopOf="parent"
                             tools:text="Bag Man" />
 
                         <TextView
@@ -125,29 +125,31 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
                             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                            android:layout_marginTop="@dimen/margin_vertical_4"
+                            android:layout_marginBottom="@dimen/margin_vertical_small"
                             android:ellipsize="end"
                             android:maxLines="2"
                             android:textColor="@android:color/white"
+                            app:layout_constraintBottom_toTopOf="@+id/iv_palette"
                             app:layout_constraintEnd_toEndOf="@+id/right_guideline"
                             app:layout_constraintStart_toEndOf="@+id/iv_artwork"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_title"
                             tools:text="MSNBC, Rachel Maddow" />
 
                         <Button
                             android:id="@+id/bt_subscribe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="134dp"
+                            android:layout_height="43dp"
                             android:layout_marginStart="@dimen/activity_horizontal_margin"
                             android:layout_marginLeft="@dimen/activity_horizontal_margin"
                             android:layout_marginTop="@dimen/margin_vertical_small"
+                            android:layout_marginBottom="@dimen/margin_vertical_small"
+                            android:background="@drawable/btn_rounded"
                             android:nextFocusDown="@+id/rv_item"
                             android:onClick="onSubscribeClick"
                             android:text="@string/subscribe"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_artwork"
                             app:layout_constraintStart_toEndOf="@+id/iv_artwork"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_author" />
+                            app:layout_constraintTop_toBottomOf="@+id/iv_blur" />
 
                         <TextView
                             android:id="@+id/tv_category"
