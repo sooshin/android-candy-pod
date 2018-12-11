@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="afterDescendants"
+            android:layoutAnimation="@anim/layout_animation_from_bottom"
             app:visibleGone="@{!isLoading}" />
 
         <!-- A progress bar that will be shown to users to indicate that podcast data is loading -->
