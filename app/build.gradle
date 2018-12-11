@@ -64,6 +64,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:palette-v7:28.0.0'
+    implementation 'com.android.support:preference-v7:28.0.0'
     // Declare the dependency for the ads only for the 'free' flavor
     freeImplementation('com.google.android.gms:play-services-ads:16.0.0', {
         exclude group: 'com.android.support'

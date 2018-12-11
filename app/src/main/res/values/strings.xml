@@ -113,4 +113,10 @@
     <string name="transition_subscribe" translatable="false">transition_subscribe</string>
 
     <string name="country_us" translatable="false">us</string>
+
+    <!-- Label for the dark theme switch preference -->
+    <string name="pref_dark_theme_label">Dark Theme</string>
+    <!-- Key name for storing dark theme in SharedPreferences -->
+    <string name="pref_dark_theme_key" translatable="false">dark_theme</string>
+
 </resources>
