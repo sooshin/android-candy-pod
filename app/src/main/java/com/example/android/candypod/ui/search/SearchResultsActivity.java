@@ -81,6 +81,9 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
         // Initialize the adapter and attach it to the RecyclerView
         initAdapter();
 
+        // Run the layout animation for RecyclerView.
+        CandyPodUtils.runLayoutAnimation(mSearchBinding.rvSearchResults);
+
         // Get the ViewModel from the factory
         setupViewModel();
 

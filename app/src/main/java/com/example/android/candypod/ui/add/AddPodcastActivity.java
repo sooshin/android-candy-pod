@@ -27,12 +27,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -103,7 +100,7 @@ public class AddPodcastActivity extends AppCompatActivity
         showUpButton();
 
         // Run the layout animation for RecyclerView.
-        runLayoutAnimation(mAddPodBinding.rvAddPod);
+        CandyPodUtils.runLayoutAnimation(mAddPodBinding.rvAddPod);
 
         // Load the saved state if there is one
         if (savedInstanceState != null) {
@@ -135,19 +132,6 @@ public class AddPodcastActivity extends AppCompatActivity
         mAddPodAdapter = new AddPodcastAdapter(mResults, this);
         // Set adapter to the RecyclerView
         mAddPodBinding.rvAddPod.setAdapter(mAddPodAdapter);
-    }
-
-    /**
-     * Runs the layout animation for RecyclerView.
-     * Reference: @see "https://proandroiddev.com/enter-animation-using-recyclerview-and-layoutanimation-part-1-list-75a874a5d213"
-     */
-    private void runLayoutAnimation(RecyclerView recyclerView) {
-        Context context = recyclerView.getContext();
-        LayoutAnimationController controller =
-                AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_from_bottom);
-        recyclerView.setLayoutAnimation(controller);
-        recyclerView.getAdapter().notifyDataSetChanged();
-        recyclerView.scheduleLayoutAnimation();
     }
 
     /**
