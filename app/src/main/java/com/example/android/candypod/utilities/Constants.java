@@ -118,7 +118,7 @@ public class Constants {
     public static final int NO_DRAWABLES = 0;
 
     /** The enclosure type */
-    public static final String TYPE_AUDIO = "audio/mpeg";
+    public static final String TYPE_AUDIO = "audio";
 
     /** Cache directory */
     public static final String FILE_DOWNLOADS = "downloads";
