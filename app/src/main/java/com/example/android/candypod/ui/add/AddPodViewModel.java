@@ -39,4 +39,10 @@ public class AddPodViewModel extends ViewModel {
         return mITunesResponse;
     }
 
+    /**
+     * Sets a new value for a country.
+     */
+    public void setCountry(String country) {
+        mITunesResponse = mRepository.getITunesResponse(country);
+    }
 }

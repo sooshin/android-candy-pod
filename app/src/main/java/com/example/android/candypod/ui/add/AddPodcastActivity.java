@@ -21,12 +21,15 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,7 +63,11 @@ import static com.example.android.candypod.utilities.Constants.STATE_SEARCH_QUER
  * in this activity, it will navigate the user to the {@link SubscribeActivity}.
  */
 public class AddPodcastActivity extends AppCompatActivity
-        implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler {
+        implements AddPodcastAdapter.AddPodcastAdapterOnClickHandler,
+        SharedPreferences.OnSharedPreferenceChangeListener {
+
+    /** Tag for CountryPreferenceDialog */
+    private static final String TAG = AddPodcastActivity.class.getSimpleName();
 
     /** This field is used for data binding **/
     private ActivityAddPodcastBinding mAddPodBinding;
@@ -82,6 +89,9 @@ public class AddPodcastActivity extends AppCompatActivity
     /** Member variable for SearchView */
     private SearchView mSearchView;
 
+    /** Member variable for SharedPreferences */
+    private SharedPreferences mPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +100,12 @@ public class AddPodcastActivity extends AppCompatActivity
         // Create a GridLayoutManager and AddPodcastAdapter, and set them to the RecyclerView
         initAdapter();
 
-        String country = getString(R.string.country_us);
+        // Setup SharedPreferences
+        setupSharedPreferences();
+        // Get the value of country from shared preferences
+        String country = mPrefs.getString(getString(R.string.pref_country_key),
+                getString(R.string.pref_country_default));
+
         // Get the ViewModel from the factory
         setupViewModel(country);
         // Observe changes in the ITunesResponse
@@ -109,6 +124,18 @@ public class AddPodcastActivity extends AppCompatActivity
 
         // Get the FirebaseAnalytics instance
         mFirebaseAnalytics = Analytics.getInstance(this);
+    }
+
+    /**
+     * Creates a SharedPreferences instance and register AddPodcastActivity as an OnPreferenceChangedListener.
+     */
+    private void setupSharedPreferences() {
+        // Get a SharedPreferences instance
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // Register AddPodcastActivity as an OnPreferenceChangedListener to receive a callback when a
+        // SharedPreference has changed. Please note that we must unregister AddPodcastActivity as an
+        // OnSharedPreferenceChanged listener in onDestroy to avoid any memory leaks.
+        mPrefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     /**
@@ -239,6 +266,11 @@ public class AddPodcastActivity extends AppCompatActivity
                 // Navigate back to the MainActivity when the home button is pressed
                 onBackPressed();
                 return true;
+            case R.id.action_country:
+                // Create a dialog which is the same as ListPreference where the user can choose
+                // a country
+                chooseCountry();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -303,5 +335,33 @@ public class AddPodcastActivity extends AppCompatActivity
         mSearchQuery = mSearchView.getQuery().toString();
         outState.putString(STATE_SEARCH_QUERY, mSearchQuery);
         super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Creates a dialog which is the same as ListPreference where the user can choose a country.
+     */
+    private void chooseCountry() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        CountryPreferenceDialog dialog = new CountryPreferenceDialog();
+        dialog.show(fragmentManager, TAG);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_country_key))) {
+            // Get the value from the shared preferences
+            String country = sharedPreferences.getString(key, getString(R.string.pref_country_default));
+            // Set a new value for a country.
+            mAddPodViewModel.setCountry(country);
+            // Observe changes in ITunesResponse
+            observeITunesResponse();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unregister AddPodcastActivity as an OnPreferenceChangedListener to avoid any memory leaks
+        mPrefs.unregisterOnSharedPreferenceChangeListener(this);
     }
 }

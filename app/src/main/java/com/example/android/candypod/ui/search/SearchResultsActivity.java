@@ -138,7 +138,7 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchAd
     private void setupViewModel() {
         if (mQuery != null) {
             SearchViewModelFactory searchFactory = InjectorUtils.provideSearchViewModelFactory(
-                    this, I_TUNES_SEARCH, getString(R.string.country_us),
+                    this, I_TUNES_SEARCH, getString(R.string.pref_country_default),
                     SEARCH_MEDIA_PODCAST, mQuery);
             mSearchViewModel = ViewModelProviders.of(this, searchFactory).get(SearchViewModel.class);
         }
