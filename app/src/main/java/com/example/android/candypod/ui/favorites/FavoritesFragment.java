@@ -25,11 +25,13 @@ import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.FavoriteEntry;
@@ -150,9 +152,10 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
      * Once the Intent has been created, starts the NowPlayingActivity and the PodcastService.
      *
      * @param favoriteEntry FavoriteEntry the user clicked
+     * @param imageView The shared element
      */
     @Override
-    public void onFavoriteClick(FavoriteEntry favoriteEntry) {
+    public void onFavoriteClick(FavoriteEntry favoriteEntry, ImageView imageView) {
         Item item = getItem(favoriteEntry);
         // Update the episode data using SharedPreferences each time the user selects the episode
         CandyPodUtils.updateSharedPreference(this.getContext(), item,
@@ -173,7 +176,20 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
         intent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
         // Pass the podcast image URL. If there is no item image, use this podcast image.
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Apply the shared element transition to the podcast image
+            String transitionName = imageView.getTransitionName();
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this.getActivity(),
+                    imageView,
+                    transitionName
+            ).toBundle();
+            startActivity(intent, bundle);
+        } else {
+            // Once the Intent has been created, start the NowPlayingActivity
+            startActivity(intent);
+        }
 
         // Start the PodcastService
         Intent serviceIntent = new Intent(this.getActivity(), PodcastService.class);

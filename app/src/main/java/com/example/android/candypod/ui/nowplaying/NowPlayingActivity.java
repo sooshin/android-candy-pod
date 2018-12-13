@@ -427,8 +427,8 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         int itemId = item.getItemId();
         switch (itemId) {
             case android.R.id.home:
-                // When the user press the up button, finishes this NowPlayingActivity
-                onBackPressed();
+                // Allow the animation to be reversed
+                supportFinishAfterTransition();
                 return true;
             case R.id.action_download:
                 // When the user clicks download button, download or remove episode

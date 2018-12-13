@@ -112,6 +112,7 @@
     <!-- The transition name -->
     <string name="transition_detail" translatable="false">transition_detail</string>
     <string name="transition_subscribe" translatable="false">transition_subscribe</string>
+    <string name="transition_now" translatable="false">transition_now</string>
 
     <!-- The title of CountryPreferenceDialog -->
     <string name="title_country_dialog">Choose a country</string>

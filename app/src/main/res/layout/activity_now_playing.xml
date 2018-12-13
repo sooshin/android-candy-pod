@@ -66,6 +66,7 @@
                 android:layout_marginRight="@dimen/margin_image"
                 android:contentDescription="@string/artwork_content_description"
                 android:scaleType="centerCrop"
+                android:transitionName="@string/transition_now"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

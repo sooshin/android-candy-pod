@@ -23,9 +23,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -253,9 +255,10 @@ public class DetailActivity extends AppCompatActivity
     /**
      * When an episode is selected, starts the NowPlayingActivity.
      * @param item Item object which contains an episode data
+     * @param imageView The shared element
      */
     @Override
-    public void onItemClick(Item item) {
+    public void onItemClick(Item item, ImageView imageView) {
         // Update the episode data using SharedPreferences each time the user selects the episode.
         CandyPodUtils.updateSharedPreference(this, item, mResultName,
                 CandyPodUtils.getItemImageUrl(item, mPodcastImage));
@@ -274,7 +277,20 @@ public class DetailActivity extends AppCompatActivity
         intent.putExtra(EXTRA_RESULT_NAME, mResultName);
         // Pass the podcast image URL. If there is no item image, use this podcast image.
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
-        startActivity(intent);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Apply the shared element transition to the podcast image
+            String transitionName = imageView.getTransitionName();
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    imageView,
+                    transitionName
+            ).toBundle();
+            startActivity(intent, bundle);
+        } else {
+            // Once the Intent has been created, start the NowPlayingActivity
+            startActivity(intent);
+        }
 
 
         Intent serviceIntent = new Intent(this, PodcastService.class);

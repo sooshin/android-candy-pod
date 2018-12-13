@@ -26,11 +26,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.candypod.R;
 import com.example.android.candypod.data.DownloadEntry;
@@ -146,8 +148,17 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
         });
     }
 
+    /**
+     * This is where we receive our callback from {@link DownloadsAdapter.DownloadsAdapterOnClickHandler}.
+     *
+     * This callback is invoked when you click on an item in the list.
+     * Once the Intent has been created, starts the NowPlayingActivity and the PodcastService.
+     *
+     * @param downloadEntry DownloadEntry the user clicked
+     * @param imageView The shared element
+     */
     @Override
-    public void onItemClick(DownloadEntry downloadEntry) {
+    public void onItemClick(DownloadEntry downloadEntry, ImageView imageView) {
         Item item = getItem(downloadEntry);
         // Update the episode data using SharedPreferences each time the user selects the episode
         CandyPodUtils.updateSharedPreference(this.getContext(), item,
@@ -167,8 +178,20 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
         intent.putExtra(EXTRA_RESULT_NAME, mPodcastTitle);
         // Pass the podcast image URL. If there is no item image, use this podcast image.
         intent.putExtra(EXTRA_PODCAST_IMAGE, mPodcastImage);
-        startActivity(intent);
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            // Apply the shared element transition to the podcast image
+            String transitionName = imageView.getTransitionName();
+            Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this.getActivity(),
+                    imageView,
+                    transitionName
+            ).toBundle();
+            startActivity(intent, bundle);
+        } else {
+            // Once the Intent has been created, start the NowPlayingActivity
+            startActivity(intent);
+        }
 
         Intent serviceIntent = new Intent(this.getActivity(), PodcastService.class);
         // Set the action to check if the old player should be released in PodcastService

@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
@@ -49,7 +50,7 @@ public class DownloadsAdapter extends RecyclerView.Adapter<DownloadsAdapter.Down
     private final DownloadsAdapterOnClickHandler mOnClickHandler;
 
     public interface DownloadsAdapterOnClickHandler {
-        void onItemClick(DownloadEntry downloadEntry);
+        void onItemClick(DownloadEntry downloadEntry, ImageView imageView);
     }
 
     public DownloadsAdapter(Context context, DownloadsAdapterOnClickHandler onClickHandler) {
@@ -144,7 +145,8 @@ public class DownloadsAdapter extends RecyclerView.Adapter<DownloadsAdapter.Down
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             DownloadEntry downloadEntry = mDownloadEntries.get(adapterPosition);
-            mOnClickHandler.onItemClick(downloadEntry);
+            // Trigger the callback onItemClick
+            mOnClickHandler.onItemClick(downloadEntry, mDownloadsListItemBinding.ivEpisode);
         }
     }
 }

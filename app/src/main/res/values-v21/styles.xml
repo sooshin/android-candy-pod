@@ -56,4 +56,14 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowSharedElementEnterTransition">@transition/shared_photo</item>
     </style>
+
+    <!-- Theme applied to the NowPlayingActivity -->
+    <style name="Theme.Subscribe.NowPlaying" >
+
+        <!-- Enable window content transitions -->
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowEnterTransition">@transition/now_enter</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/shared_photo</item>
+        <item name="android:windowSharedElementExitTransition">@transition/shared_photo</item>
+    </style>
 </resources>

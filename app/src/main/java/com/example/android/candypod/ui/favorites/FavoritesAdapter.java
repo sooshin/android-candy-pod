@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
@@ -58,7 +59,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
      * The interface that receives onClick messages.
      */
     public interface FavoritesAdapterOnClickHandler {
-        void onFavoriteClick(FavoriteEntry favoriteEntry);
+        void onFavoriteClick(FavoriteEntry favoriteEntry, ImageView imageView);
     }
 
     /**
@@ -192,7 +193,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.Favo
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
             FavoriteEntry favoriteEntry = mFavoriteEntries.get(adapterPosition);
-            mOnClickHandler.onFavoriteClick(favoriteEntry);
+            // Trigger the callback onFavoriteClick
+            mOnClickHandler.onFavoriteClick(favoriteEntry, mFavListItemBinding.ivEpisode);
         }
     }
 }

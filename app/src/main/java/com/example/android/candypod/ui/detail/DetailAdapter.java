@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.android.candypod.R;
@@ -57,7 +58,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
      * The interface that receives onClick messages.
      */
     public interface DetailAdapterOnClickHandler {
-        void onItemClick(Item item);
+        void onItemClick(Item item, ImageView imageView);
     }
 
     /**
@@ -193,7 +194,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             int adapterPosition = getAdapterPosition();
             Item item = mItems.get(adapterPosition);
             // Trigger the callback onItemClick
-            mOnClickHandler.onItemClick(item);
+            mOnClickHandler.onItemClick(item, mDetailListItemBinding.ivDetailArtwork);
         }
     }
 }
