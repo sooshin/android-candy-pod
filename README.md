@@ -3,7 +3,7 @@
 
 Capstone Project for Android Developer Nanodegree
 
-## Description
+## Project Overview
 Candy Pod is a podcast player for podcast lovers who want to listen to podcasts for free. Discover popular podcasts and listen to your favorite podcasts anywhere, anytime. It is easy to use and you can subscribe to the podcast in one click.
 
 ## Features
@@ -48,3 +48,6 @@ made by [Freepik](http://www.freepik.com) from [www.flaticon.com](www.flaticon.c
 [Wifi](https://www.flaticon.com/free-icon/wifi_179428)
 made by [Pixel Buddha](https://www.flaticon.com/authors/pixel-buddha) from [www.flaticon.com](www.flaticon.com) is licensed by
 [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/).
+
+## License
+Apache, see the [LICENSE](LICENSE) file.
