@@ -352,7 +352,9 @@ public class SubscribeActivity extends AppCompatActivity {
         // Get the language and set the text
         String language = channel.getLanguage();
         if (!TextUtils.isEmpty(language)) {
-            mSubscribeBinding.tvLanguage.setText(language);
+            // Convert language code to language name
+            String languageName = CandyPodUtils.convertLanguageCode(language);
+            mSubscribeBinding.tvLanguage.setText(languageName);
         }
 
         // Get the description

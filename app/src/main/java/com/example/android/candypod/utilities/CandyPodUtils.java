@@ -241,4 +241,17 @@ public class CandyPodUtils {
         recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
+
+    /**
+     * Converts language code to language name.
+     * @param languageCode The language code (i.e. en, ko)
+     * @return The language name (i.e. English, Korean)
+     *
+     * Reference: @see "https://stackoverflow.com/questions/36061116/get-language-name-in-that-language-from-language-code"
+     * "https://stackoverflow.com/questions/39583040/how-to-display-the-language-name-in-english-from-the-language-code"
+     */
+    public static String convertLanguageCode(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        return locale.getDisplayLanguage(Locale.ENGLISH);
+    }
 }
