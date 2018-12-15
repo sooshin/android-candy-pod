@@ -16,8 +16,8 @@
 
 <resources>
     <string name="app_name">Candy Pod</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title">Candy Pod</string>
     <string name="nav_header_desc">Navigation header</string>
 
@@ -54,7 +54,7 @@
     <!-- Text for the unsubscribe button -->
     <string name="unsubscribe">Unsubscribe</string>
     <!-- Space used to set the title in the expanded collapsing toolbar -->
-    <string name="space">\u0020</string>
+    <string name="space" translatable="false">\u0020</string>
 
     <!-- Label for the DetailActivity and NowPlayingActivity -->
     <string name="detail">Detail</string>
@@ -70,10 +70,6 @@
     <string name="empty_downloads">You have no downloaded episodes</string>
     <string name="empty_search_results">No results found</string>
     <string name="empty_offline">Please check your internet connection and try again</string>
-
-    <!-- Notification actions -->
-    <string name="notification_play">Play</string>
-    <string name="notification_pause">Pause</string>
 
     <!-- Notification channel name -->
     <string name="playback_channel_name">Playback</string>
@@ -101,7 +97,6 @@
     <string name="chooser_title">Share Episode</string>
 
     <!-- Widget -->
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
 
     <!-- Key name in SharedPreferences -->
