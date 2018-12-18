@@ -28,9 +28,6 @@ Candy Pod is a podcast player for podcast lovers who want to listen to podcasts 
 - [Firebase Analytics](https://firebase.google.com/docs/analytics/)
 - [Google Mobile Ads](https://developers.google.com/android/guides/setup)
 
-## Video
-I've created a video demonstrating the app. Click [here](https://youtu.be/EuuCu4429q4) to view the video.
-
 ## Screenshots
 ![1_main](https://user-images.githubusercontent.com/33213229/49943703-f42bfc00-ff2b-11e8-8afc-a583d06dbae3.png)
 ![2_add](https://user-images.githubusercontent.com/33213229/49943708-f68e5600-ff2b-11e8-86d1-8fbcddff5656.png)
