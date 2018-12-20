@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "1072367271639",
-    "firebase_url": "https://candypod-46eab.firebaseio.com",
-    "project_id": "candypod-46eab",
-    "storage_bucket": "candypod-46eab.appspot.com"
+    "project_number": "176419118870",
+    "firebase_url": "https://candypod2.firebaseio.com",
+    "project_id": "candypod2",
+    "storage_bucket": "candypod2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1072367271639:android:50d6ef6f3c3a454a",
+        "mobilesdk_app_id": "1:176419118870:android:2ba03443da40af6f",
         "android_client_info": {
-          "package_name": "com.example.android.candypod.free"
+          "package_name": "com.soojeongshin.candypod.free"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1072367271639-g27pjt7amtl1jtbgqgfunklgjt5srrdq.apps.googleusercontent.com",
+          "client_id": "176419118870-0c9886erdqd212otsamouq27ke20p5vh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBOv_j5aBF1295DwZ9sc9hctFBCA0cjvcI"
+          "current_key": "AIzaSyDGJLXElA3OyxI7MaLLctSMn252wRpSS7I"
         }
       ],
       "services": {
@@ -39,20 +39,20 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1072367271639:android:e0e0180b63bf8e82",
+        "mobilesdk_app_id": "1:176419118870:android:1ceb0e38794a821f",
         "android_client_info": {
-          "package_name": "com.example.android.candypod.paid"
+          "package_name": "com.soojeongshin.candypod.paid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1072367271639-g27pjt7amtl1jtbgqgfunklgjt5srrdq.apps.googleusercontent.com",
+          "client_id": "176419118870-0c9886erdqd212otsamouq27ke20p5vh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBOv_j5aBF1295DwZ9sc9hctFBCA0cjvcI"
+          "current_key": "AIzaSyDGJLXElA3OyxI7MaLLctSMn252wRpSS7I"
         }
       ],
       "services": {

@@ -17,9 +17,9 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_settings"
-    android:name="com.example.android.candypod.ui.settings.SettingsFragment"
+    android:name="com.soojeongshin.candypod.ui.settings.SettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.candypod.ui.settings.SettingsActivity">
+    tools:context="com.soojeongshin.candypod.candypod.com.example.android.ui.settings.SettingsActivity">
 
 </fragment>

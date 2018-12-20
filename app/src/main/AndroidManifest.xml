@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.candypod">
+    package="com.soojeongshin.candypod">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.soojeongshin.candypod.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -25,71 +25,71 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.add.AddPodcastActivity"
+            android:name="com.soojeongshin.candypod.ui.add.AddPodcastActivity"
             android:label="@string/add_podcast"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName="com.soojeongshin.candypod.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="com.soojeongshin.candypod.ui.MainActivity" />
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ui.subscribe.SubscribeActivity"
+            android:name="com.soojeongshin.candypod.ui.subscribe.SubscribeActivity"
             android:label="@string/subscribe"
-            android:parentActivityName=".ui.add.AddPodcastActivity"
+            android:parentActivityName="com.soojeongshin.candypod.ui.add.AddPodcastActivity"
             android:theme="@style/Theme.Subscribe">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.add.AddPodcastActivity" />
+                android:value="com.soojeongshin.candypod.ui.add.AddPodcastActivity" />
         </activity>
         <activity
-            android:name=".ui.detail.DetailActivity"
+            android:name="com.soojeongshin.candypod.ui.detail.DetailActivity"
             android:label="@string/detail"
             android:theme="@style/Theme.Subscribe.Detail" />
         <activity
-            android:name=".ui.nowplaying.NowPlayingActivity"
+            android:name="com.soojeongshin.candypod.ui.nowplaying.NowPlayingActivity"
             android:label="@string/now_playing"
             android:launchMode="singleTop"
             android:theme="@style/Theme.Subscribe.NowPlaying" />
         <activity
-            android:name=".ui.search.SearchResultsActivity"
+            android:name="com.soojeongshin.candypod.ui.search.SearchResultsActivity"
             android:label="@string/action_search"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.add.AddPodcastActivity">
+            android:parentActivityName="com.soojeongshin.candypod.ui.add.AddPodcastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.add.AddPodcastActivity" />
+                android:value="com.soojeongshin.candypod.ui.add.AddPodcastActivity" />
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.soojeongshin.candypod.ui.settings.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName="com.soojeongshin.candypod.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value="com.soojeongshin.candypod.ui.MainActivity" />
         </activity>
 
         <service
-            android:name=".service.PodcastService"
+            android:name="com.soojeongshin.candypod.service.PodcastService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
-        <service android:name=".service.PodcastDownloadService" />
+        <service android:name="com.soojeongshin.candypod.service.PodcastDownloadService" />
         <service
             android:name="com.google.android.exoplayer2.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <receiver android:name=".widget.PodcastWidgetProvider">
+        <receiver android:name="com.soojeongshin.candypod.widget.PodcastWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

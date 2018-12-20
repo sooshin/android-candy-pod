@@ -17,7 +17,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.detail.DetailActivity">
+    tools:context="com.soojeongshin.candypod.ui.detail.DetailActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinator"
