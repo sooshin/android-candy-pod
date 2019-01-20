@@ -20,6 +20,6 @@
     android:name="com.soojeongshin.candypod.ui.settings.SettingsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.soojeongshin.candypod.candypod.com.example.android.ui.settings.SettingsActivity">
+    tools:context="com.soojeongshin.candypod.ui.settings.SettingsActivity">
 
 </fragment>
