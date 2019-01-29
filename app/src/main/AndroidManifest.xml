@@ -66,15 +66,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.soojeongshin.candypod.ui.add.AddPodcastActivity" />
         </activity>
-        <activity
-            android:name="com.soojeongshin.candypod.ui.settings.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName="com.soojeongshin.candypod.ui.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.soojeongshin.candypod.ui.MainActivity" />
-        </activity>
-
         <service
             android:name="com.soojeongshin.candypod.service.PodcastService"
             android:enabled="true"

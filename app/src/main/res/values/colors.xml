@@ -19,13 +19,6 @@
     <color name="colorPrimary">#9C27B0</color>
     <color name="colorPrimaryDark">#7B1FA2</color>
     <color name="colorAccent">#c6ff00</color>
-    <color name="primaryText">#000000</color>
-
-    <!-- Colors for the dark theme -->
-    <color name="darkColorPrimary">#1B1B1B</color>
-    <color name="darkColorPrimaryDark">#000000</color>
-    <color name="darkColorAccent">#FF5252</color>
-    <color name="darkPrimaryText">#FFFFFF</color>
 
     <!-- Colors used to gradient scrim -->
     <color name="color_start_gradient">#00000000</color>

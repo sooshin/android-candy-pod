@@ -16,8 +16,6 @@
 
 package com.soojeongshin.candypod.ui;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -25,24 +23,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.PreferenceManager;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.soojeongshin.candypod.R;
-import com.soojeongshin.candypod.ui.podcasts.PodcastsFragment;
 import com.soojeongshin.candypod.databinding.ActivityMainBinding;
 import com.soojeongshin.candypod.ui.downloads.DownloadsFragment;
 import com.soojeongshin.candypod.ui.favorites.FavoritesFragment;
-import com.soojeongshin.candypod.ui.settings.SettingsActivity;
+import com.soojeongshin.candypod.ui.podcasts.PodcastsFragment;
 
 import timber.log.Timber;
 
 import static com.soojeongshin.candypod.utilities.Constants.INDEX_ZERO;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     /** This field is used for data binding **/
     private ActivityMainBinding mMainBinding;
@@ -50,8 +44,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setupSharedPreferences();
 
         mMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(mMainBinding.appBarMain.toolbar);
@@ -67,12 +59,6 @@ public class MainActivity extends AppCompatActivity
 
         mMainBinding.navView.setNavigationItemSelectedListener(this);
 
-        // Register MainActivity as an OnPreferenceChangedListener to receive a callback when a
-        // SharedPreference has changed. Please note that we must unregister MainActivity as an
-        // OnSharedPreferenceChanged listener in onDestroy to avoid any memory leaks.
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
-
         // Set PodcastsFragment as a default fragment when starting the app
         if (savedInstanceState == null) {
             onNavigationItemSelected(mMainBinding.navView.getMenu().getItem(INDEX_ZERO).setChecked(true));
@@ -86,30 +72,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -137,37 +99,5 @@ public class MainActivity extends AppCompatActivity
 
         mMainBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    private void setupSharedPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setTheme(sharedPreferences);
-    }
-
-    private void setTheme(SharedPreferences sharedPreferences) {
-        boolean isDarkTheme = sharedPreferences.getBoolean(
-                getString(R.string.pref_dark_theme_key),
-                getResources().getBoolean(R.bool.pref_dark_theme_default));
-        if (isDarkTheme) {
-            setTheme(R.style.AppTheme_Dark_NoActionBar);
-        } else {
-            setTheme(R.style.AppTheme_NoActionBar);
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_dark_theme_key))) {
-            setTheme(sharedPreferences);
-            recreate();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Unregister MainActivity as an OnPreferenceChangedListener to avoid any memory leaks
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }
