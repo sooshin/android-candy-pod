@@ -121,7 +121,7 @@ public class FavoritesFragment extends Fragment implements FavoritesAdapter.Favo
 
     /**
      * Every time the favorite episode data is updated, update the UI.
-     * @param context
+     * @param context Context we use to utility methods, app resources and layout inflaters
      */
     private void setupViewModel(Context context) {
         // Get the ViewModel from the factory

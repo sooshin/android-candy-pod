@@ -64,17 +64,18 @@ public class FavoriteEntry {
     private String itemImageUrl;
 
     /**
-     *
-     * @param podcastId
-     * @param title
-     * @param artworkImageUrl
-     * @param itemTitle
-     * @param itemDescription
-     * @param itemPubDate
-     * @param itemDuration
-     * @param itemEnclosureUrl
-     * @param itemEnclosureLength
-     * @param itemImageUrl
+     * Constructor to create FavoriteEntry. Uses ignore annotation to guide Room to use the right
+     * constructor.
+     * @param podcastId The podcast ID
+     * @param title The podcast title
+     * @param artworkImageUrl The artwork image URL
+     * @param itemTitle The episode title
+     * @param itemDescription The episode description
+     * @param itemPubDate The pub date of an episode
+     * @param itemDuration The duration of an episode
+     * @param itemEnclosureUrl The enclosure URL of an episode
+     * @param itemEnclosureLength The length of an episode
+     * @param itemImageUrl The image URL of an episode
      */
     @Ignore
     public FavoriteEntry(String podcastId, String title,

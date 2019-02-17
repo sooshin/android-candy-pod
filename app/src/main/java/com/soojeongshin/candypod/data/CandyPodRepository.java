@@ -196,7 +196,7 @@ public class CandyPodRepository {
     }
 
     /**
-     * Get the favorite episode by item title from the favorite_episode table.
+     * Get the favorite episode by enclosure URL from the favorite_episodes table.
      * @param url The stream URL for the episode audio file
      * @return {@link LiveData} {@link FavoriteEntry} from the database.
      */

@@ -547,7 +547,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
-                    // Insert a episode to the database by using the podcastDao
+                    // Insert an episode to the database by using the podcastDao
                     mDb.podcastDao().insertFavoriteEpisode(getFavoriteEntry());
                 }
             });
