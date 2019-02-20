@@ -89,8 +89,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$arch_version"
     annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
     // ExoPlayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.9.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.9.5'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.9.5'
     // Glide Transformations
     implementation 'jp.wasabeef:glide-transformations:4.0.1'
     // Firebase Analytics
