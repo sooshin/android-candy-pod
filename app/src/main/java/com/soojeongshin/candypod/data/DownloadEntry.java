@@ -36,6 +36,7 @@ public class DownloadEntry implements Parcelable {
     private String podcastId;
 
     /** The podcast title */
+    @ColumnInfo(name = "podcast_title")
     private String title;
 
     @ColumnInfo(name = "artwork_image_url")
