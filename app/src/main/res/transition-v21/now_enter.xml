@@ -17,6 +17,14 @@
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
     android:transitionOrdering="together">
 
+    <!-- Reference: @see "https://stackoverflow.com/questions/26600263/how-do-i-prevent-the-status-bar-and-navigation-bar-from-animating-during-an-acti/26748694#26748694" -->
+    <fade xmlns:android="http://schemas.android.com/apk/res/android">
+        <targets>
+            <target android:excludeId="@android:id/statusBarBackground"/>
+            <target android:excludeId="@android:id/navigationBarBackground"/>
+        </targets>
+    </fade>
+
     <slide android:slideEdge="left">
         <targets>
             <target android:targetId="@+id/tv_episode_title" />
