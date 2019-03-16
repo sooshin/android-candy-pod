@@ -18,8 +18,12 @@ package com.soojeongshin.candypod.service;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,11 +36,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.soojeongshin.candypod.R;
-import com.soojeongshin.candypod.model.rss.Item;
-import com.soojeongshin.candypod.ui.nowplaying.NowPlayingActivity;
-import com.soojeongshin.candypod.utilities.CandyPodUtils;
-import com.soojeongshin.candypod.utilities.DownloadUtil;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -58,6 +57,11 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.soojeongshin.candypod.R;
+import com.soojeongshin.candypod.model.rss.Item;
+import com.soojeongshin.candypod.ui.nowplaying.NowPlayingActivity;
+import com.soojeongshin.candypod.utilities.CandyPodUtils;
+import com.soojeongshin.candypod.utilities.DownloadUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -110,6 +114,23 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     private String mPodcastImage;
     /** The podcast bitmap image */
     private Bitmap mBitmap;
+
+    private boolean mAudioNoisyReceiverRegistered;
+    private final IntentFilter mAudioNoisyIntentFilter =
+            new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+    private final BroadcastReceiver mAudioNoisyReceiver =
+            new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intent.getAction())) {
+                        Timber.d("Headphones disconnected.");
+                        // Pause the playback
+                        if (mExoPlayer != null && mExoPlayer.getPlayWhenReady()) {
+                            mExoPlayer.setPlayWhenReady(false);
+                        }
+                    }
+                }
+            };
 
     @Override
     public void onCreate() {
@@ -457,6 +478,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             if (mExoPlayer != null) {
                 mExoPlayer.setPlayWhenReady(true);
             }
+
+            // Register the receiver when you begin playback
+            registerAudioNoisyReceiver();
         }
 
         @Override
@@ -491,6 +515,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
             // Take the service out of the foreground
             stopForeground(true);
+
+            // Unregister the receiver when you stop
+            unregisterAudioNoisyReceiver();
         }
     }
 
@@ -513,16 +540,32 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             // When ExoPlayer is playing, update the PlaybackState
             mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mExoPlayer.getCurrentPosition(), 1f);
-
+            // Register the receiver when you begin playback
+            registerAudioNoisyReceiver();
             Timber.d("onPlayerStateChanged: we are playing");
         } else if (playbackState == Player.STATE_READY) {
             // When ExoPlayer is paused, update the PlaybackState
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
-
+            // Unregister the receiver when you stop
+            unregisterAudioNoisyReceiver();
             Timber.d("onPlayerStateChanged: we are paused");
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
+    }
+
+    private void registerAudioNoisyReceiver() {
+        if (!mAudioNoisyReceiverRegistered) {
+            registerReceiver(mAudioNoisyReceiver, mAudioNoisyIntentFilter);
+            mAudioNoisyReceiverRegistered = true;
+        }
+    }
+
+    private void unregisterAudioNoisyReceiver() {
+        if (mAudioNoisyReceiverRegistered) {
+            unregisterReceiver(mAudioNoisyReceiver);
+            mAudioNoisyReceiverRegistered = false;
+        }
     }
 
     // Use AsyncTask to load the image from the URL
