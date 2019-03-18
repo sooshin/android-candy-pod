@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
@@ -53,6 +54,10 @@ import static com.soojeongshin.candypod.utilities.Constants.FORMATTED_PATTERN;
 import static com.soojeongshin.candypod.utilities.Constants.PUB_DATE_PATTERN;
 import static com.soojeongshin.candypod.utilities.Constants.PUB_DATE_PATTERN_TIME_ZONE;
 import static com.soojeongshin.candypod.utilities.Constants.REQUEST_METHOD_GET;
+import static com.soojeongshin.candypod.utilities.Constants.SPLIT_COLON;
+import static com.soojeongshin.candypod.utilities.Constants.SPLIT_INDEX_ONE;
+import static com.soojeongshin.candypod.utilities.Constants.SPLIT_INDEX_TWO;
+import static com.soojeongshin.candypod.utilities.Constants.SPLIT_INDEX_ZERO;
 
 public class CandyPodUtils {
 
@@ -253,5 +258,19 @@ public class CandyPodUtils {
     public static String convertLanguageCode(String languageCode) {
         Locale locale = new Locale(languageCode);
         return locale.getDisplayLanguage(Locale.ENGLISH);
+    }
+
+    /**
+     * Converts hh:mm:ss string to seconds.
+     * @param item Item object that holds the current episode data
+     * Reference: @see "https://stackoverflow.com/questions/8257641/java-how-to-convert-a-string-hhmmss-to-a-duration"
+     */
+    public static long getDurationInMilliSeconds(Item item) {
+        String timestampStr = item.getITunesDuration();
+        String[] tokens = timestampStr.split(SPLIT_COLON);
+        int hours = Integer.parseInt(tokens[SPLIT_INDEX_ZERO]);
+        int minutes = Integer.parseInt(tokens[SPLIT_INDEX_ONE]);
+        int seconds = Integer.parseInt(tokens[SPLIT_INDEX_TWO]);
+        return TimeUnit.HOURS.toSeconds(hours) + TimeUnit.MINUTES.toSeconds(minutes) + seconds;
     }
 }

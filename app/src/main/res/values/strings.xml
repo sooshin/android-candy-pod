@@ -112,6 +112,9 @@
     <!-- The title of CountryPreferenceDialog -->
     <string name="title_country_dialog">Choose a country</string>
 
+    <!-- A string that will be shown to users to indicate that podcast data is loading -->
+    <string name="loading">loading&#8230;</string>
+
     <!-- - - - - - - - - - - - - - - -
       - Used by Preferences  -
       - - - - - - - - - - - - - - - -->

@@ -31,6 +31,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
@@ -244,6 +245,12 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         }
         // Initialize ExoPlayer
         initializePlayer();
+
+        // Convert hh:mm:ss string to seconds to put it into the metadata
+        long duration = CandyPodUtils.getDurationInMilliSeconds(mItem);
+        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration).build();
+        mMediaSession.setMetadata(metadata);
 
         // Initialize PlayerNotificationManager
         initializeNotificationManager(mItem);
@@ -525,6 +532,14 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
             // Unregister the receiver when you stop
             unregisterAudioNoisyReceiver();
         }
+
+        @Override
+        public void onSeekTo(long pos) {
+            super.onSeekTo(pos);
+            if (mExoPlayer != null) {
+                mExoPlayer.seekTo((int) pos);
+            }
+        }
     }
 
     // Player Event Listeners
@@ -542,20 +557,39 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == Player.STATE_READY && playWhenReady) {
-            // When ExoPlayer is playing, update the PlaybackState
+        if (playbackState == Player.STATE_IDLE) {
+            // When there is nothing to play, update the state to paused
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        } else if (playbackState == Player.STATE_BUFFERING) {
+            // When ExoPlayer is buffering, not being able to play immediately,
+            // update the state to buffering.
+            mStateBuilder.setState(PlaybackStateCompat.STATE_BUFFERING,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        } else if (playbackState == Player.STATE_READY && playWhenReady) {
+            // When ExoPlayer is playing, update the state to playing that indicates this item is
+            // currently playing.
             mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     mExoPlayer.getCurrentPosition(), 1f);
             // Register the receiver when you begin playback
             registerAudioNoisyReceiver();
             Timber.d("onPlayerStateChanged: we are playing");
         } else if (playbackState == Player.STATE_READY) {
-            // When ExoPlayer is paused, update the PlaybackState
+            // When ExoPlayer is paused, update the state to paused that indicates this item is
+            // currently paused.
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
             // Unregister the receiver when you stop
             unregisterAudioNoisyReceiver();
             Timber.d("onPlayerStateChanged: we are paused");
+        } else if (playbackState == Player.STATE_ENDED) {
+            // When ExoPlayer finished playing, update the state to paused
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        } else {
+            // Update the state to the default state that indicates that the performer has no content to play.
+            mStateBuilder.setState(PlaybackStateCompat.STATE_NONE,
+                    mExoPlayer.getCurrentPosition(), 1f);
         }
         mMediaSession.setPlaybackState(mStateBuilder.build());
     }

@@ -83,8 +83,21 @@ public class Constants {
     public static final int FAST_FORWARD_INCREMENT = 30000; // 30 sec
     public static final int REWIND_INCREMENT = 10000; // 10 sec
 
+    /** Constant used to format elapsed time */
+    public static final int FORMAT_ELAPSED_TIME = 1000;
+    /** The initial delay, the time to delay first execution */
+    public static final long PROGRESS_UPDATE_INTERVAL = 1000;
+    /** The period between successive executions */
+    public static final long PROGRESS_UPDATE_INITIAL_INTERVAL = 100;
+
     /** Scheduler Job id in the PodcastDownloadService*/
     public static final int JOB_ID = 1;
+
+    /** Strings used to convert ITunes duration */
+    public static final String SPLIT_COLON = ":";
+    public static final int SPLIT_INDEX_ZERO = 0;
+    public static final int SPLIT_INDEX_ONE = 1;
+    public static final int SPLIT_INDEX_TWO = 2;
 
     /** The pubDate pattern */
     public static final String PUB_DATE_PATTERN = "EEE, d MMM yyyy HH:mm:ss Z";

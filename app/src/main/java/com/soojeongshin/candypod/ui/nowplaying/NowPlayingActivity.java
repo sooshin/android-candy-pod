@@ -25,7 +25,9 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
@@ -36,14 +38,20 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.exoplayer2.offline.DownloadManager;
+import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
+import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.soojeongshin.candypod.AppExecutors;
 import com.soojeongshin.candypod.R;
 import com.soojeongshin.candypod.analytics.Analytics;
@@ -57,10 +65,11 @@ import com.soojeongshin.candypod.service.PodcastService;
 import com.soojeongshin.candypod.utilities.CandyPodUtils;
 import com.soojeongshin.candypod.utilities.DownloadUtil;
 import com.soojeongshin.candypod.utilities.InjectorUtils;
-import com.google.android.exoplayer2.offline.DownloadManager;
-import com.google.android.exoplayer2.offline.DownloadManager.TaskState;
-import com.google.android.exoplayer2.offline.ProgressiveDownloadAction;
-import com.google.firebase.analytics.FirebaseAnalytics;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
@@ -72,6 +81,9 @@ import static com.soojeongshin.candypod.utilities.Constants.EXTRA_ITEM;
 import static com.soojeongshin.candypod.utilities.Constants.EXTRA_PODCAST_IMAGE;
 import static com.soojeongshin.candypod.utilities.Constants.EXTRA_RESULT_ID;
 import static com.soojeongshin.candypod.utilities.Constants.EXTRA_RESULT_NAME;
+import static com.soojeongshin.candypod.utilities.Constants.FORMAT_ELAPSED_TIME;
+import static com.soojeongshin.candypod.utilities.Constants.PROGRESS_UPDATE_INITIAL_INTERVAL;
+import static com.soojeongshin.candypod.utilities.Constants.PROGRESS_UPDATE_INTERVAL;
 import static com.soojeongshin.candypod.utilities.Constants.SHARE_INTENT_TYPE_TEXT;
 import static com.soojeongshin.candypod.utilities.Constants.TYPE_AUDIO;
 
@@ -118,6 +130,26 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
     /** Member variable for the DownloadEntryViewModel to store and manage LiveData DownloadEntry */
     private DownloadEntryViewModel mDownloadEntryViewModel;
 
+    /** Playback state for a MediaSessionCompat */
+    private PlaybackStateCompat mLastPlaybackState;
+    /** A Handler allows you to send and process Message and Runnable objects associated with a
+     * thread's MessageQueue */
+    private final Handler mHandler = new Handler();
+    /** Runs the updateProgress in its Runnable.run() method on a separate thread */
+    private final Runnable mUpdateProgressTask = new Runnable() {
+        @Override
+        public void run() {
+            updateProgress();
+        }
+    };
+    /** Creates a single-threaded executor that can schedule commands to run after a given delay,
+     * or to execute periodically */
+    private final ScheduledExecutorService mExecutorService =
+            Executors.newSingleThreadScheduledExecutor();
+    /** A delayed result-bearing action that can be cancelled. The result of scheduling a task with a
+     * ScheduledExecutorService */
+    private ScheduledFuture<?> mScheduledFuture;
+
     /** Member variable for FirebaseAnalytics */
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -147,6 +179,32 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         setTitle(getString(R.string.space));
         // Show the up button on the Toolbar
         showUpButton();
+
+        // Set a listener to receive notifications of changes to the SeekBar's progress level
+        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            // Notification that the progress level has changed
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mNowPlayingBinding.playingInfo.tvStart.setText(DateUtils.formatElapsedTime(
+                        progress/FORMAT_ELAPSED_TIME));
+            }
+
+            // Notification that the user has started a touch gesture
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Cancel the future returned by scheduleAtFixedRate() to stop the SeekBar from progressing
+                stopSeekbarUpdate();
+            }
+
+            // Notification that the user has finished a touch gesture
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                MediaControllerCompat.getMediaController(NowPlayingActivity.this)
+                        .getTransportControls().seekTo(seekBar.getProgress());
+                // Create and execute a periodic action to update the SeekBar progress
+                scheduleSeekbarUpdate();
+            }
+        });
 
         // Get the FirebaseAnalytics instance
         mFirebaseAnalytics = Analytics.getInstance(this);
@@ -228,6 +286,15 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         DownloadUtil.getDownloadManager(this).removeListener(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Cancel the future returned by scheduleAtFixedRate() to stop the seekBar from progressing
+        stopSeekbarUpdate();
+        // Cancel currently executing tasks
+        mExecutorService.shutdown();
+    }
+
     /**
      * Get the podcast episode, title and the podcast image URL from the DetailActivity via Intent.
      */
@@ -295,17 +362,28 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         mNowPlayingBinding.playingInfo.ibPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pbState = MediaControllerCompat.getMediaController(NowPlayingActivity.this)
-                        .getPlaybackState().getState();
-
-                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                    MediaControllerCompat.getMediaController(NowPlayingActivity.this)
-                            .getTransportControls().pause();
-
-                } else {
-                    MediaControllerCompat.getMediaController(NowPlayingActivity.this)
-                            .getTransportControls().play();
-
+                PlaybackStateCompat pbState =
+                        MediaControllerCompat.getMediaController(NowPlayingActivity.this).getPlaybackState();
+                if (pbState != null) {
+                    MediaControllerCompat.TransportControls controls =
+                            MediaControllerCompat.getMediaController(NowPlayingActivity.this).getTransportControls();
+                    switch (pbState.getState()) {
+                        case PlaybackStateCompat.STATE_PLAYING: // fall through
+                        case PlaybackStateCompat.STATE_BUFFERING:
+                            controls.pause();
+                            // Cancel the future returned by scheduleAtFixedRate() to stop the seekBar
+                            // from progressing
+                            stopSeekbarUpdate();
+                            break;
+                        case PlaybackStateCompat.STATE_PAUSED:
+                        case PlaybackStateCompat.STATE_STOPPED:
+                            controls.play();
+                            // Create and execute a periodic action to update the seekBar progress
+                            scheduleSeekbarUpdate();
+                            break;
+                        default:
+                            Timber.d("onClick with state " + pbState);
+                    }
                 }
             }
         });
@@ -316,6 +394,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
                         .getTransportControls().fastForward();
+                updateProgress();
             }
         });
 
@@ -325,19 +404,29 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
             public void onClick(View v) {
                 MediaControllerCompat.getMediaController(NowPlayingActivity.this)
                         .getTransportControls().rewind();
+                updateProgress();
             }
         });
 
-        MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(NowPlayingActivity.this);
-
+        MediaControllerCompat mediaController =
+                MediaControllerCompat.getMediaController(NowPlayingActivity.this);
         // Display the initial state
         MediaMetadataCompat metadata = mediaController.getMetadata();
         PlaybackStateCompat pbState = mediaController.getPlaybackState();
 
-        if (pbState.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
-        } else {
-            mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+        // Update the playback state
+        updatePlaybackState(pbState);
+
+        if (metadata != null) {
+            // Get the episode duration from the metadata and sets the end time to the textView
+            updateDuration(metadata);
+        }
+        // Set the current progress to the current position
+        updateProgress();
+        if (pbState != null && (pbState.getState() == PlaybackStateCompat.STATE_PLAYING ||
+                pbState.getState() == PlaybackStateCompat.STATE_BUFFERING)) {
+            // Create and execute a periodic action to update the SeekBar progress
+            scheduleSeekbarUpdate();
         }
 
         // Register a Callback to stay in sync
@@ -351,18 +440,135 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         @Override
         public void onMetadataChanged(MediaMetadataCompat metadata) {
             super.onMetadataChanged(metadata);
+            if (metadata != null) {
+                // Get the episode duration from the metadata and sets the end time to the textView
+                updateDuration(metadata);
+            }
         }
 
         @Override
         public void onPlaybackStateChanged(PlaybackStateCompat state) {
             super.onPlaybackStateChanged(state);
-            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
-            } else {
-                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
-            }
+            // Update the playback state
+            updatePlaybackState(state);
         }
     };
+
+    /**
+     * Creates and executes a periodic action that becomes enabled first after the given initial delay,
+     * and subsequently with the given period;that is executions will commence after initialDelay
+     * then initialDelay + period, then initialDelay + 2 * period, and so on.
+     */
+    private void scheduleSeekbarUpdate() {
+        stopSeekbarUpdate();
+        if (!mExecutorService.isShutdown()) {
+            mScheduledFuture = mExecutorService.scheduleAtFixedRate(
+                    // Cause the Runnable updateProgress to be added to the message queue
+                    () -> mHandler.post(mUpdateProgressTask),
+                    PROGRESS_UPDATE_INITIAL_INTERVAL,// initial delay (100 milliseconds)
+                    PROGRESS_UPDATE_INTERVAL, // period (1000 milliseconds)
+                    TimeUnit.MILLISECONDS); // the time unit of the initialDelay and period
+        }
+    }
+
+    /**
+     * Cancels the future returned by scheduleAtFixedRate() to stop the SeekBar from progressing.
+     */
+    private void stopSeekbarUpdate() {
+        if (mScheduledFuture != null) {
+            mScheduledFuture.cancel(false);
+        }
+    }
+
+    /**
+     * Gets the episode duration from the metadata and sets the end time to be displayed in the TextView.
+     */
+    private void updateDuration(MediaMetadataCompat metadata) {
+        if (metadata == null) {
+            return;
+        }
+        int duration = (int) metadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
+                * FORMAT_ELAPSED_TIME;
+        mNowPlayingBinding.playingInfo.seekBar.setMax(duration);
+        mNowPlayingBinding.playingInfo.tvEnd.setText(
+                DateUtils.formatElapsedTime(duration / FORMAT_ELAPSED_TIME));
+    }
+
+    /**
+     * Calculates the current position (distance = timeDelta * velocity) and sets the current progress
+     * to the current position.
+     */
+    private void updateProgress() {
+        if (mLastPlaybackState == null) {
+            return;
+        }
+        long currentPosition = mLastPlaybackState.getPosition();
+        if (mLastPlaybackState.getState() == PlaybackStateCompat.STATE_PLAYING) {
+            // Calculate the elapsed time between the last position update and now and unless
+            // paused, we can assume (delta * speed) + current position is approximately the
+            // latest position. This ensure that we do not repeatedly call the getPlaybackState()
+            // on MediaControllerCompat.
+            long timeDelta = SystemClock.elapsedRealtime() -
+                    mLastPlaybackState.getLastPositionUpdateTime();
+            currentPosition += (int) timeDelta * mLastPlaybackState.getPlaybackSpeed();
+        }
+        mNowPlayingBinding.playingInfo.seekBar.setProgress((int) currentPosition);
+    }
+
+    /**
+     * Updates the playback state.
+     * @param state Playback state for a MediaSessionCompat
+     */
+    private void updatePlaybackState(PlaybackStateCompat state) {
+        if (state == null) {
+            return;
+        }
+        mLastPlaybackState = state;
+        switch (state.getState()) {
+            case PlaybackStateCompat.STATE_PLAYING:
+                hideLoading();
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_pause);
+                // Create and execute a periodic action to update the SeekBar progress
+                scheduleSeekbarUpdate();
+                break;
+            case PlaybackStateCompat.STATE_PAUSED:
+                hideLoading();
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                // Cancel the future returned by scheduleAtFixedRate() to stop the SeekBar from progressing
+                stopSeekbarUpdate();
+                break;
+            case PlaybackStateCompat.STATE_NONE:
+            case PlaybackStateCompat.STATE_STOPPED:
+                hideLoading();
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                stopSeekbarUpdate();
+                break;
+            case PlaybackStateCompat.STATE_BUFFERING:
+                showLoading();
+                mNowPlayingBinding.playingInfo.ibPlayPause.setImageResource(R.drawable.exo_controls_play);
+                stopSeekbarUpdate();
+                break;
+            default:
+                Timber.d("Unhandled state " + state.getState());
+        }
+    }
+
+    /**
+     * Shows loading indicator and text when the player is buffering.
+     */
+    private void showLoading() {
+        mNowPlayingBinding.playingInfo.pbLoadingIndicator.setVisibility(View.VISIBLE);
+        mNowPlayingBinding.playingInfo.tvLoading.setVisibility(View.VISIBLE);
+        mNowPlayingBinding.playingInfo.tvLoading.setText(R.string.loading);
+    }
+
+    /**
+     * Hides loading indicator and text when the player is playing.
+     */
+    private void hideLoading() {
+        mNowPlayingBinding.playingInfo.pbLoadingIndicator.setVisibility(View.INVISIBLE);
+        mNowPlayingBinding.playingInfo.tvLoading.setVisibility(View.INVISIBLE);
+    }
 
     /**
      * Shows the up button on the tool bar.

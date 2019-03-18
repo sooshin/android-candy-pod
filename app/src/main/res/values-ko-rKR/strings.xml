@@ -98,6 +98,9 @@
     <!-- The title of CountryPreferenceDialog -->
     <string name="title_country_dialog">국가 선택하기</string>
 
+    <!-- A string that will be shown to users to indicate that podcast data is loading -->
+    <string name="loading">로딩중&#8230;</string>
+
     <!-- Labels for country preference -->
     <string name="pref_country_label_ca">캐나다</string>
     <string name="pref_country_label_kr">한국</string>

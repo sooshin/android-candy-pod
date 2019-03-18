@@ -63,6 +63,7 @@
 
     <!-- Size of the loading indicator -->
     <dimen name="size_loading">42dp</dimen>
+    <dimen name="size_loading_small">34dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
