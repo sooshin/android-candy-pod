@@ -234,7 +234,7 @@ public class DownloadsFragment extends Fragment implements DownloadsAdapter.Down
     }
 
     /**
-     * When the favorite list is empty, shows an empty view.
+     * When the download list is empty, shows an empty view.
      */
     private void showEmptyView() {
         // Show an empty view

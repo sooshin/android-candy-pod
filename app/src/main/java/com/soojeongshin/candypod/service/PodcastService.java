@@ -118,6 +118,12 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
     private boolean mAudioNoisyReceiverRegistered;
     private final IntentFilter mAudioNoisyIntentFilter =
             new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+    /**
+     * A BroadcastReceiver that listens for an ACTION_AUDIO_BECOMING_NOISY intent whenever you're
+     * playing audio. This handles changes in audio output to avoid suddenly playing out loud if a
+     * peripheral like headphones is disconnected while in use.
+     * Reference: @see "https://developer.android.com/guide/topics/media-apps/volume-and-earphones"
+     */
     private final BroadcastReceiver mAudioNoisyReceiver =
             new BroadcastReceiver() {
                 @Override
@@ -554,6 +560,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
+    /**
+     * Register the AudioNoisyReceiver when you begin playback.
+     */
     private void registerAudioNoisyReceiver() {
         if (!mAudioNoisyReceiverRegistered) {
             registerReceiver(mAudioNoisyReceiver, mAudioNoisyIntentFilter);
@@ -561,6 +570,9 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         }
     }
 
+    /**
+     * Unregister the AudioNoisyReceiver when you stop.
+     */
     private void unregisterAudioNoisyReceiver() {
         if (mAudioNoisyReceiverRegistered) {
             unregisterReceiver(mAudioNoisyReceiver);

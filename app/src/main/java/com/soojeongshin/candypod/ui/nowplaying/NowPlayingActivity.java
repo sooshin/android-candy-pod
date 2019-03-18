@@ -613,7 +613,7 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
      * Called when the download menu item clicked.
      */
     private void addOrRemoveDownloadedEpisode() {
-        // Check if is not downloaded episode and download action is currently started.
+        // Check if it is not downloaded episode and download action is currently started.
         // mStateStarted is to avoid starting the download every time the button is pressed.
         if (!mIsDownloaded && !mStateStarted) {
             // Show a toast message that indicates start downloading
