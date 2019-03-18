@@ -52,6 +52,7 @@
             android:name="com.soojeongshin.candypod.ui.nowplaying.NowPlayingActivity"
             android:label="@string/now_playing"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Subscribe.NowPlaying" />
         <activity
             android:name="com.soojeongshin.candypod.ui.search.SearchResultsActivity"
