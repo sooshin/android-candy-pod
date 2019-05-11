@@ -94,7 +94,7 @@ dependencies {
     // Glide Transformations
     implementation 'jp.wasabeef:glide-transformations:4.0.1'
     // Firebase Analytics
-    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
     // Multidex
     implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
