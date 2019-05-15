@@ -31,7 +31,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
-import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
@@ -247,10 +246,12 @@ public class PodcastService extends MediaBrowserServiceCompat implements Player.
         initializePlayer();
 
         // Convert hh:mm:ss string to seconds to put it into the metadata
-        long duration = CandyPodUtils.getDurationInMilliSeconds(mItem);
-        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
-                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration).build();
-        mMediaSession.setMetadata(metadata);
+//        long duration = CandyPodUtils.getDurationInMilliSeconds(mItem);
+//        long duration = Long.parseLong(mItem.getITunesDuration());
+//        Timber.e("duration: " + duration);
+//        MediaMetadataCompat metadata = new MediaMetadataCompat.Builder()
+//                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, duration).build();
+//        mMediaSession.setMetadata(metadata);
 
         // Initialize PlayerNotificationManager
         initializeNotificationManager(mItem);

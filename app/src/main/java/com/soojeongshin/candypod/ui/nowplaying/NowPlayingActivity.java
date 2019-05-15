@@ -42,7 +42,6 @@ import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -181,30 +180,30 @@ public class NowPlayingActivity extends AppCompatActivity implements DownloadMan
         showUpButton();
 
         // Set a listener to receive notifications of changes to the SeekBar's progress level
-        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            // Notification that the progress level has changed
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                mNowPlayingBinding.playingInfo.tvStart.setText(DateUtils.formatElapsedTime(
-                        progress/FORMAT_ELAPSED_TIME));
-            }
-
-            // Notification that the user has started a touch gesture
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // Cancel the future returned by scheduleAtFixedRate() to stop the SeekBar from progressing
-                stopSeekbarUpdate();
-            }
-
-            // Notification that the user has finished a touch gesture
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                MediaControllerCompat.getMediaController(NowPlayingActivity.this)
-                        .getTransportControls().seekTo(seekBar.getProgress());
-                // Create and execute a periodic action to update the SeekBar progress
-                scheduleSeekbarUpdate();
-            }
-        });
+//        mNowPlayingBinding.playingInfo.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            // Notification that the progress level has changed
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                mNowPlayingBinding.playingInfo.tvStart.setText(DateUtils.formatElapsedTime(
+//                        progress/FORMAT_ELAPSED_TIME));
+//            }
+//
+//            // Notification that the user has started a touch gesture
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                // Cancel the future returned by scheduleAtFixedRate() to stop the SeekBar from progressing
+//                stopSeekbarUpdate();
+//            }
+//
+//            // Notification that the user has finished a touch gesture
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                MediaControllerCompat.getMediaController(NowPlayingActivity.this)
+//                        .getTransportControls().seekTo(seekBar.getProgress());
+//                // Create and execute a periodic action to update the SeekBar progress
+//                scheduleSeekbarUpdate();
+//            }
+//        });
 
         // Get the FirebaseAnalytics instance
         mFirebaseAnalytics = Analytics.getInstance(this);
