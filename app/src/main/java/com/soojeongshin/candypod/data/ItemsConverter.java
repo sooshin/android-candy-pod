@@ -16,7 +16,7 @@
 
 package com.soojeongshin.candypod.data;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import com.soojeongshin.candypod.model.rss.Item;
 import com.google.gson.Gson;

@@ -19,7 +19,7 @@ package com.soojeongshin.candypod.service;
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.Toast;
 
 import com.soojeongshin.candypod.AppExecutors;

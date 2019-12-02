@@ -16,8 +16,8 @@
 
 package com.soojeongshin.candypod.data;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.soojeongshin.candypod.AppExecutors;
 import com.soojeongshin.candypod.model.ITunesResponse;

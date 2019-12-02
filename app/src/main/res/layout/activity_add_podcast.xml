@@ -35,7 +35,7 @@
         android:layout_height="match_parent">
 
         <!-- Enable D-pad navigation. Reference: @see "https://stackoverflow.com/questions/36887573/recyclerview-and-d-pad-navigation"-->
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_add_pod"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

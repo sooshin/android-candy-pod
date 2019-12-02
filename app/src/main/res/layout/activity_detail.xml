@@ -19,17 +19,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.soojeongshin.candypod.ui.detail.DetailActivity">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -38,7 +38,7 @@
                 app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -99,7 +99,7 @@
                         tools:text="Joe Rogan" />
 
                     <!-- Guideline for left(start) margin -->
-                    <android.support.constraint.Guideline
+                    <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/left_guideline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -107,32 +107,32 @@
                         app:layout_constraintGuide_begin="@dimen/guideline_begin" />
 
                     <!-- Guideline for right(end) margin -->
-                    <android.support.constraint.Guideline
+                    <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/right_guideline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         app:layout_constraintGuide_end="@dimen/guideline_begin" />
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_collapseMode="pin" />
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="afterDescendants"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

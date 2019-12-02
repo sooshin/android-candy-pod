@@ -16,8 +16,8 @@
 
 package com.soojeongshin.candypod.ui.subscribe;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.soojeongshin.candypod.data.CandyPodRepository;
 import com.soojeongshin.candypod.model.rss.RssFeed;
